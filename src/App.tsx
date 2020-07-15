@@ -6,11 +6,15 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import TopTaps from './common/TopTaps';
 
 function App() {
   return (
     <React.Fragment>
         <main>
+          <div>
+            <TopTaps/>
+          </div>
           <div/>
             <BrowserRouter>
               <Route exact path="/" component={Home}/>
