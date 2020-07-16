@@ -8,37 +8,37 @@ import Loading from './Loading';
 // import { initFirebase } from './shared/Firebase';
 
 interface IState {
-    isLoadded: boolean,
+	isLoadded: boolean,
 }
 
 export default class Root extends Component<{}, IState> {
-    constructor(props: {}) {
-        super(props);
+	constructor(props: {}) {
+		super(props);
 
-        this.state = {
-            isLoadded: true,
-        }
+		this.state = {
+				isLoadded: true,
+		}
 
-        /*
-        initFirebase()
-            .then(() => {
-                this.setState({
-                    isLoadded: true,
-                });
-            });
-        */
-    }
-    
-    render() {
-        const { isLoadded } = this.state;
+		/*
+		initFirebase()
+			.then(() => {
+				this.setState({
+					isLoadded: true,
+				});
+			});
+		*/
+	}
+	
+	render() {
+		const { isLoadded } = this.state;
 
-        return (
-            <BrowserRouter>
-                {isLoadded ?
-                    <App/> :
-                    <Loading/>
-                }
-            </BrowserRouter>
-        )
-    }
+		return (
+			<BrowserRouter>
+				{isLoadded ?
+					<App/> :
+					<Loading/>
+				}
+			</BrowserRouter>
+		)
+	}
 }

@@ -96,62 +96,60 @@ class SignIn extends Component<IProps, IState> {
         }
     }
 
-    
-
     render() {
         const { classes } = this.props;
         const { id, password } = this.state;
 
         return(
-            <div>
-                <div className={classes.heroContent}>
-                    <Container component="main" maxWidth="xs">
-                        <CssBaseline />
-                        <div className={classes.paper}>
-                            <Typography component="h1" variant="h5">
-                                Sign In
-                            </Typography>
-                            <form className={classes.form} noValidate>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                  <MyTextField
-                                    id="id"
-                                    name="id"
-                                    label="User Id"/>
-                                </Grid>
-                                <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    value={password}
-                                    onChange={this.handleChangePassword}
-                                    onKeyUp={this.handleKeyUpPassword}
-                                    inputRef={ref => this.refPassword = ref}
-                                />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                className={classes.btnSignIn}
-                                type="button"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleSignUp}
-                                buttonRef={ref => this.refSignIn = ref}
-                            >
-                                Sign In
-                            </Button>
-                            </form>
-                        </div>
-                    </Container>
-                </div>
-            </div>
+					<div>
+						<div className={classes.heroContent}>
+							<Container component="main" maxWidth="xs">
+								<CssBaseline />
+								<div className={classes.paper}>
+									<Typography component="h1" variant="h5">
+											Sign In
+									</Typography>
+									<form className={classes.form} noValidate>
+									<Grid container spacing={2}>
+										<Grid item xs={12}>
+												<MyTextField
+													id="id"
+													name="id"
+													label="User Id"/>
+											</Grid>
+											<Grid item xs={12}>
+											<TextField
+												variant="outlined"
+												required
+												fullWidth
+												name="password"
+												label="Password"
+												type="password"
+												id="password"
+												autoComplete="current-password"
+												value={password}
+												onChange={this.handleChangePassword}
+												onKeyUp={this.handleKeyUpPassword}
+												inputRef={ref => this.refPassword = ref}
+												/>
+												</Grid>
+										</Grid>
+										<Button
+											className={classes.btnSignIn}
+											type="button"
+											fullWidth
+											variant="contained"
+											color="primary"
+											onClick={this.handleSignUp}
+											buttonRef={ref => this.refSignIn = ref}
+										>
+											Sign In
+										</Button>
+										</form>
+									</div>
+								</Container>
+							</div>
+					</div>
         );
     }
 }

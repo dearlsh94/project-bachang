@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button, { ButtonProps as MuiButtonProps } from '@material-ui/core/Button';
 import { Omit } from '@material-ui/types';
 
-interface Props {
-  color: 'red' | 'blue';
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement>{
+  color: 'red' | 'blue',
+  text?: string,
 }
 
 const useStyles = makeStyles({
@@ -20,23 +21,30 @@ const useStyles = makeStyles({
         ? '0 3px 5px 2px rgba(255, 105, 135, .3)'
         : '0 3px 5px 2px rgba(33, 203, 243, .3)',
     color: 'white',
-    height: 48,
-    padding: '0 30px',
-    margin: 8,
+    height: "auto",
+    paddingTop: 4,
+    paddingBottom: 4,
+    padding: '0 50px',
   },
 });
 
 function MyButton(props: Props & Omit<MuiButtonProps, keyof Props>) {
   const { color, ...other } = props;
   const classes = useStyles(props);
-  return <Button className={classes.root} {...other} />;
+  return <Button 
+            fullWidth
+            variant="contained"
+            className={classes.root} 
+            {...other}/>;
 }
 
-export default function AdaptingHook() {
+export default function AdaptingHook(props: Props) {
   return (
     <React.Fragment>
-      <MyButton color="red">Red</MyButton>
-      <MyButton color="blue">Blue</MyButton>
+      <MyButton 
+        {...props}>
+          {props.text}
+      </MyButton>
     </React.Fragment>
   );
 }

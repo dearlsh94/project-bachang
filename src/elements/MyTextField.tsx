@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement>{
   id: string,
   name: string,
   label: string,
+  required?: boolean,
 }
 
 const useStyles = makeStyles({
@@ -18,18 +19,17 @@ const useStyles = makeStyles({
 });
 
 export default function AdaptingHook(props: Props) {
-  const { label, id, name, ...other } = props;
-  const classes = useStyles(props);
+  const classes = useStyles();
   return (
     <React.Fragment>
        <TextField 
-          className={classes.root} {...other}
+          className={classes.root}
           variant="outlined"
-          required
           fullWidth
           label={props.label}
           id={props.id}
-          name={props.name} />
+          name={props.name}
+          {...props.required} />
     </React.Fragment>
   );
 }
