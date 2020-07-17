@@ -90,28 +90,28 @@ export default function SignUp() {
 						container 
 						justify="flex-end"
 						className={classes.signup}>
-						<MyButton
-							color="blue"
-							text="SIGN UP"
-							onClick={() => {
-								console.log("onClick");
-							}}/>
-						{/* 
-						<Button
-								type="button"
-								fullWidth
-								variant="contained"
-								color="primary"
-								onClick={() => {}}
-						>
-							Sign Up
-						</Button>
-						*/}
-						<Grid item>
-							<Link href="/signin" variant="body2">
-								Already have an account? Sign in
-							</Link>
-						</Grid>
+							<MyButton
+								color="blue"
+								text="SIGN UP"
+								onClick={() => {
+									console.log("onClick");
+								}}/>
+							{/* 
+							<Button
+									type="button"
+									fullWidth
+									variant="contained"
+									color="primary"
+									onClick={() => {}}
+							>
+								Sign Up
+							</Button>
+							*/}
+							<Grid item>
+								<Link href="/signin" variant="body2">
+									Already have an account? Sign in
+								</Link>
+							</Grid>
 					</Grid>
 				</form>
 			</Container>
