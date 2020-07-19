@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -9,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import MyTextField from '../elements/MyTextField';
 import MyButton from '../elements/MyButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,12 +21,6 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: 20,
 	}
 }));
-
-interface IProps{
-}
-
-interface IState{
-}
 
 export default function SignIn() {
   const classes = useStyles();
