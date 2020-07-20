@@ -11,10 +11,12 @@ import Header from './common/Header';
 function App() {
   return (
     <React.Fragment>
-        <main>
+        <header>
           <div>
             <Header/>
           </div>
+        </header>
+        <main>
           <div/>
             <BrowserRouter>
               <Route exact path="/" component={Home}/>
