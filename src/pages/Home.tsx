@@ -10,36 +10,21 @@ interface IState {
 
 class Home extends Component <IProps, IState>{
 
-    constructor(props: IProps) {
-        super(props);
+	constructor(props: IProps) {
+		super(props);
 
-        this.state = {
-            menu: "menu1"
-        }
-    }
+		this.state = {
+			menu: "menu1"
+		}
+	}
 
-    onChangeOneMenu = () => {
-        this.setState({
-            menu: "menu1",
-        })
-    }
-
-    onChangeEveryMenu = () => {
-        this.setState({
-            menu: "menu2",
-        })
-    }
-
-    render(){
-
-        const { menu } = this.state;
-
-        return(
-            <div>
-                    Main Home
-            </div>
-        );
-    }
+	render(){
+		return(
+			<div>
+				Main Home
+			</div>
+		);
+	}
 }
 
 export default Home;
