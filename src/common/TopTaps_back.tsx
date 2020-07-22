@@ -1,9 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
@@ -16,24 +17,22 @@ import ISection from '../interfaces/ISection';
 const useStyles = makeStyles((theme) => ({
   menuTabs: {
     margin: "0 auto",
+    justifyContent: "space-between",
   },
   menuTab: {
     padding: theme.spacing(1),
-    justifyContent: "space-around",
-    width: "13%",
-    textAlign: "center",
+    flexShrink: 2,
   },
   tabListItem: {
     margin: "auto",
-    textAlign: "center",
-    alignItems: "center",
-    flexShrink: 0,
+    textAlign: "center"
   }
 }));
 
 export default function TopTaps() {
   const classes = useStyles();
   
+  const [value, setValue] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenFixed, setIsOpenFixed] = React.useState(false);
 
@@ -52,15 +51,23 @@ export default function TopTaps() {
     _tabsClose();
   }
 
-  const _onListItemOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const _onListItemOpen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setIsOpenFixed(true);
     _tabsOpen();
   }
-  const _onListItemClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const _onListItemClose = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setIsOpenFixed(false);
     _tabsClose();
   }
 
+  const _onTabsChange = (e: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+    
+    console.log(menus.find((menu) => {
+      return menu.key === newValue.toString();
+    }));
+  };
+  
   const menus: Array<ISection> = [
       {
         idx: 0,
@@ -196,82 +203,76 @@ export default function TopTaps() {
       },
   ]
 
-  const _onMoveMenu = (url: string) => {
-    document.location.href = url;
-  }
-
   return (
     <React.Fragment>
-      <Box>
-        <Grid
-          container
-          spacing={0}
-          direction="row"
-          justify="center"
-          className={classes.menuTabs}>
-          {
-            menus.map((menu: ISection) => {
-              return(
-                <Grid
-                  item
-                  key={menu.idx}
-                  className={classes.menuTab}
-                  onMouseEnter={_onTabsEnter}
-                  onMouseLeave={_onTabsLeave}>
+      <Tabs
+        value={false} //{value}
+        onChange={_onTabsChange}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        //centered
+        orientation="horizontal"
+        className={classes.menuTabs}
+        >
+      {
+        menus.map((menu: ISection) => {
+          return( 
+            <div
+              key={menu.key}
+              id={menu.key}
+              onMouseEnter={_onTabsEnter}
+              onMouseLeave={_onTabsLeave}>
+              <Tab
+                value={value}
+                className={classes.menuTab}
+                label={menu.title}
+              />
+              {
+                (isOpen || isOpenFixed) &&
                   <List>
-                    <ListItem
-                      key={menu.key}
-                      button
-                      className={classes.tabListItem}
-                      onClick={() => (_onMoveMenu(menu.url))}>
-                        <Typography
-                          align="center"
-                          variant="subtitle1"
-                          display="block">
-                            {menu.title}
-                        </Typography>
-                    </ListItem>
                     {
-                      (isOpen || isOpenFixed) &&
-                        menu.sub.map((submenu: ISection) => (
-                          <ListItem
-                            key={submenu.key}
-                            button
-                            className={classes.tabListItem}
-                            onClick={() => (_onMoveMenu(submenu.url))}>
-                              <Typography
-                                align="center"
-                                variant="subtitle2"
-                                display="block">
-                                  {submenu.title}
-                              </Typography>
-                          </ListItem>
-                        ))
+                      menu.sub.map((submenu: ISection) => (
+                        <ListItem
+                          key={submenu.key}
+                          button
+                          className={classes.tabListItem}>
+                            <Typography
+                              align="center"
+                              className={classes.tabListItem}
+                              variant="subtitle2"
+                              display="block">
+                                {submenu.title}
+                            </Typography>
+                        </ListItem>
+                      ))
                     }
                   </List>
-                </Grid>
-              );
-            })
-          }
-          <Grid
-            item
-            sm={1}
-            className={classes.menuTab}>
-            {
-              isOpenFixed ?
-                <IconButton
-                  onClick={_onListItemClose}>
-                  <ExpandLessIcon/>
-                </IconButton>
-              :
-                <IconButton
-                  onClick={_onListItemOpen}>
-                  <ExpandMoreIcon/>
-                </IconButton>
-            }
-          </Grid>
-        </Grid>
-      </Box>
+                }
+            </div>
+          );
+        })
+      }
+      {
+        isOpenFixed ?
+          <Box
+            key="98"
+            onClick={_onListItemClose}>
+            <IconButton>
+              <ExpandLessIcon/>
+            </IconButton>
+          </Box>
+        : 
+          <Box
+            key="99"
+            onClick={_onListItemOpen}>
+            <IconButton>
+              <ExpandMoreIcon/>
+            </IconButton>
+          </Box>
+      }
+      </Tabs>
       <Divider/>
     </React.Fragment>
   );
