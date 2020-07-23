@@ -15,6 +15,7 @@ import MyButton from '../elements/MyButton';
 const useStyles = makeStyles((theme) => ({
 	title: {
 		marginTop: 10,
+		textAlign: "center",
 	},
 	form: {
 		marginTop: 20,
@@ -48,15 +49,15 @@ export default function SignUp() {
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
 							<TextField
-									variant="outlined"
-									required
-									fullWidth
-									id="id"
-									name="id"
-									label="User ID"
-									autoComplete="id"
-									value=""
-									onChange={() => {}}
+								variant="outlined"
+								required
+								fullWidth
+								id="id"
+								name="id"
+								label="User ID"
+								autoComplete="id"
+								value=""
+								onChange={() => {}}
 							/>
 						</Grid>
 						<Grid item xs={12}>

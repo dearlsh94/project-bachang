@@ -6,10 +6,10 @@ import { RecoilRoot } from 'recoil';
 
 import Container from '@material-ui/core/Container';
 
-import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
 import Header from './common/Header';
+import Home from './pages/Home';
+import SignUp from './pages/SignUp';
+import FindId from './pages/FindId';
 
 function App() {
   return (
@@ -27,8 +27,8 @@ function App() {
               fixed>
               <BrowserRouter>
                 <Route exact path="/" component={Home}/>
-                <Route exact path="/signin" component={SignIn}/>
                 <Route exact path="/signup" component={SignUp}/>
+                <Route exact path="/findid" component={FindId}/>
               </BrowserRouter>
             </Container>
           </main>

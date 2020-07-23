@@ -11,14 +11,11 @@ import Container from '@material-ui/core/Container';
 import MyButton from '../elements/MyButton';
 
 const useStyles = makeStyles((theme) => ({
-	title: {
-		marginTop: 10,
-	},
 	form: {
-		marginTop: 20,
+		marginTop: 0,
 	},
 	signin: {
-		marginTop: 20,
+		marginTop: 10,
 	}
 }));
 
@@ -27,74 +24,58 @@ export default function SignIn() {
 
   return (
     <React.Fragment>
-			<Container component="main" maxWidth="xs">
-				<Typography 
-					className={classes.title}
-					component="h1" 
-					variant="h5">
-						Sign in
-				</Typography>
-				<form
-					noValidate 
-					className={classes.form}>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<TextField
-									variant="outlined"
-									required
-									fullWidth
-									id="id"
-									name="id"
-									label="User ID"
-									autoComplete="id"
-									value=""
-									onChange={() => {}}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								name="password"
-								label="Password"
-								type="password"
-								id="password"
-								autoComplete="current-password"
-								value=""
-								onChange={() => {}}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<FormControlLabel
-								control={
-									<Checkbox 
-										value="allowExtraEmails" 
-										color="primary" 
-										checked
-										onChange={() => {}}/>
-								}
-								label="Remember Me"
-							/>
-						</Grid>
-					</Grid>
-					<Grid 
-						container 
-						justify="flex-end"
-						className={classes.signin}>
-							<MyButton
-								color="red"
-								text="SIGN IN"
-								onClick={() => {
-									console.log("onClick");
-								}}/>
-							<Grid item>
-								<Link href="/signin" variant="body2">
-									Sign up?
-								</Link>
+			<Container 
+				component="main" 
+				maxWidth="xs">
+					<form
+						noValidate 
+						className={classes.form}>
+							<Grid container spacing={2}>
+								<Grid item xs={12}>
+									<TextField
+											variant="outlined"
+											required
+											fullWidth
+											id="id"
+											name="id"
+											label="User ID"
+											autoComplete="id"
+											value=""
+											onChange={() => {}}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										variant="outlined"
+										required
+										fullWidth
+										name="password"
+										label="Password"
+										type="password"
+										id="password"
+										autoComplete="current-password"
+										value=""
+										onChange={() => {}}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Link href="/signin" variant="body2">
+										아이디 / 비밀번호 찾기
+									</Link>
+								</Grid>
 							</Grid>
-					</Grid>
-				</form>
+							<Grid 
+								container 
+								justify="flex-end"
+								className={classes.signin}>
+									<MyButton
+										color="red"
+										text="로그인"
+										onClick={() => {
+											alert("LOGIN");
+										}}/>
+							</Grid>
+					</form>
 			</Container>
     </React.Fragment>
   );
