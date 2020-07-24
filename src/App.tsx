@@ -10,12 +10,13 @@ import Header from './common/Header';
 import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import FindId from './pages/FindId';
+import FindPw from './pages/FindPw';
 
 function App() {
   return (
     <RecoilRoot>
       <Container
-        maxWidth="lg">
+        maxWidth="xl">
         <React.Fragment>
           <header>
             <Container>
@@ -29,6 +30,7 @@ function App() {
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/signup" component={SignUp}/>
                 <Route exact path="/findid" component={FindId}/>
+                <Route exact path="/findpw" component={FindPw}/>
               </BrowserRouter>
             </Container>
           </main>

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import MainCarousel from '../components/MainCarousel';
+
 interface IProps {
 
 }
@@ -22,6 +24,7 @@ class Home extends Component <IProps, IState>{
 		return(
 			<div>
 				Main Home
+				<MainCarousel/>
 			</div>
 		);
 	}
