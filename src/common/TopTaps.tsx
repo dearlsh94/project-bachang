@@ -46,7 +46,6 @@ export default function TopTaps() {
 
   const _onTabsEnter = (e: React.MouseEvent<{}>) => {
     _tabsOpen();
-    console.log(e.currentTarget);
   }
   const _onTabsLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     _tabsClose();

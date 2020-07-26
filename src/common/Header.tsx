@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Grid from '@material-ui/core/Grid';
 
 import TopTaps from './TopTaps';
 import SignIn from '../pages/SignIn';
@@ -20,8 +21,17 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
   },
+  toolbarleft: {
+    textAlign: "left",
+  },
+  toolbarcenter: {
+    textAlign: "center"
+  },
   toolbarTitle: {
     flex: 1,
+  },
+  toolbarright: {
+    textAlign: "right",
   },
   dialogActions: {
     justifyContent: "space-between"
@@ -34,6 +44,10 @@ export default function Header() {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [isSignInOpen, setIsSignInOpen] = React.useState(false);
+
+  const _onMoveToMain = () => {
+    document.location.href = "/";
+  }
 
   const _onSignInOpen = () => {
     setIsSignInOpen(true);
@@ -49,49 +63,57 @@ export default function Header() {
 
   return (
     <React.Fragment>
-      <div
-        className={classes.root}>
-        <React.Fragment>
-          <nav>
-            <Toolbar 
-              className={classes.toolbar}>
-              <Button 
-                size="small">
-                  Subscribe
-              </Button>
-              <Typography
-                component="h2"
-                variant="h5"
-                color="inherit"
-                align="center"
-                noWrap
-                className={classes.toolbarTitle}
-              >
-                {title}
-              </Typography>
-              <Button 
-                variant="outlined" 
-                size="small"
-                onClick={_onSignInOpen}
-              >
-                Sign in
-              </Button>
-              <Button 
-                variant="outlined" 
-                size="small"
-                onClick={() => document.location.href="/signup"}
-              >
-                Sign up
-              </Button>
-            </Toolbar>
-          </nav>
-          <aside>
-            <Box>
-              <TopTaps/>
-            </Box>
-          </aside>
-        </React.Fragment>
-      </div>
+      <React.Fragment>
+        <nav>
+          <Toolbar 
+            className={classes.toolbar}>
+            <Grid container xs={12}>
+              <Grid item xs={3}
+                className={classes.toolbarleft}>                  
+                <Button 
+                  size="small">
+                    Subscribe
+                </Button>
+              </Grid>
+              <Grid item xs={6}>                  
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  color="inherit"
+                  align="center"
+                  noWrap
+                  className={classes.toolbarTitle}
+                  onClick={_onMoveToMain}
+                >
+                  {title}
+                </Typography>
+              </Grid>
+              <Grid item xs={3}
+                className={classes.toolbarright}>                  
+                <Button 
+                  variant="outlined" 
+                  size="small"
+                  onClick={_onSignInOpen}
+                >
+                  Sign in
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  size="small"
+                  onClick={() => document.location.href="/signup"}
+                >
+                  Sign up
+                </Button>
+              </Grid>
+            </Grid>
+          </Toolbar>
+        </nav>
+        <aside>
+          <Box>
+            <TopTaps/>
+          </Box>
+        </aside>
+      </React.Fragment>
       <Dialog
         fullScreen={fullScreen}
         open={isSignInOpen}
