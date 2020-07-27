@@ -7,7 +7,6 @@ import Container from '@material-ui/core/Container';
 
 import MyButton from '../elements/MyButton';
 
-
 const useStyles = makeStyles((theme) => ({
   title: {
     paddingTop: 20,
@@ -28,18 +27,17 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-interface IProps{
-}
-
-interface IState{
-}
-
 export default function FindPw() {
   const classes = useStyles();
-
+  
+  const [mail, setMail] = React.useState("");
+  const [id, setId] = React.useState("");
   const [isSendPasswordMail, setIsSendPasswordMail] = React.useState(false);
 
   const _onSendAuthMail = () => {
+    setMail("");
+    setId("");
+
     setIsSendPasswordMail(true);
   }
 
@@ -71,24 +69,25 @@ export default function FindPw() {
                         variant="outlined"
                         required
                         fullWidth
-                        margin="normal"
-                        id="mail"
-                        name="mail"
-                        label="가입메일"
-                        autoComplete="mail"
-                        value=""
-                        onChange={() => {}}
+                        margin="dense"
+                        id="id"
+                        name="id"
+                        label="아이디"
+                        autoComplete="id"
+                        value={id}
+                        onChange={(e) => {setId(e.target.value)}}
                       />
                       <TextField
                         variant="outlined"
                         required
                         fullWidth
+                        margin="dense"
                         id="mail"
                         name="mail"
-                        label="아이디"
+                        label="가입메일"
                         autoComplete="mail"
-                        value=""
-                        onChange={() => {}}
+                        value={mail}
+                        onChange={(e) => {setMail(e.target.value)}}
                       />
                     </Grid>
                 }

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   back: {
     alignItems: "flex-start",
-    marginBottom: 3,
+    marginBottom: 10,
   },
 	signup: {
 		marginTop: 20,
@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FindId() {
   const classes = useStyles();
+
+  const [mail, setMail] = React.useState("");
+  const [mailAuth, setMailAuth] = React.useState("");
 
   const [isSendAuthMail, setIsSendAuthMail] = React.useState(false);
 
@@ -68,11 +71,12 @@ export default function FindId() {
                         variant="outlined"
                         required
                         fullWidth
+                        margin="dense"
                         id="auth"
                         name="auth"
                         label="인증번호"
-                        value=""
-                        onChange={() => {}}
+                        value={mailAuth}
+                        onChange={(e) => {setMailAuth(e.target.value)}}
                       />
                     </Grid>
                   :
@@ -80,13 +84,13 @@ export default function FindId() {
                       variant="outlined"
                       required
                       fullWidth
-                      margin="normal"
+                      margin="dense"
                       id="mail"
                       name="mail"
                       label="가입메일"
                       autoComplete="mail"
-                      value=""
-                      onChange={() => {}}
+                      value={mail}
+                      onChange={(e) => {setMail(e.target.value)}}
                     />
                 }
               </Grid>

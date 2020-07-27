@@ -114,6 +114,7 @@ export default function SignUp<IProps, IState>() {
 								variant="outlined"
 								required
 								fullWidth
+								size="small"
 								id="id"
 								name="id"
 								label="User ID"
@@ -128,6 +129,7 @@ export default function SignUp<IProps, IState>() {
 								variant="outlined"
 								required
 								fullWidth
+								size="small"
 								name="password"
 								label="Password"
 								id="password"
@@ -145,6 +147,7 @@ export default function SignUp<IProps, IState>() {
 								variant="outlined"
 								required
 								fullWidth
+								size="small"
 								name="passwordConfrim"
 								label="password Confrim"
 								id="passwordConfrim"
@@ -160,6 +163,7 @@ export default function SignUp<IProps, IState>() {
 									variant="outlined"
 									required
 									fullWidth
+									size="small"
 									name="mail"
 									label="Email Address"
 									id="mail"
@@ -186,6 +190,7 @@ export default function SignUp<IProps, IState>() {
 									variant="outlined"
 									required
 									fullWidth
+									size="small"
 									name="mailauth"
 									label="Authentication Code"
 									id="mailauth"
@@ -236,11 +241,13 @@ export default function SignUp<IProps, IState>() {
 								text="SIGN UP"
 								disabled={!isAuth}
 								onClick={_onClickSignUp}/>
+							{/*
 							<Grid item>
 								<Link href="/signin" variant="body2">
 									로그인 하러가기
 								</Link>
 							</Grid>
+							*/}
 					</Grid>
 				</form>
 			</Container>

@@ -13,11 +13,14 @@ const useStyles = makeStyles((theme) => ({
 	},
 	signin: {
 		marginTop: 20,
-	}
+	},
 }));
 
 export default function SignIn() {
   const classes = useStyles();
+
+	const [id, setId] = React.useState("");
+	const [password, setPassword] = React.useState("");
 
   return (
     <React.Fragment>
@@ -38,11 +41,11 @@ export default function SignIn() {
 											name="id"
 											label="User ID"
 											autoComplete="id"
-											value=""
-											onChange={() => {}}
+											value={id}
+											onChange={(e) => setId(e.target.value)}
 									/>
-									<Link href="/findid" variant="body2">
-										아이디 찾기
+									<Link href="/findid" variant="body2" tabIndex={-1}>
+											아이디 찾기
 									</Link>
 								</Grid>
 								<Grid container item xs={12}>
@@ -56,11 +59,11 @@ export default function SignIn() {
 										type="password"
 										id="password"
 										autoComplete="current-password"
-										value=""
-										onChange={() => {}}
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
 									/>
-									<Link href="/findpw" variant="body2">
-										비밀번호 찾기
+									<Link href="/findpw" variant="body2" tabIndex={-1}>
+											비밀번호 찾기
 									</Link>
 								</Grid>
 							</Grid>

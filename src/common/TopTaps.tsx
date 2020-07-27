@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
   },
   menuTab: {
-    padding: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
     justifyContent: "space-around",
     width: "13%",
     textAlign: "center",
@@ -115,7 +116,7 @@ export default function TopTaps() {
             idx: 0,
             key: "0000301",
             title: "아이템",
-            url: "/#3/#1",
+            url: "/dic/item",
             sub: []
           },
           {
@@ -181,14 +182,14 @@ export default function TopTaps() {
             idx: 1,
             key: "0000602",
             title: "아이디 찾기",
-            url: "/#6/#2",
+            url: "/findid",
             sub: []
           },
           {
             idx: 2,
             key: "0000603",
-            title: "패스워드 찾기",
-            url: "/#6/#3",
+            title: "비밀번호 찾기",
+            url: "/findpw",
             sub: []
           },
         ]

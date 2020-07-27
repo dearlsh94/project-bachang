@@ -135,14 +135,16 @@ export default function Header() {
             className={classes.dialogActions}>
             <Button 
               autoFocus 
+              tabIndex={-1}
               onClick={_onMoveSignUp} 
               color="primary">
                 회원가입
             </Button>
             <Button 
+              autoFocus
+              tabIndex={-1}
               onClick={_onSignInClose} 
-              color="primary" 
-              autoFocus>
+              color="primary">
                 닫기
             </Button>
           </DialogActions>

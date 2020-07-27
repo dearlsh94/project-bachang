@@ -12,6 +12,8 @@ import SignUp from './pages/SignUp';
 import FindId from './pages/FindId';
 import FindPw from './pages/FindPw';
 
+import Item from './pages/Dictionary/Item';
+
 function App() {
   return (
     <RecoilRoot>
@@ -31,6 +33,7 @@ function App() {
                 <Route exact path="/signup" component={SignUp}/>
                 <Route exact path="/findid" component={FindId}/>
                 <Route exact path="/findpw" component={FindPw}/>
+                <Route exact path="/dic/item" component={Item}/>
               </BrowserRouter>
             </Container>
           </main>
