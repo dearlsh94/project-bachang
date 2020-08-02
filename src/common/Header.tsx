@@ -67,7 +67,7 @@ export default function Header() {
         <nav>
           <Toolbar 
             className={classes.toolbar}>
-            <Grid container xs={12}>
+            <Grid container item xs={12}>
               <Grid item xs={3}
                 className={classes.toolbarleft}>                  
                 <Button 

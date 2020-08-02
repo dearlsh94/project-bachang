@@ -13,6 +13,7 @@ import FindId from './pages/FindId';
 import FindPw from './pages/FindPw';
 
 import Item from './pages/Dictionary/Item';
+import Raid from './pages/Dictionary/Raid';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                 <Route exact path="/findid" component={FindId}/>
                 <Route exact path="/findpw" component={FindPw}/>
                 <Route exact path="/dic/item" component={Item}/>
+                <Route exact path="/dic/raid" component={Raid}/>
               </BrowserRouter>
             </Container>
           </main>

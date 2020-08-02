@@ -12,6 +12,7 @@ import IItem from '../../interfaces/Dictionary/IItem';
 
 const useStyles = makeStyles((theme) => ({
   tabbar: {
+    margin: "auto",
     justifyContent: "space-between",
   },
   tabs: {
@@ -61,7 +62,6 @@ export default function FindId() {
 
   return (
     <React.Fragment>
-      아이템 - 현재 검색어 : {search}
 			<Grid container xs={12} spacing={3}
         className={classes.tabbar}>
         <Grid item xs={9}>
@@ -82,13 +82,14 @@ export default function FindId() {
                 })
               }
           </Tabs>
+          아이템 - 현재 검색어 : {search}
         </Grid>
         <Grid item xs={3}>
           <TextField
             fullWidth
             size="small"
-            id="search"
-            name="search"
+            id="itemsearch"
+            name="itemsearch"
             label="검색"
             value={search}
             onChange={(e) => _onChangeSearch(e.target.value)}
@@ -100,6 +101,9 @@ export default function FindId() {
               ),
             }}
           />
+        </Grid>
+        <Grid item xs={12}>
+
         </Grid>
       </Grid>
     </React.Fragment>

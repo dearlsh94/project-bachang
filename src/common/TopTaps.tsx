@@ -126,6 +126,13 @@ export default function TopTaps() {
             url: "/#3/#2",
             sub: []
           },
+          {
+            idx: 2,
+            key: "0000303",
+            title: "레이드",
+            url: "/dic/raid",
+            sub: []
+          },
         ]
       },
       {
