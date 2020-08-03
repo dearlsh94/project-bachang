@@ -6,9 +6,7 @@ import Divider from '@material-ui/core/Divider';
 
 import { IRaid } from '../../interfaces/Dictionary/IRaids';
 
-import image01 from "../../assets/img/dictionary/raid/거마왕.png";
-
-const baseUrl = "../../assets/img/dictionary/raid/";
+const baseUrl = "/assets/img/dictionary/raid/";
 
 interface IProps {
   raid: IRaid,
@@ -36,7 +34,7 @@ export default function RaidListItem(props: IProps) {
             
           </Grid>
           <Grid item xs={4}>
-            레이드명
+            레이드명 
           </Grid>
           <Grid item xs={2}>
             제한 전투력
@@ -53,7 +51,7 @@ export default function RaidListItem(props: IProps) {
         </Grid>
         <Grid container>
           <Grid item xs={2}>
-            <Avatar alt="Raid" src={baseUrl + props.raid.img} className={classes.shortImage}/>
+            <Avatar alt="Raid" src={baseUrl.concat(props.raid.img)} className={classes.shortImage}/>
           </Grid>
           <Grid item xs={4}>
             {props.raid.name}
