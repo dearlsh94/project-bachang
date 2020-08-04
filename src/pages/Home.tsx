@@ -23,7 +23,6 @@ class Home extends Component <IProps, IState>{
 	render(){
 		return(
 			<div>
-				Main Home
 				<MainCarousel/>
 			</div>
 		);
