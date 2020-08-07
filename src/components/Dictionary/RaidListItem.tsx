@@ -30,27 +30,8 @@ export default function RaidListItem(props: IProps) {
         className={classes.root}>
         <Grid container>
           <Grid item xs={2}>
-            
-          </Grid>
-          <Grid item xs={4}>
-            레이드명 
-          </Grid>
-          <Grid item xs={2}>
-            제한 전투력
-          </Grid>
-          <Grid item xs={2}>
-            제한 인원
-          </Grid>
-          <Grid item xs={2}>
-
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Divider/>
-        </Grid>
-        <Grid container>
-          <Grid item xs={2}>
-            <Avatar alt="Raid" src={baseUrlForRaidImg.concat(props.raid.img)} className={classes.shortImage}/>
+            <Avatar src={baseUrlForRaidImg.concat(props.raid.img)} 
+              className={classes.shortImage}/>
           </Grid>
           <Grid item xs={4}>
             {props.raid.name}
