@@ -6,14 +6,14 @@ import { RecoilRoot } from 'recoil';
 
 import Container from '@material-ui/core/Container';
 
-import Header from './common/Header';
-import Home from './pages/Home';
-import SignUp from './pages/SignUp';
-import FindId from './pages/FindId';
-import FindPw from './pages/FindPw';
+import Header from 'components/Common/Header';
+import Home from 'pages/Home';
+import SignUp from 'pages/Common/SignUp';
+import FindId from 'pages/Common/FindId';
+import FindPw from 'pages/Common/FindPw';
 
-import Item from './pages/Dictionary/Item';
-import Raid from './pages/Dictionary/Raid';
+import Item from 'pages/Dictionary/Item';
+import Raid from 'pages/Dictionary/Raid';
 
 function App() {
   return (

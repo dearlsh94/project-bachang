@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import MyButton from '../elements/MyButton';
+import MyButton from 'elements/MyButton';
 
 const useStyles = makeStyles((theme) => ({
   title: {

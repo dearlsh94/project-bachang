@@ -4,9 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 
-import { IRaid } from '../../interfaces/Dictionary/IRaids';
-
-const baseUrl = "/assets/img/dictionary/raid/";
+import { IRaid } from 'interfaces/Dictionary/IRaids';
+import { baseUrlForRaidImg } from 'utils/ConfigUtil';
 
 interface IProps {
   raid: IRaid,
@@ -51,7 +50,7 @@ export default function RaidListItem(props: IProps) {
         </Grid>
         <Grid container>
           <Grid item xs={2}>
-            <Avatar alt="Raid" src={baseUrl.concat(props.raid.img)} className={classes.shortImage}/>
+            <Avatar alt="Raid" src={baseUrlForRaidImg.concat(props.raid.img)} className={classes.shortImage}/>
           </Grid>
           <Grid item xs={4}>
             {props.raid.name}

@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 
-import IItem from '../../interfaces/Dictionary/IItem';
+import IItem from 'interfaces/Dictionary/IItem';
 
 const useStyles = makeStyles((theme) => ({
   tabbar: {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import MainCarousel from '../components/MainCarousel';
+import MainCarousel from 'components/MainCarousel';
 
 interface IProps {
 
