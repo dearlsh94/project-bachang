@@ -11,7 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from '@material-ui/core/Grid';
 
-import TopTaps from 'components/Common/TopTaps';
+import TopTaps from 'components/Header/TopTaps';
 import SignIn from 'pages/Common/SignIn';
 
 const useStyles = makeStyles((theme) => ({

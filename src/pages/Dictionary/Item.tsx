@@ -1,14 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
 
+import MyInputSearch from 'elements/Input/MyInputSearch';
 import IItem from 'interfaces/Dictionary/IItem';
+
+import { useRecoilValue } from 'recoil';
+import { SearchValueState } from 'state';
 
 const useStyles = makeStyles((theme) => ({
   tabbar: {
@@ -29,7 +29,8 @@ export default function FindId() {
   const classes = useStyles();
 
   const [value, setValue] = React.useState(0);
-  const [search, setSearch] = React.useState("");
+
+  const searchValue = useRecoilValue(SearchValueState);
 
   const tabs: Array<IItem> = [
     {
@@ -51,14 +52,7 @@ export default function FindId() {
 
   const _onTabsChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
-    setSearch("");
   };
-
-  const _onChangeSearch = (value: string) => {
-    setSearch(value);
-
-    //Reactive Filter
-  }
 
   return (
     <React.Fragment>
@@ -82,25 +76,9 @@ export default function FindId() {
                 })
               }
           </Tabs>
-          아이템 - 현재 검색어 : {search}
         </Grid>
         <Grid item xs={3}>
-          <TextField
-            fullWidth
-            size="small"
-            id="itemsearch"
-            name="itemsearch"
-            label="검색"
-            value={search}
-            onChange={(e) => _onChangeSearch(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <MyInputSearch />
         </Grid>
         <Grid item xs={12}>
 

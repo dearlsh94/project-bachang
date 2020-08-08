@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
+import Container from '@material-ui/core/Container';
 
 import { IRaid } from 'interfaces/Dictionary/IRaids';
 import { baseUrlForRaidImg } from 'utils/ConfigUtil';
@@ -14,21 +14,26 @@ interface IProps {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    margin: "10",
+    padding: "10"
   },
   shortImage: {
-    width: theme.spacing(8),
-    height: theme.spacing(8),
+    width: theme.spacing(6),
+    height: theme.spacing(6),
   },
 }));
 
 export default function RaidListItem(props: IProps) {
   const classes = useStyles();
 
+  const [ isHover, setIsHover ] = React.useState(false);
+
   return (
-    <React.Fragment>
-			<Grid container item xs={12} spacing={3}
-        className={classes.root}>
-        <Grid container>
+    <Container
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}>
+        <Grid container item xs={12}
+          className={classes.root}>
           <Grid item xs={2}>
             <Avatar src={baseUrlForRaidImg.concat(props.raid.img)} 
               className={classes.shortImage}/>
@@ -44,9 +49,12 @@ export default function RaidListItem(props: IProps) {
           </Grid>
           <Grid item xs={2}>
             검색어 - {props.keyword}
+            {
+              isHover &&
+                "Over"
+            }
           </Grid>
         </Grid>
-      </Grid>
-    </React.Fragment>
+    </Container>
   );
 }

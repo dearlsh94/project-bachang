@@ -10,8 +10,20 @@ const tempRaidList: Array<IRaid> = [
     minPeopleCount: 0,
     maxPeopleCount: 4,
     maxEnterCount: 3,
-    reward: "보상",
+    reward: "수룡장 보상",
     img: "수룡장.png",
+  },
+  {
+    idx: 1,
+    key: "02",
+    name: "화룡장",
+    limitPower: 20000,
+    limitEnter: "-",
+    minPeopleCount: 3,
+    maxPeopleCount: 10,
+    maxEnterCount: 3,
+    reward: "화룡장 보상",
+    img: "화룡장.png",
   }
 ]
 
@@ -25,7 +37,7 @@ const tempRaidList2: Array<IRaid> = [
     minPeopleCount: 0,
     maxPeopleCount: 4,
     maxEnterCount: 3,
-    reward: "보상",
+    reward: "수룡장 보상",
     img: "수룡장.png",
   }
 ]
