@@ -13,6 +13,7 @@ export interface IRaid {
 
 export default interface IRaids {
   idx: number,
+  key: string,
   section: string,
   raidInfos: Array<IRaid>
 }

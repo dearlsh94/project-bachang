@@ -1,10 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { makeStyles, withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 
-import RaidListItem from 'components/ListItem/RaidListItem';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 import { getDicAllRaidList } from 'utils/DictionaryUtil';
 import IRaids from 'interfaces/Dictionary/IRaids';
 import MyInputSearch from 'elements/Input/MyInputSearch';
@@ -15,87 +20,99 @@ import { SearchValueState } from 'state';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: "auto",
-    paddingTop: "10",
-    justifyContent: "space-between",
+    marginTop: "10px",
+  },
+  table: {
+    minWidth: 400,
   },
   searchContainer: {
+    padding: theme.spacing(0.1),
   },
-  sectionContainer: {
-
+  tableContainer: {
+    marginTop: "20px",
+    marginBottom: "20px",
   },
-  listItemContainer: {
-    padding: "2"
-  }
 }));
+
+const StyledTableRow = withStyles((theme: Theme) =>
+createStyles({
+  root: {
+    backgroundColor: "#d7ccc8",
+    '&:nth-of-type(odd)': {
+      backgroundColor: "#efebe9",
+    },
+    '&:hover': {
+      backgroundColor: "#8d6e63",
+    }
+  },
+}),
+)(TableRow);
+
+const StyledTableCell = withStyles((theme: Theme) =>
+  createStyles({
+    head: {
+      backgroundColor: "#a1887f",
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+  }),
+)(TableCell);
 
 export default function Raid() {
   const classes = useStyles();
-
-  const searchValue = useRecoilValue(SearchValueState);
-
+  
   const allRaids: Array<IRaids> = getDicAllRaidList();
+
+  const _onMoveRaidInfo = (key: string) => {
+    document.location.href="/dic/raid/" + key;
+  }
 
   return (
     <React.Fragment>
+      {/*
       <Grid container spacing={3}
         direction="column"
-        justify="flex-start"
-        alignItems="center"
+        alignItems="flex-end"
         className={classes.root}>
-          <Grid container
-            className={classes.searchContainer}>
-              <Grid item xs={9}>
-              </Grid>
-              <Grid item xs={3}>
-                <MyInputSearch /> 
-              </Grid> 
-          </Grid>
-          <Grid container>
-            <Grid item xs={2}>
-              
-            </Grid>
-            <Grid item xs={4}>
-              레이드명 
-            </Grid>
-            <Grid item xs={2}>
-              제한 전투력
-            </Grid>
-            <Grid item xs={2}>
-              제한 인원
-            </Grid>
-            <Grid item xs={2}>
-
-            </Grid>
+          <Grid item xs={3}>
+            <MyInputSearch /> 
           </Grid>
           <MyGridDivider/>
-          {
-            allRaids.map((raids) => {
-              return (
-                <Container
-                  key={raids.section}
-                  className={classes.sectionContainer}>
-                    <Grid item xs={12}>
-                      <Typography variant="h6" gutterBottom>
-                        {raids.section}
-                      </Typography>
-                    </Grid>
-                    <Grid container item xs={12}>
-                      {
-                        raids.raidInfos.map((raid) => (
-                          <RaidListItem
-                            key={raid.key}
-                            raid= {raid}
-                            keyword={searchValue}/>
-                        ))
-                      }
-                    </Grid>
-                    <MyGridDivider/>
-                </Container>
-              );
-            })
-          }
       </Grid>
+      */}
+      {
+        allRaids.map((raids) => {
+          return (
+            <TableContainer component={Paper} className={classes.tableContainer} key={raids.key}>
+              <Table className={classes.table} aria-label={`${raids.section}-table`}>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>{raids.section} 레이드 목록</StyledTableCell>
+                    <StyledTableCell align="right">제한 전투력</StyledTableCell>
+                    <StyledTableCell align="right">제한 인원</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    raids.raidInfos.map((info) => (
+                      <StyledTableRow key={info.name}
+                        onClick={() => _onMoveRaidInfo(info.key)}>
+                        <StyledTableCell component="th" scope="row">
+                          {info.name}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">{info.limitPower}</StyledTableCell>
+                        <StyledTableCell align="right">{info.minPeopleCount} ~ {info.maxPeopleCount}</StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          );
+        })
+      }
     </React.Fragment>
   );
 }

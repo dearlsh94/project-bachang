@@ -22,6 +22,33 @@ export default function SignIn() {
 	const [id, setId] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
+	const refId = React.useRef<any>();
+	const refPassword = React.useRef<any>();
+
+	const _onEnterPassword = (keyCode: number) => {
+		if (keyCode == 13) {
+			_onSignIn();
+		}
+	}
+
+	const _onSignIn = () => {
+		if ( id.length < 1 ) {
+			alert("PLEASE INPUT USER ID");
+			refId.current.focus();
+
+			return false;
+		}
+
+		if ( password.length < 1 ) {
+			alert("PLEASE INPUT PASSWORD");
+			refPassword.current.focus();
+
+			return false;
+		}
+
+		alert("LOGIN");
+	}
+
   return (
     <React.Fragment>
 			<Container 
@@ -42,6 +69,7 @@ export default function SignIn() {
 											label="User ID"
 											autoComplete="id"
 											value={id}
+											inputRef={refId}
 											onChange={(e) => setId(e.target.value)}
 									/>
 									<Link href="/findid" variant="body2" tabIndex={-1}>
@@ -60,7 +88,9 @@ export default function SignIn() {
 										id="password"
 										autoComplete="current-password"
 										value={password}
+										inputRef={refPassword}
 										onChange={(e) => setPassword(e.target.value)}
+										onKeyUp={(e) => _onEnterPassword(e.keyCode)}
 									/>
 									<Link href="/findpw" variant="body2" tabIndex={-1}>
 											비밀번호 찾기
@@ -73,9 +103,7 @@ export default function SignIn() {
 									<MyButton
 										color="red"
 										text="로그인"
-										onClick={() => {
-											alert("LOGIN");
-										}}/>
+										onClick={_onSignIn}/>
 							</Grid>
 					</form>
 			</Container>
