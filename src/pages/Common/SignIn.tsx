@@ -7,6 +7,8 @@ import Container from '@material-ui/core/Container';
 
 import MyButton from 'elements/MyButton';
 
+import { SignInUser } from 'utils/UserUtil';
+
 const useStyles = makeStyles((theme) => ({
 	form: {
 		marginTop: 0,
@@ -46,7 +48,9 @@ export default function SignIn() {
 			return false;
 		}
 
-		alert("LOGIN");
+		SignInUser(id, password);
+
+		document.location.href="/";
 	}
 
   return (

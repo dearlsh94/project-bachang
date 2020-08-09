@@ -124,7 +124,7 @@ export const Menus: Array<IMenu> = [
         idx: 0,
         key: "0000601",
         title: "내정보",
-        url: "/#6/#1",
+        url: "/myinfo",
         sub: []
       },
       {

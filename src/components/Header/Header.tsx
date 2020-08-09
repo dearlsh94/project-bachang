@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +14,8 @@ import Grid from '@material-ui/core/Grid';
 
 import TopTaps from 'components/Header/TopTaps';
 import SignIn from 'pages/Common/SignIn';
+
+import { getSignInUserInfo, LogoutUser } from 'utils/UserUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +48,9 @@ export default function Header() {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [isSignInOpen, setIsSignInOpen] = React.useState(false);
 
+  const userInfo = getSignInUserInfo();
+  console.log(userInfo);
+
   const _onMoveToMain = () => {
     document.location.href = "/";
   }
@@ -59,6 +65,12 @@ export default function Header() {
 
   const _onMoveSignUp = () => {
     document.location.href = "/signup";
+  }
+
+  const _onLogoutUser = () => {
+    LogoutUser();
+    
+    _onMoveToMain();
   }
 
   return (
@@ -89,21 +101,32 @@ export default function Header() {
                 </Typography>
               </Grid>
               <Grid item xs={3}
-                className={classes.toolbarright}>                  
-                <Button 
-                  variant="outlined" 
-                  size="small"
-                  onClick={_onSignInOpen}
-                >
-                  Sign in
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  size="small"
-                  onClick={() => document.location.href="/signup"}
-                >
-                  Sign up
-                </Button>
+                className={classes.toolbarright}>
+                  {
+                    userInfo === "" ?
+                      <Container>
+                        <Button 
+                          variant="outlined" 
+                          size="small"
+                          onClick={_onSignInOpen}>
+                            SignIn
+                        </Button>
+                        <Button 
+                          variant="outlined" 
+                          size="small"
+                          onClick={_onMoveSignUp}
+                        >
+                          SignUp
+                        </Button>
+                      </Container>
+                    :
+                      <Button 
+                        variant="outlined" 
+                        size="small"
+                        onClick={_onLogoutUser}>
+                         Logout
+                      </Button>
+                  }               
               </Grid>
             </Grid>
           </Toolbar>
