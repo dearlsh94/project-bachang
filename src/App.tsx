@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 
 import Header from 'components/Header/Header';
 import Home from 'pages/Home';
+import SignIn from 'pages/Common/SignIn';
 import SignUp from 'pages/Common/SignUp';
 import FindId from 'pages/Common/FindId';
 import FindPw from 'pages/Common/FindPw';
@@ -35,6 +36,7 @@ function App() {
               <Route exact path="/" component={Home}/>
 
               {/*Common*/}
+              <Route exact path="/signin" component={SignIn}/>
               <Route exact path="/signup" component={SignUp}/>
               <Route exact path="/findid" component={FindId}/>
               <Route exact path="/findpw" component={FindPw}/>
