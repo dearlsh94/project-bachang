@@ -1,5 +1,7 @@
 import IMenu from 'interfaces/Common/IMenu';
 
+export const sessionUserInfo = "SignInUser";
+
 export const baseUrlForMainCarousel = "/assets/img/";
 export const baseUrlForRaidImg = "/assets/img/dictionary/raid/";
 
@@ -144,4 +146,3 @@ export const Menus: Array<IMenu> = [
     ]
   },
 ]
-

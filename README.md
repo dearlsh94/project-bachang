@@ -17,7 +17,6 @@
 
 - [Material-UI](https://material-ui.com/)
   - [Pallete](https://www.materialpalette.com/colors)
-
 - [Recoil](https://recoiljs.org/)
-
 - [React-Slick](https://react-slick.neostack.com/docs/get-started/)
+- [React-Hooks API](https://ko.reactjs.org/docs/hooks-reference.html)

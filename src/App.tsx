@@ -5,6 +5,8 @@ import {BrowserRouter, Route} from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 
+import Test from './Test';
+
 import Header from 'components/Header/Header';
 import Home from 'pages/Home';
 import SignIn from 'pages/Common/SignIn';
@@ -34,6 +36,7 @@ function App() {
             <BrowserRouter>
               {/*Home*/}
               <Route exact path="/" component={Home}/>
+              <Route exact path="/test" component={Test}/>
 
               {/*Common*/}
               <Route exact path="/signin" component={SignIn}/>
