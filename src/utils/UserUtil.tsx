@@ -37,7 +37,10 @@ export const checkGameUser = () => {
 
   const getHtml = async () => {
     try {
-      return await axios.get("/Profile/Info?character=%ED%98%91%EA%B0%80%EA%B2%80%40%ED%95%98%EC%9E%90");
+      const userId = encodeURI("협가검");
+      const userServer = encodeURI("하자");
+
+      return await axios.get(`/Profile/Info?character=${userId}%40${userServer}`);
     }
     catch (e) {
       console.log(e);
