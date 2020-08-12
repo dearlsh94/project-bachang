@@ -40,7 +40,7 @@ function MyInfo() {
   const userId: string = getSignInUserId();
   const userInfo: IUserInfo = getUserInfoById(userId);
 
-  const [mode, setMode] = React.useState("auth");
+  const [mode, setMode] = React.useState("edit");
 
   const _onViewUser = () => {
     setMode("view");
@@ -83,7 +83,8 @@ function MyInfo() {
                 }
                 {
                   mode === "edit" &&
-                    <EditUserInfo />
+                    <EditUserInfo
+                      userInfo={userInfo}/>
                 }
                 {
                   mode === "auth" &&

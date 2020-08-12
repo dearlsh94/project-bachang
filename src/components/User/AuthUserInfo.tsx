@@ -9,6 +9,7 @@ import { checkGameUser } from 'utils/UserUtil';
 import IUserInfo from 'interfaces/Common/IUserInfo';
 
 import MyButton from 'elements/MyButton';
+import MyAlert from 'elements/Alert/MyAlert';
 
 interface IProps {
   userInfo: IUserInfo,
@@ -28,14 +29,22 @@ function AuthUserInfo(props: IProps) {
   const classes = useStyles();
   const userInfo: IUserInfo = props.userInfo;
 
+  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
+  const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
+
   const _onAuthRequest = async () => {
     const res = await checkGameUser(userInfo.server, userInfo.character);
     
     if (res) {
       console.log("인증성공");
+      setOpenSuccessAlert(true);
+      setTimeout(() => setOpenSuccessAlert(false), 4000);
+      setTimeout(() => document.location.reload(), 4000);
     }
     else {
       console.log("인증실패");
+      setOpenErrorAlert(true);
+      setTimeout(()=> setOpenErrorAlert(false), 4000);
     }
   }
 
@@ -83,6 +92,22 @@ function AuthUserInfo(props: IProps) {
             onClick={_onAuthRequest}/>
         </Grid>
       </Grid>
+      {
+        openSuccessAlert &&
+          <MyAlert
+            isOpen={true}
+            severity="success"
+            duration={4000}
+            text="인증 성공! 잠시 후 회원정보로 이동 됩니다." />
+      }
+      {
+        openErrorAlert &&
+          <MyAlert
+            isOpen={true}
+            severity="error"
+            duration={4000}
+            text="인증 실패!" />
+      }
     </Container>
   ); 
 }

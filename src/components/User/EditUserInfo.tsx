@@ -1,10 +1,86 @@
 import React from 'react';
 
-function EditUserInfo() {
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+
+import SignUp from 'pages/Common/SignUp';
+import IUserInfo from 'interfaces/Common/IUserInfo';
+
+interface IProps {
+  userInfo: IUserInfo,
+}
+
+const useStyles = makeStyles((theme) => ({
+  title: {
+    
+  },
+  form: {
+    marginTop: 10,
+  },
+}));
+
+function EditUserInfo(props: IProps) {
+
+  const classes = useStyles();
+  const userInfo: IUserInfo = props.userInfo;
+
   return (
-    <div>
-      수정영역
-    </div>
+    <Container>
+      <Typography
+        variant="h6"
+        className={classes.title}>
+          정보수정
+      </Typography>
+      <Grid container spacing={2}
+        className={classes.form}>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            아이디
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.id}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            이메일
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.mail}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            서버
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.server}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            닉네임
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.character}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            인증정보
+          </Grid>
+          <Grid item xs={9}>
+            {
+              userInfo.isAuth 
+              ? "인증"
+              : "미인증"
+            }
+          </Grid>
+        </Grid>
+      </Grid>
+    </Container>
   ); 
 }
 

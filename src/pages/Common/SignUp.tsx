@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IProps{
+	mode: "create" | "edit"
 }
 
 interface IState{
@@ -41,9 +42,11 @@ interface IState{
 	mailAuth: string,
 }
 
-export default function SignUp<IProps, IState>() {
+export default function SignUp(props: IProps) {
 	const classes = useStyles();
 	
+	const [isEdit, setIsEdit] = React.useState(props.mode === "edit" ? true : false);
+	const [isDisabled, setIsDisabled] = React.useState(isEdit);
 	const [id, setId] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [passwordConfirm, setPasswordConfirm] = React.useState("");
@@ -54,15 +57,25 @@ export default function SignUp<IProps, IState>() {
 	const [isSend, setIsSend] = React.useState(false);
 	const [isAuth, setIsAuth] = React.useState(false);
 
+	const _onEnterMail = (keyCode: number) => {
+		if (keyCode == 13) {
+			_onClickAuthSend();
+		}
+	}
 	const _onClickAuthSend = () => {
 		if (password !== passwordConfirm) {
 			alert("비밀번호를 확인해주세요");
 			return 0;
 		}
-
+		
 		setIsSend(true);
 	}
-
+	
+	const _onEnterMailAuth = (keyCode: number) => {
+		if (keyCode == 13) {
+			_onClickAuth();
+		}
+	}
 	const _onClickAuth = () => {
 		setIsAuth(true);
 	}
@@ -80,20 +93,6 @@ export default function SignUp<IProps, IState>() {
 		};
 
 		console.log("SIGN UP USER INFO >>> " , signUp);
-
-		clear();
-	}
-
-	const clear = () => {
-		setId("");
-		setPassword("");
-		setPasswordConfirm("");
-		setMail("");
-		setMailAuth("");
-		setIsAgree(false);
-		
-		setIsSend(false);
-		setIsAuth(false);
 	}
 
   return (
@@ -103,153 +102,155 @@ export default function SignUp<IProps, IState>() {
 					className={classes.title}
 					component="h1" 
 					variant="h5">
-						Sign up
+						{
+							!isEdit &&
+								"Sign Up"
+						}
 				</Typography>
-				<form
-					noValidate 
-					className={classes.form}>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								size="small"
-								id="id"
-								name="id"
-								label="User ID"
-								autoComplete="id"
-								disabled={isSend}
-								value={id}
-								onChange={(e) => (setId(e.target.value))}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								size="small"
-								name="password"
-								label="Password"
-								id="password"
-								type="password"
-								autoComplete="current-password"
-								disabled={isSend}
-								value={password}
-								onChange={(e) => (setPassword(e.target.value))}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								error={((passwordConfirm !== "") && (password !== passwordConfirm))}
-								helperText={(passwordConfirm !== "") && (password !== passwordConfirm) ? "비밀번호가 일치하지 않습니다." : ""}
-								variant="outlined"
-								required
-								fullWidth
-								size="small"
-								name="passwordConfrim"
-								label="password Confrim"
-								id="passwordConfrim"
-								type="password"
-								disabled={isSend}
-								value={passwordConfirm}
-								onChange={(e) => (setPasswordConfirm(e.target.value))}
-							/>
-						</Grid>
-						<Grid container item xs={12}>
-							<Grid item xs={8}>
-								<TextField
-									variant="outlined"
-									required
-									fullWidth
-									size="small"
-									name="mail"
-									label="Email Address"
-									id="mail"
-									disabled={isSend}
-									value={mail}
-									onChange={(e) => (setMail(e.target.value))}
-								/>
-							</Grid>
-							<Grid item xs={4}>
-								<Button
-									fullWidth
-									variant="contained"
-									color="primary"
-									className={classes.textButton}
-									disabled={isSend}
-									onClick={_onClickAuthSend}>
-										인증요청
-								</Button>
-							</Grid>
-						</Grid>
-						<Grid container item xs={12}>
-							<Grid item xs={8}>
-								<TextField
-									variant="outlined"
-									required
-									fullWidth
-									size="small"
-									name="mailauth"
-									label="Authentication Code"
-									id="mailauth"
-									disabled = {!isSend || isAuth}
-									value={mailAuth}
-									onChange={(e) => (setMailAuth(e.target.value))}
-								/>
-							</Grid>
-							<Grid item xs={4}>
-								<Button
-									fullWidth
-									variant="contained"
-									color="primary"
-									className={classes.textButton}
-									disabled = {!isSend || isAuth}
-									onClick={_onClickAuth}>
-										인증확인
-								</Button>
-							</Grid>
-						</Grid>
-						<Grid item xs={12}>
-							{
-								(isAuth) &&
+					{
+						!isSend &&
+							<React.Fragment>
+								<Grid container spacing={2}>
 									<Grid item xs={12}>
-										<Typography>
-											인증되었습니다. 동의 후 회원가입을 진행하세요.
-										</Typography>
+										<TextField
+											disabled={isDisabled}
+											variant="outlined"
+											required
+											fullWidth
+											size="small"
+											id="id"
+											name="id"
+											label="User ID"
+											autoComplete="id"
+											value={id}
+											onChange={(e) => (setId(e.target.value))}
+										/>
 									</Grid>
-							}
-							<FormControlLabel
-								control={
-									<Checkbox 
-										value="allowExtraEmails" 
-										color="primary" 
-										checked={isAgree}
-										onChange={(() => {setIsAgree(!isAgree)})}/>
-								}
-								label="닉네임 인증방식 설명"
-							/>
-						</Grid>
-					</Grid>
-					<Grid 
-						container 
-						justify="flex-end"
-						className={classes.signup}>
-							<MyButton
-								color="blue"
-								text="SIGN UP"
-								disabled={!isAuth}
-								onClick={_onClickSignUp}/>
-							{/*
-							<Grid item>
-								<Link href="/signin" variant="body2">
-									로그인 하러가기
-								</Link>
-							</Grid>
-							*/}
-					</Grid>
-				</form>
+									<Grid item xs={12}>
+										<TextField
+											variant="outlined"
+											required
+											fullWidth
+											size="small"
+											name="password"
+											label="Password"
+											id="password"
+											type="password"
+											autoComplete="current-password"
+											value={password}
+											onChange={(e) => (setPassword(e.target.value))}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<TextField
+											error={((passwordConfirm !== "") && (password !== passwordConfirm))}
+											helperText={(passwordConfirm !== "") && (password !== passwordConfirm) ? "비밀번호가 일치하지 않습니다." : ""}
+											variant="outlined"
+											required
+											fullWidth
+											size="small"
+											name="passwordConfrim"
+											label="password Confrim"
+											id="passwordConfrim"
+											type="password"
+											value={passwordConfirm}
+											onChange={(e) => (setPasswordConfirm(e.target.value))}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<TextField
+											variant="outlined"
+											required
+											fullWidth
+											size="small"
+											name="mail"
+											label="Email Address"
+											id="mail"
+											value={mail}
+											onChange={(e) => (setMail(e.target.value))}
+											onKeyUp={(e) => _onEnterMail(e.keyCode)}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<Button
+											fullWidth
+											variant="contained"
+											color="primary"
+											className={classes.textButton}
+											onClick={_onClickAuthSend}>
+												인증요청
+										</Button>
+									</Grid>
+								</Grid>
+							</React.Fragment>
+					}
+					{
+						(isSend && !isAuth) &&
+							<React.Fragment>
+								<Grid container spacing={2}>
+									<Grid item xs={12}>
+										<TextField
+											variant="outlined"
+											required
+											fullWidth
+											size="small"
+											name="mailAuth"
+											label="Authentication Code"
+											id="mailAuth"
+											value={mailAuth}
+											onChange={(e) => (setMailAuth(e.target.value))}
+											onKeyUp={(e) => _onEnterMailAuth(e.keyCode)}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<Button
+											fullWidth
+											variant="contained"
+											color="primary"
+											className={classes.textButton}
+											onClick={_onClickAuth}>
+												인증확인
+										</Button>
+									</Grid>
+								</Grid>
+							</React.Fragment>
+					}
+					{
+						(isSend && isAuth) &&
+							<React.Fragment>
+								<Grid container spacing={2}>
+									<Grid item xs={12}>
+										{
+											(isAuth) &&
+												<Grid item xs={12}>
+													<Typography>
+														인증방식 설명
+													</Typography>
+												</Grid>
+										}
+										<FormControlLabel
+											control={
+												<Checkbox 
+													value="allowExtraEmails" 
+													color="primary" 
+													checked={isAgree}
+													onChange={(() => {setIsAgree(!isAgree)})}/>
+											}
+											label="내용을 다 읽고 이해하였습니다."
+										/>
+									</Grid>
+									<Grid 
+										container 
+										justify="flex-end"
+										className={classes.signup}>
+											<MyButton
+												color="blue"
+												text="SIGN UP"
+												onClick={_onClickSignUp}/>
+									</Grid>
+								</Grid>
+							</React.Fragment>
+					}
 			</Container>
     </React.Fragment>
   );

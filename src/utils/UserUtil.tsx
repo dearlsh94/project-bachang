@@ -76,8 +76,7 @@ export const checkGameUser = (server: string, character: string) => {
           const $ = cheerio.load(html.data);
           const $txtMessage = $("textarea").text();
 
-          const char = "승옹";
-          const regContainCharacter = new RegExp(char, "g");
+          const regContainCharacter = new RegExp(character, "g");
 
           const regRes = regContainCharacter.test($txtMessage);
           console.log("REG RESPONSE > ", regRes);
