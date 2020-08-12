@@ -1,64 +1,98 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-import ISginInUser from 'interfaces/Common/ISginInUser';
-import { sessionUserInfo } from './ConfigUtil';
+import IUserInfo from 'interfaces/Common/IUserInfo';
+import ISignInUser from 'interfaces/Common/ISignInUser';
+import { getSessionUserInfo } from './ConfigUtil';
+import { useRecoilTransactionObserver_UNSTABLE } from 'recoil';
 
 export const SignInUser = (_id: string, _password: string) => {
   // Check DB
 
-  // Create SignOn User Info
-  const signInUser: ISginInUser = {
+  // Create SignIn User Info
+  const signInUser: ISignInUser = {
     id: _id,
   }
 
   // Session Store
   localStorage.setItem(
-    sessionUserInfo,
+    getSessionUserInfo(),
     JSON.stringify(signInUser)
   );
 }
 
 export const LogoutUser = () => {
-  localStorage.removeItem(sessionUserInfo);
+  localStorage.removeItem(getSessionUserInfo());
 }
 
-export const getSignInUserInfo = () => {
-  const userInfo = localStorage.getItem(sessionUserInfo);
+export const getSignInUser = () => {
+  const userInfo = localStorage.getItem(getSessionUserInfo());
 
   if ( userInfo === null ) {
     return "";
   }
+
+  const jsonUserInfo = JSON.parse(userInfo);
+
+  const signInUser: ISignInUser = {
+    id: jsonUserInfo.id,
+  }
   
-  return JSON.parse(userInfo);
+  return signInUser;
 }
 
-export const checkGameUser = () => {
-
-  const getHtml = async () => {
-    try {
-      const userId = encodeURI("협가검");
-      const userServer = encodeURI("하자");
-
-      return await axios.get(`/Profile/Info?character=${userId}%40${userServer}`);
-    }
-    catch (e) {
-      console.log(e);
-    }
+export const getSignInUserId = () => {
+  const userInfo = localStorage.getItem(getSessionUserInfo());
+  if ( userInfo === null ) {
+    return "";
   }
 
-  getHtml()
-    .then((html) => {
+  return JSON.parse(userInfo).id;
+}
 
-      if (html === undefined)
-        throw new Error("no html");
+export const getUserInfoById = (_id: string) => {
+  const userInfo: IUserInfo = {
+    id: _id,
+    mail: "mail@mail.net",
+    server: "하자",
+    character: "협가검",
+    isAuth: true
+  }
 
-      const $ = cheerio.load(html.data);
-      const $txtMessage = $("textarea").text();
+  return userInfo;
+}
 
-      console.log("TEXTMESSAGE : ", $txtMessage);
+export const checkGameUser = (server: string, character: string) => {
 
-      return 
-    })
+  const userId = encodeURI(character);
+  const userServer = encodeURI(server);
+  
+  return new Promise((resolve, reject) => {
+    axios.get(`/Profile/Info?character=${userId}%40${userServer}`)
+      .then((html) => {
+        if (html === undefined)
+            throw new Error("NO HTML");
+          
+          const $ = cheerio.load(html.data);
+          const $txtMessage = $("textarea").text();
 
+          const char = "승옹";
+          const regContainCharacter = new RegExp(char, "g");
+
+          const regRes = regContainCharacter.test($txtMessage);
+          console.log("REG RESPONSE > ", regRes);
+
+          return regRes;
+      })
+      .then((regRes) => {
+        console.log("[TODO] RUN DB PROCESS");
+
+        resolve(regRes);
+      })
+      .catch((e) => {
+        console.log("CHECK GAME USER ERROR > ", e);
+
+        resolve(false);
+      })
+  });
 }

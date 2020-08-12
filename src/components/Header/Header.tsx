@@ -15,7 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import TopTaps from 'components/Header/TopTaps';
 import SignIn from 'pages/Common/SignIn';
 
-import { getSignInUserInfo, LogoutUser } from 'utils/UserUtil';
+import { getSignInUser, LogoutUser } from 'utils/UserUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,7 +48,7 @@ export default function Header() {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [isSignInOpen, setIsSignInOpen] = React.useState(false);
 
-  const userInfo = getSignInUserInfo();
+  const userInfo = getSignInUser();
   console.log(userInfo);
 
   const _onMoveToMain = () => {

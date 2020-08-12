@@ -228,7 +228,7 @@ export default function SignUp<IProps, IState>() {
 										checked={isAgree}
 										onChange={(() => {setIsAgree(!isAgree)})}/>
 								}
-								label="닉네임 정회원 인증 후 설정 가능"
+								label="닉네임 인증방식 설명"
 							/>
 						</Grid>
 					</Grid>

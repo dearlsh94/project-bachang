@@ -12,7 +12,7 @@ export default function Test() {
   const classes = useStyles();
 
   const _onTest = () => {
-    checkGameUser();
+    checkGameUser("하자", "협가검");
   }
 
   return (
