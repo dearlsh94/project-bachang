@@ -4,7 +4,6 @@ import cheerio from 'cheerio';
 import IUserInfo from 'interfaces/Common/IUserInfo';
 import ISignInUser from 'interfaces/Common/ISignInUser';
 import { getSessionUserInfo } from './ConfigUtil';
-import { useRecoilTransactionObserver_UNSTABLE } from 'recoil';
 
 export const SignInUser = (_id: string, _password: string) => {
   // Check DB
@@ -12,6 +11,7 @@ export const SignInUser = (_id: string, _password: string) => {
   // Create SignIn User Info
   const signInUser: ISignInUser = {
     id: _id,
+    token: "",
   }
 
   // Session Store
@@ -19,10 +19,6 @@ export const SignInUser = (_id: string, _password: string) => {
     getSessionUserInfo(),
     JSON.stringify(signInUser)
   );
-}
-
-export const LogoutUser = () => {
-  localStorage.removeItem(getSessionUserInfo());
 }
 
 export const getSignInUser = () => {
@@ -36,6 +32,7 @@ export const getSignInUser = () => {
 
   const signInUser: ISignInUser = {
     id: jsonUserInfo.id,
+    token: "",
   }
   
   return signInUser;
@@ -60,6 +57,10 @@ export const getUserInfoById = (_id: string) => {
   }
 
   return userInfo;
+}
+
+export const LogoutUser = () => {
+  localStorage.removeItem(getSessionUserInfo());
 }
 
 export const checkGameUser = (server: string, character: string) => {

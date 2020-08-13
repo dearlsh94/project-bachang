@@ -17,7 +17,7 @@ import { getSignInUserId, getUserInfoById } from 'utils/UserUtil';
 
 import IUserInfo from 'interfaces/Common/IUserInfo';
 
-import MyButton from 'elements/MyButton';
+import MyButton from 'elements/Button/MyButton';
 import NoSignInUser from 'components/User/NoSignInUser';
 import ViewUserInfo from 'components/User/ViewUserInfo';
 import EditUserInfo from 'components/User/EditUserInfo';
@@ -40,7 +40,7 @@ function MyInfo() {
   const userId: string = getSignInUserId();
   const userInfo: IUserInfo = getUserInfoById(userId);
 
-  const [mode, setMode] = React.useState("edit");
+  const [mode, setMode] = React.useState("view");
 
   const _onViewUser = () => {
     setMode("view");

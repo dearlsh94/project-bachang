@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 
-import MyButton from 'elements/MyButton';
+import MyButton from 'elements/Button/MyButton';
 
 import { SignInUser } from 'utils/UserUtil';
 

@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { checkGameUser } from 'utils/UserUtil';
 import IUserInfo from 'interfaces/Common/IUserInfo';
 
-import MyButton from 'elements/MyButton';
+import MyButton from 'elements/Button/MyButton';
 import MyAlert from 'elements/Alert/MyAlert';
 
 interface IProps {
@@ -29,10 +29,13 @@ function AuthUserInfo(props: IProps) {
   const classes = useStyles();
   const userInfo: IUserInfo = props.userInfo;
 
+  const [isDisabled, setIsDisabled] = React.useState(false);
   const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
   const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
 
   const _onAuthRequest = async () => {
+    setIsDisabled(true);
+
     const res = await checkGameUser(userInfo.server, userInfo.character);
     
     if (res) {
@@ -44,7 +47,10 @@ function AuthUserInfo(props: IProps) {
     else {
       console.log("인증실패");
       setOpenErrorAlert(true);
-      setTimeout(()=> setOpenErrorAlert(false), 4000);
+      setTimeout(()=> {
+        setOpenErrorAlert(false);
+        setIsDisabled(false);
+      }, 4000);
     }
   }
 
@@ -87,8 +93,9 @@ function AuthUserInfo(props: IProps) {
         </Grid>
         <Grid container item xs={12}>
           <MyButton
+            disabled={isDisabled}
             color="blue"
-            text="인증신청"
+            text={isDisabled ? "인증 중입니다." : "인증신청"}
             onClick={_onAuthRequest}/>
         </Grid>
       </Grid>

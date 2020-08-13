@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 
 import ISignUpUser from 'interfaces/Common/ISignUpUser';
 
-import MyButton from 'elements/MyButton';
+import MyButton from 'elements/Button/MyButton';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
