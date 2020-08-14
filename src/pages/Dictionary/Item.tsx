@@ -34,17 +34,14 @@ export default function FindId() {
 
   const tabs: Array<IItem> = [
     {
-      idx: 0,
       key: "01",
       title: "전체"
     },
     {
-      idx: 1,
       key: "02",
       title: "목록1"
     },
     {
-      idx: 2,
       key: "03",
       title: "목록2"
     },

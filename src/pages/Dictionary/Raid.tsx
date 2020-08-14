@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
+import Avatar from '@material-ui/core/Avatar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,6 +12,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { getDicAllRaidList } from 'utils/DictionaryUtil';
+import { getBaseUrlForRaidImg } from 'utils/ConfigUtil';
+
 import IRaids from 'interfaces/Dictionary/IRaids';
 import MyInputSearch from 'elements/Input/MyInputSearch';
 import MyGridDivider from 'elements/Grid/MyGridDivider';
@@ -31,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   tableContainer: {
     marginTop: "20px",
     marginBottom: "20px",
+  },
+  shortImage: {
+    width: theme.spacing(6),
+    height: theme.spacing(6),
   },
 }));
 
@@ -64,7 +71,7 @@ export default function Raid() {
   const classes = useStyles();
   
   const allRaids: Array<IRaids> = getDicAllRaidList();
-
+  const baseUrlForRaidImg = getBaseUrlForRaidImg();
   const _onMoveRaidInfo = (key: string) => {
     document.location.href="/dic/raid/" + key;
   }
@@ -89,21 +96,24 @@ export default function Raid() {
               <Table className={classes.table} aria-label={`${raids.section}-table`}>
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell>{raids.section} 레이드 목록</StyledTableCell>
+                    <StyledTableCell>{raids.section}</StyledTableCell>
+                    <StyledTableCell align="left">레이드명</StyledTableCell>
                     <StyledTableCell align="right">제한 전투력</StyledTableCell>
                     <StyledTableCell align="right">제한 인원</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {
-                    raids.raidInfos.map((info) => (
-                      <StyledTableRow key={info.name}
-                        onClick={() => _onMoveRaidInfo(info.key)}>
-                        <StyledTableCell component="th" scope="row">
-                          {info.name}
-                        </StyledTableCell>
-                        <StyledTableCell align="right">{info.limitPower}</StyledTableCell>
-                        <StyledTableCell align="right">{info.minPeopleCount} ~ {info.maxPeopleCount}</StyledTableCell>
+                    raids.raidInfos.map((raid) => (
+                      <StyledTableRow key={raid.name}
+                        onClick={() => _onMoveRaidInfo(raid.key)}>
+                          <StyledTableCell component="th" scope="row">
+                            <Avatar src={baseUrlForRaidImg.concat(raid.img)} 
+                              className={classes.shortImage}/>
+                          </StyledTableCell>
+                          <StyledTableCell align="left">{raid.name}</StyledTableCell>
+                          <StyledTableCell align="right">{raid.limitPower}</StyledTableCell>
+                          <StyledTableCell align="right">{raid.minPeopleCount} ~ {raid.maxPeopleCount}</StyledTableCell>
                       </StyledTableRow>
                     ))
                   }

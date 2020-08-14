@@ -4,42 +4,105 @@ const tempRaidList: Array<IRaid> = [
   {
     idx: 0,
     key: "0101",
-    name: "수룡장",
+    name: "검은용-일반",
     limitPower: 17000,
     limitEnter: "-",
-    minPeopleCount: 0,
-    maxPeopleCount: 4,
-    maxEnterCount: 3,
-    reward: "수룡장 보상",
-    img: "수룡장.png",
+    minPeopleCount: 1,
+    maxPeopleCount: 10,
+    maxEnterCount: "-",
+    reward:[
+      {
+        name: "중국황제",
+        reward: [
+          {
+            key: "xx",
+            title: "용x노리개"
+          },
+        ]
+      },
+      {
+        name: "검은용",
+        reward: [
+          {
+            key: "xx",
+            title: "흑룡의결정"
+          },
+          {
+            key: "xx",
+            title: "흑룡의용안"
+          }
+        ]
+      }
+    ],
+    img: "blackDragon.png",
   },
   {
     idx: 1,
     key: "0102",
-    name: "화룡장",
-    limitPower: 20000,
+    name: "검은용-심연",
+    limitPower: 37000,
     limitEnter: "-",
-    minPeopleCount: 3,
-    maxPeopleCount: 10,
-    maxEnterCount: 3,
-    reward: "화룡장 보상",
-    img: "화룡장.png",
-  }
+    minPeopleCount: 1,
+    maxPeopleCount: 4,
+    maxEnterCount: "-",
+    reward:[
+      {
+        name: "검은용",
+        reward: [
+          {
+            key: "xx",
+            title: "용전설보급품"
+          },
+          {
+            key: "xx",
+            title: "기술서:검은용의 공포"
+          }
+        ]
+      }
+    ],
+    img: "blackDragon.png",
+  },
 ]
 
 const tempRaidList2: Array<IRaid> = [
   {
     idx: 0,
     key: "0201",
-    name: "수룡장",
-    limitPower: 17000,
+    name: "구미호",
+    limitPower: "-",
     limitEnter: "-",
-    minPeopleCount: 0,
-    maxPeopleCount: 4,
+    minPeopleCount: 1,
+    maxPeopleCount: 10,
     maxEnterCount: 3,
-    reward: "수룡장 보상",
-    img: "수룡장.png",
-  }
+    reward:[
+      {
+        name: "구미호",
+        reward: [
+          {
+            key: "xx",
+            title: "구미호의 영혼(병/갑/투)"
+          },
+          {
+            key: "xx",
+            title: "전설구미호 무기류"
+          },
+          {
+            key: "xx",
+            title: "전설구미호 방어구류"
+          },
+          {
+            key: "xx",
+            title: "순수여우구슬"
+          },
+          {
+            key: "xx",
+            title: "타락여우구슬"
+          }
+        ]
+      }
+    ],
+    img: "blackDragon.png",
+  },
 ]
 
 export const getDicAllRaidList = () => {
@@ -59,4 +122,16 @@ export const getDicAllRaidList = () => {
   });
 
   return dicRaidList;
+}
+
+export const getDicRaidBykey = (findKey: string) => {
+  let resRaid;
+
+  resRaid = tempRaidList.filter((raid) => raid.key === findKey);
+
+  if (resRaid.length == 0) {
+    resRaid = tempRaidList2.filter((raid) => raid.key === findKey);
+  }
+
+  return resRaid;
 }

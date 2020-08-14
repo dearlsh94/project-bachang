@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { checkGameUser } from 'utils/UserUtil';
 import IUserInfo from 'interfaces/Common/IUserInfo';
@@ -22,7 +24,13 @@ const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: 10,
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
+
+const duration = 3000;
 
 function AuthUserInfo(props: IProps) {
 
@@ -39,18 +47,18 @@ function AuthUserInfo(props: IProps) {
     const res = await checkGameUser(userInfo.server, userInfo.character);
     
     if (res) {
-      console.log("인증성공");
+      // Successed Authentication
       setOpenSuccessAlert(true);
-      setTimeout(() => setOpenSuccessAlert(false), 4000);
-      setTimeout(() => document.location.reload(), 4000);
+      setTimeout(() => setOpenSuccessAlert(false), duration);
+      setTimeout(() => document.location.reload(), duration);
     }
     else {
-      console.log("인증실패");
+      // Failed Authentication
       setOpenErrorAlert(true);
       setTimeout(()=> {
         setOpenErrorAlert(false);
         setIsDisabled(false);
-      }, 4000);
+      }, duration);
     }
   }
 
@@ -99,12 +107,15 @@ function AuthUserInfo(props: IProps) {
             onClick={_onAuthRequest}/>
         </Grid>
       </Grid>
+      <Backdrop className={classes.backdrop} open={isDisabled}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {
         openSuccessAlert &&
           <MyAlert
             isOpen={true}
             severity="success"
-            duration={4000}
+            duration={duration}
             text="인증 성공! 잠시 후 회원정보로 이동 됩니다." />
       }
       {
@@ -112,7 +123,7 @@ function AuthUserInfo(props: IProps) {
           <MyAlert
             isOpen={true}
             severity="error"
-            duration={4000}
+            duration={duration}
             text="인증 실패!" />
       }
     </Container>

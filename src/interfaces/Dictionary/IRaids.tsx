@@ -1,13 +1,20 @@
+import IItem from 'interfaces/Dictionary/IItem';
+
+interface IDropItem {
+  name: string,
+  reward: Array<IItem>
+}
+
 export interface IRaid {
   idx: number,
   key: string,
   name: string,
-  limitPower?: number,
+  limitPower?: number | "-",
   limitEnter?: string,
   minPeopleCount?: number,
   maxPeopleCount?: number,
-  maxEnterCount?: number,
-  reward: string,
+  maxEnterCount?: number | "-",
+  reward: Array<IDropItem>,
   img: string,
 }
 
