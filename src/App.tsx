@@ -14,6 +14,9 @@ import SignUp from 'pages/Common/SignUp';
 import FindId from 'pages/Common/FindId';
 import FindPw from 'pages/Common/FindPw';
 
+import FreeBoard from 'pages/Board/FreeBoard';
+import PostWrite from 'pages/Board/PostWrite';
+
 import Item from 'pages/Dictionary/Item';
 import Raid from 'pages/Dictionary/Raid';
 import RaidInfo from 'pages/Dictionary/RaidInfo';
@@ -44,6 +47,10 @@ function App() {
               <Route exact path="/findid" component={FindId}/>
               <Route exact path="/findpw" component={FindPw}/>
 
+              {/*Board*/}
+              <Route exact path="/board/free" component={FreeBoard}/>
+              <Route exact path="/board/write" component={PostWrite}/>
+              
               {/*Dictionary*/}
               <Route path="/dic/item" component={Item}/>
               <Route exact path="/dic/raid" component={Raid}/>

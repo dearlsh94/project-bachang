@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   const classes = useStyles();
-  const title = "Basa";
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [isSignInOpen, setIsSignInOpen] = React.useState(false);
@@ -97,7 +96,7 @@ export default function Header() {
                   className={classes.toolbarTitle}
                   onClick={_onMoveToMain}
                 >
-                  {title}
+                  logo
                 </Typography>
               </Grid>
               <Grid item xs={3}
