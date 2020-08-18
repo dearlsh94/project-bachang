@@ -17,6 +17,10 @@ import MyButton from 'elements/Button/MyButton';
 import MyTextEditor from 'elements/TextEditor/MyTextEditor';
 import MyAlert from 'elements/Alert/MyAlert';
 
+import IPost from 'interfaces/Common/IPost';
+
+import { CreatePost } from 'utils/PostUtil';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "10px",
@@ -61,7 +65,21 @@ function PostWrite() {
     setIsDisabled(true);
 
     // Processing...
-    const res = true;
+    const post: IPost = {
+      key: "9999",
+      section: "free",
+      title: "title",
+      content: "content",
+      viewCount: 0,
+      writer: {
+        creater: "sys",
+        createDate: new Date(),
+        editer: "sys",
+        lastEditDate: new Date(),
+      }
+    }
+
+    const res = CreatePost(post);
 
     if (res) {
       // Successed Authentication
