@@ -1,5 +1,5 @@
 {
-  "sessionUserInfo": "SignInUser",
+  "sessionUserToken": "SignInUser",
   "baseUrlForMainCarousel": "/assets/img/",
   "baseUrlForRaidImg": "/assets/img/dictionary/raid/",
   "menus": [

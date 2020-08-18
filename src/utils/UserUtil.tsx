@@ -1,53 +1,75 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import crypto from 'crypto';
+import jsonwebtoken from 'jsonwebtoken';
+
+import jwtObject from 'conf/jwt';
 
 import IUserInfo from 'interfaces/Common/IUserInfo';
+import ISignUpUser from 'interfaces/Common/ISignUpUser';
 import ISignInUser from 'interfaces/Common/ISignInUser';
-import { getSessionUserInfo } from './ConfigUtil';
+import { getSessionUserToken } from 'utils/ConfigUtil';
+
+export const SignUpUser = (user: ISignUpUser) => {
+
+  // Create Encrypt salt
+  let mySalt = Math.round((new Date().valueOf() * Math.random())) + "";
+
+  const newUser: ISignUpUser = {
+    id: user.id,
+    mail: user.mail,
+    password: crypto.createHash("sha512").update(user.password + mySalt).digest("hex"),
+    salt: mySalt
+  }
+
+  //TODO - DB Process for Create User
+
+  console.log("NEW USER > ", newUser);
+
+  return true;
+}
+
 
 export const SignInUser = (_id: string, _password: string) => {
-  // Check DB
+  // TODO - DB Process for Check Sign Up User
+
+  // Create JWT
+  const token = jsonwebtoken.sign(
+    {
+      id: _id,
+    },
+    jwtObject.secret,
+    {
+      expiresIn: '5m'
+    }
+  );
 
   // Create SignIn User Info
   const signInUser: ISignInUser = {
-    id: _id,
-    token: "",
+    token: token,
   }
 
   // Session Store
   localStorage.setItem(
-    getSessionUserInfo(),
+    getSessionUserToken(),
     JSON.stringify(signInUser)
   );
 }
 
-export const getSignInUser = () => {
-  const userInfo = localStorage.getItem(getSessionUserInfo());
-
-  if ( userInfo === null ) {
+export const getSignInUserId = () => { 
+  const userToken = localStorage.getItem(getSessionUserToken());
+  if ( userToken === null ) {
     return "";
   }
 
-  const jsonUserInfo = JSON.parse(userInfo);
+  const userId = getIdFromJWT(JSON.parse(userToken).token);
 
-  const signInUser: ISignInUser = {
-    id: jsonUserInfo.id,
-    token: "",
-  }
-  
-  return signInUser;
-}
-
-export const getSignInUserId = () => {
-  const userInfo = localStorage.getItem(getSessionUserInfo());
-  if ( userInfo === null ) {
-    return "";
-  }
-
-  return JSON.parse(userInfo).id;
+  return userId;
 }
 
 export const getUserInfoById = (_id: string) => {
+  // TODO - DB Process Get UserInfo By Id
+
   const userInfo: IUserInfo = {
     id: _id,
     mail: "mail@mail.net",
@@ -60,9 +82,13 @@ export const getUserInfoById = (_id: string) => {
 }
 
 export const LogoutUser = () => {
-  localStorage.removeItem(getSessionUserInfo());
+  localStorage.removeItem(getSessionUserToken());
 }
 
+
+/*
+* 바람의 나라 공식 사이트 한줄인사말 데이터 크롤링하여, 사용자 인증 처리
+*/
 export const checkGameUser = (server: string, character: string) => {
 
   const userId = encodeURI(character);
@@ -95,4 +121,19 @@ export const checkGameUser = (server: string, character: string) => {
         resolve(false);
       })
   });
+}
+
+
+/*
+* JWT 구조
+* [HEADER].[PAYLOAD].[VERIFY SIGNATURE]
+*/
+const getIdFromJWT = (token: string) => {
+  // Get Payload Data
+  const splitToken = token.split(".")[1];
+
+  // Decode Base64 and Transfer to JSON
+  const payload = JSON.parse(atob(splitToken));
+
+  return payload.id;
 }

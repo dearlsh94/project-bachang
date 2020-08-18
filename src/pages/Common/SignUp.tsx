@@ -14,6 +14,8 @@ import ISignUpUser from 'interfaces/Common/ISignUpUser';
 
 import MyButton from 'elements/Button/MyButton';
 
+import { SignUpUser } from 'utils/UserUtil';
+
 const useStyles = makeStyles((theme) => ({
 	title: {
 		marginTop: 10,
@@ -86,13 +88,19 @@ export default function SignUp(props: IProps) {
 			return 0;
 		}
 
-		const signUp: ISignUpUser = {
+		const signUpUser: ISignUpUser = {
 			id: id,
 			password: password,
 			mail: mail,
 		};
 
-		console.log("SIGN UP USER INFO >>> " , signUp);
+		if ( SignUpUser(signUpUser) ) {
+			alert("회원가입 성공!");
+		}
+		else {
+			alert ("회원가입 실패!")
+		};
+		
 	}
 
   return (

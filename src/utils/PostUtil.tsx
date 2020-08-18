@@ -1,4 +1,4 @@
-import IPost from 'interfaces/Common/IPost';
+import IPost from 'interfaces/Board/IPost';
 
 export const CreatePost = (post: IPost) => {
   console.log(post);

@@ -17,9 +17,11 @@ import MyButton from 'elements/Button/MyButton';
 import MyTextEditor from 'elements/TextEditor/MyTextEditor';
 import MyAlert from 'elements/Alert/MyAlert';
 
-import IPost from 'interfaces/Common/IPost';
+import IPost from 'interfaces/Board/IPost';
 
 import { CreatePost } from 'utils/PostUtil';
+
+import { getNowDateString } from 'utils/ComoonUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,9 +75,9 @@ function PostWrite() {
       viewCount: 0,
       writer: {
         creater: "sys",
-        createDate: new Date(),
+        createDate: getNowDateString(),
         editer: "sys",
-        lastEditDate: new Date(),
+        lastEditDate: getNowDateString(),
       }
     }
 

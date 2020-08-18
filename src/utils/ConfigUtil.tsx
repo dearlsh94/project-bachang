@@ -2,8 +2,8 @@ import config from 'conf/config.json';
 
 import IMenu from 'interfaces/Common/IMenu';
 
-export const getSessionUserInfo = () => {
-  return config.sessionUserInfo;
+export const getSessionUserToken = () => {
+  return config.sessionUserToken;
 }
 
 export const getBaseUrlForMainCarousel = () => {
