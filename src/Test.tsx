@@ -1,12 +1,16 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-import { checkGameUser } from 'utils/UserUtil';
+import { SignUpUser } from 'utils/UserUtil';
 
 export default function Test() {
 
   const _onTest = () => {
-    checkGameUser("하자", "협가검");
+    SignUpUser({
+      id: "whitow",
+      password: "admin",
+      mail: "whitow@test.com"
+    });
   }
 
   return (
@@ -16,7 +20,7 @@ export default function Test() {
         tabIndex={-1}
         onClick={_onTest} 
         color="primary">
-          유저조회
+          유저생성
       </Button>
     </React.Fragment>
   );

@@ -12,6 +12,8 @@ import { getSessionNameUserToken } from 'utils/ConfigUtil';
 
 import * as CommonUtil from 'utils/ComoonUtil';
 
+import * as MyMongo from 'shared/index';
+
 export const SignUpUser = (user: ISignUpUser) => {
 
   // Create Encrypt salt
@@ -24,9 +26,11 @@ export const SignUpUser = (user: ISignUpUser) => {
     salt: mySalt
   }
 
+  console.log("RUN SignUpUser");
   //TODO - DB Process for Create User
+  const res = MyMongo.createSignUpUser(newUser);
 
-  console.log("NEW USER > ", newUser);
+//  console.log("NEW USER CREATED > ", res);
 
   return true;
 }
