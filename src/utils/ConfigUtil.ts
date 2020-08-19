@@ -2,7 +2,7 @@ import config from 'conf/config.json';
 
 import IMenu from 'interfaces/Common/IMenu';
 
-export const getSessionUserToken = () => {
+export const getSessionNameUserToken = () => {
   return config.sessionUserToken;
 }
 

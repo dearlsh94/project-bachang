@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 
-import ISignUpUser from 'interfaces/Common/ISignUpUser';
+import ISignUpUser from 'interfaces/User/ISignUpUser';
 
 import MyButton from 'elements/Button/MyButton';
 

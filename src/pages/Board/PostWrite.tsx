@@ -21,7 +21,7 @@ import IPost from 'interfaces/Board/IPost';
 
 import { CreatePost } from 'utils/PostUtil';
 
-import { getNowDateString } from 'utils/ComoonUtil';
+import * as CommonUtil from 'utils/ComoonUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,9 +75,9 @@ function PostWrite() {
       viewCount: 0,
       writer: {
         creater: "sys",
-        createDate: getNowDateString(),
+        createDateString: CommonUtil.getNowDateString(),
         editer: "sys",
-        lastEditDate: getNowDateString(),
+        lastEditDateString: CommonUtil.getNowDateString(),
       }
     }
 

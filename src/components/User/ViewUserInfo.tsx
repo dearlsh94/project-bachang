@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import IUserInfo from 'interfaces/Common/IUserInfo';
+import IUserInfo from 'interfaces/User/IUserInfo';
 
 interface IProps {
   userInfo: IUserInfo,
@@ -52,6 +52,22 @@ function ViewUserInfo(props: IProps) {
         </Grid>
         <Grid container item xs={12}>
           <Grid item xs={3}>
+            등급
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.grade}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            포인트
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.point}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
             서버
           </Grid>
           <Grid item xs={9}>
@@ -76,6 +92,22 @@ function ViewUserInfo(props: IProps) {
               ? "인증"
               : "미인증"
             }
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            생성일
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.createDateString}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12}>
+          <Grid item xs={3}>
+            인증일
+          </Grid>
+          <Grid item xs={9}>
+            {userInfo.authDateString}
           </Grid>
         </Grid>
       </Grid>

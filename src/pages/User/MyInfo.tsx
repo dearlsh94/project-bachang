@@ -1,23 +1,16 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Link from '@material-ui/core/Link';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 
 import { getSignInUserId, getUserInfoById } from 'utils/UserUtil';
 
-import IUserInfo from 'interfaces/Common/IUserInfo';
+import IUserInfo from 'interfaces/User/IUserInfo';
 
-import MyButton from 'elements/Button/MyButton';
 import NoSignInUser from 'components/User/NoSignInUser';
 import ViewUserInfo from 'components/User/ViewUserInfo';
 import EditUserInfo from 'components/User/EditUserInfo';
@@ -101,50 +94,3 @@ function MyInfo() {
 }
 
 export default MyInfo;
-
-
-/*
-<Container 
-  className={classes.root}
-  component="main" 
-  maxWidth="sm">
-    <Link 
-      component="button"
-      variant="body2" 
-      tabIndex={-1}
-      onClick={_onChangeEditMode}>
-        정보수정
-    </Link>
-    <form
-      noValidate 
-      className={classes.form}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-                disabled
-                variant="outlined"
-                required
-                fullWidth
-                margin="dense"
-                id="id"
-                name="id"
-                label="User ID"
-                autoComplete="id"
-                value={userInfo.id}
-            />
-          </Grid>
-        </Grid>
-        {
-          isEditMode &&
-            <Grid container item xs={12}
-              justify="flex-end"
-              className={classes.edit}>
-                <MyButton
-                  color="red"
-                  text="수정"
-                  onClick={_onEdit}/>
-            </Grid>
-        }
-  </form>
-</Container>
-*/        

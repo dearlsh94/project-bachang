@@ -7,8 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
 import MyButton from 'elements/Button/MyButton';
-import SignUp from 'pages/Common/SignUp';
-import IUserInfo from 'interfaces/Common/IUserInfo';
+
+import SignUp from 'pages/User/SignUp';
+
+import IUserInfo from 'interfaces/User/IUserInfo';
 
 interface IProps {
   userInfo: IUserInfo,

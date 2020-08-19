@@ -8,7 +8,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { checkGameUser } from 'utils/UserUtil';
-import IUserInfo from 'interfaces/Common/IUserInfo';
+import IUserInfo from 'interfaces/User/IUserInfo';
 
 import MyButton from 'elements/Button/MyButton';
 import MyAlert from 'elements/Alert/MyAlert';

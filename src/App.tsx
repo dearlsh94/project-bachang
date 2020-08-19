@@ -9,10 +9,12 @@ import Test from './Test';
 
 import Header from 'components/Header/Header';
 import Home from 'pages/Home';
-import SignIn from 'pages/Common/SignIn';
-import SignUp from 'pages/Common/SignUp';
-import FindId from 'pages/Common/FindId';
-import FindPw from 'pages/Common/FindPw';
+
+import SignIn from 'pages/User/SignIn';
+import SignUp from 'pages/User/SignUp';
+import FindId from 'pages/User/FindId';
+import FindPw from 'pages/User/FindPw';
+import MyInfo from 'pages/User/MyInfo';
 
 import FreeBoard from 'pages/Board/FreeBoard';
 import PostWrite from 'pages/Board/PostWrite';
@@ -21,7 +23,6 @@ import Item from 'pages/Dictionary/Item';
 import Raid from 'pages/Dictionary/Raid';
 import RaidInfo from 'pages/Dictionary/RaidInfo';
 
-import MyInfo from 'pages/MyPage/MyInfo';
 
 function App() {
   return (

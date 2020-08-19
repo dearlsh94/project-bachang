@@ -5,10 +5,12 @@ import jsonwebtoken from 'jsonwebtoken';
 
 import jwtObject from 'conf/jwt';
 
-import IUserInfo from 'interfaces/Common/IUserInfo';
-import ISignUpUser from 'interfaces/Common/ISignUpUser';
-import ISignInUser from 'interfaces/Common/ISignInUser';
-import { getSessionUserToken } from 'utils/ConfigUtil';
+import IUserInfo from 'interfaces/User/IUserInfo';
+import ISignUpUser from 'interfaces/User/ISignUpUser';
+import ISignInUser from 'interfaces/User/ISignInUser';
+import { getSessionNameUserToken } from 'utils/ConfigUtil';
+
+import * as CommonUtil from 'utils/ComoonUtil';
 
 export const SignUpUser = (user: ISignUpUser) => {
 
@@ -28,7 +30,6 @@ export const SignUpUser = (user: ISignUpUser) => {
 
   return true;
 }
-
 
 export const SignInUser = (_id: string, _password: string) => {
   // TODO - DB Process for Check Sign Up User
@@ -50,14 +51,11 @@ export const SignInUser = (_id: string, _password: string) => {
   }
 
   // Session Store
-  localStorage.setItem(
-    getSessionUserToken(),
-    JSON.stringify(signInUser)
-  );
+  setSessionUserToken(signInUser);
 }
 
 export const getSignInUserId = () => { 
-  const userToken = localStorage.getItem(getSessionUserToken());
+  const userToken = getSessionUserToken();
   if ( userToken === null ) {
     return "";
   }
@@ -75,14 +73,19 @@ export const getUserInfoById = (_id: string) => {
     mail: "mail@mail.net",
     server: "하자",
     character: "협가검",
-    isAuth: true
+    isAuth: true,
+    point: 0,
+    grade: "초보자",
+    createDateString: CommonUtil.getNowDateString(),
+    authDateString: CommonUtil.getNowDateString(),
+    isActive: true
   }
 
   return userInfo;
 }
 
 export const LogoutUser = () => {
-  localStorage.removeItem(getSessionUserToken());
+  delSessionUserToken();
 }
 
 
@@ -124,16 +127,37 @@ export const checkGameUser = (server: string, character: string) => {
 }
 
 
+
+const setSessionUserToken = (signInUser: ISignInUser) => {
+  localStorage.setItem(
+    getSessionNameUserToken(),
+    JSON.stringify(signInUser)
+  );
+}
+
+const getSessionUserToken = () => {
+  return localStorage.getItem(getSessionNameUserToken());
+}
+
+const delSessionUserToken = () => {
+  localStorage.removeItem(getSessionNameUserToken());
+}
+
+
+
 /*
 * JWT 구조
 * [HEADER].[PAYLOAD].[VERIFY SIGNATURE]
 */
 const getIdFromJWT = (token: string) => {
-  // Get Payload Data
-  const splitToken = token.split(".")[1];
+  // Get Token
+  const splitToken = token.split(".");
+
+  // Get Payload Token
+  const payloadToken = splitToken[1];
 
   // Decode Base64 and Transfer to JSON
-  const payload = JSON.parse(atob(splitToken));
+  const payload = JSON.parse(atob(payloadToken));
 
   return payload.id;
 }
