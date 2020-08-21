@@ -1,1 +1,0 @@
-export { default as SignUpUserSchema } from 'schemas/User/SignUpUserSchema';

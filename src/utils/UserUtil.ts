@@ -98,29 +98,16 @@ export const LogoutUser = () => {
 */
 export const checkGameUser = (server: string, character: string) => {
 
-  const userId = encodeURI(character);
-  const userServer = encodeURI(server);
-  
   return new Promise((resolve, reject) => {
-    axios.get(`/Profile/Info?character=${userId}%40${userServer}`)
-      .then((html) => {
-        if (html === undefined)
-            throw new Error("NO HTML");
-          
-          const $ = cheerio.load(html.data);
-          const $txtMessage = $("textarea").text();
-
-          const regContainCharacter = new RegExp(character, "g");
-
-          const regRes = regContainCharacter.test($txtMessage);
-          console.log("REG RESPONSE > ", regRes);
-
-          return regRes;
+    axios.post('/api/user/check', 
+      {
+        character: character,
+        server: server
       })
-      .then((regRes) => {
+      .then((res) => {
         console.log("[TODO] RUN DB PROCESS");
 
-        resolve(regRes);
+        resolve(res);
       })
       .catch((e) => {
         console.log("CHECK GAME USER ERROR > ", e);
