@@ -96,25 +96,23 @@ export const LogoutUser = () => {
 /*
 * 바람의 나라 공식 사이트 한줄인사말 데이터 크롤링하여, 사용자 인증 처리
 */
-export const checkGameUser = (server: string, character: string) => {
+export const checkGameUser = async (server: string, character: string) => {
+  const r = await axios.post('/api/user/check', {
+      character: character,
+      server: server
+    })
+    .then((res) => {
+      console.log(res.data);
+      
+      return res.data;
+    })
+    .catch((e) => {
+      console.log("CHECK GAME USER ERROR > ", e);
+      
+      return false;
+    });
 
-  return new Promise((resolve, reject) => {
-    axios.post('/api/user/check', 
-      {
-        character: character,
-        server: server
-      })
-      .then((res) => {
-        console.log("[TODO] RUN DB PROCESS");
-
-        resolve(res);
-      })
-      .catch((e) => {
-        console.log("CHECK GAME USER ERROR > ", e);
-
-        resolve(false);
-      })
-  });
+  return r
 }
 
 

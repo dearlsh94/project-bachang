@@ -28,7 +28,7 @@ router.post('/check', (req, res) => {
 
           console.log($txtMessage);
 
-          const regContainCharacter = new RegExp(req.params.character, "g");
+          const regContainCharacter = new RegExp(req.body.character, "g");
 
           const regRes = regContainCharacter.test($txtMessage);
           console.log("REG RESPONSE > ", regRes);

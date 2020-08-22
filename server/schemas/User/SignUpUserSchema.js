@@ -7,4 +7,4 @@ const signUpUserSchema = new mongoose.Schema({
   salt: { type: String, required: true }
 });
 
-module.exports(mongoose.model("SignUpUser", signUpUserSchema));
+module.exports = mongoose.model("SignUpUser", signUpUserSchema);
