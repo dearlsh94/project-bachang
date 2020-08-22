@@ -64,36 +64,39 @@ export default function FindPw() {
                       </Typography>
                     </Grid>
                   :
-                    <Grid container item xs={12}>
-                      <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        margin="dense"
-                        id="id"
-                        name="id"
-                        label="아이디"
-                        autoComplete="id"
-                        value={id}
-                        onChange={(e) => {setId(e.target.value)}}
-                      />
-                      <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        margin="dense"
-                        id="mail"
-                        name="mail"
-                        label="가입메일"
-                        autoComplete="mail"
-                        value={mail}
-                        onChange={(e) => {setMail(e.target.value)}}
-                      />
-                    </Grid>
+                    <React.Fragment>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          margin="dense"
+                          id="id"
+                          name="id"
+                          label="아이디"
+                          autoComplete="id"
+                          value={id}
+                          onChange={(e) => {setId(e.target.value)}}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          margin="dense"
+                          id="mail"
+                          name="mail"
+                          label="가입메일"
+                          autoComplete="mail"
+                          value={mail}
+                          onChange={(e) => {setMail(e.target.value)}}
+                        />
+                      </Grid>
+                    </React.Fragment>
                 }
               </Grid>
               <Grid item xs={12}
-                justify="flex-end"
                 className={classes.signup}>
                   {
                     !isSendPasswordMail &&

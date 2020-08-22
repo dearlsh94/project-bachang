@@ -56,10 +56,10 @@ export default function FindId() {
             noValidate 
             className={classes.form}>
             <Grid container spacing={2}>
-              <Grid container item xs={12}>
+                <Grid item xs={12}>
                 {
                   isSendAuthMail ?
-                    <Grid container item xs={12}>
+                    <React.Fragment>
                       <Link
                         component="button"
                         className={classes.back}
@@ -77,7 +77,7 @@ export default function FindId() {
                         value={mailAuth}
                         onChange={(e) => {setMailAuth(e.target.value)}}
                       />
-                    </Grid>
+                    </React.Fragment>
                   :
                     <TextField
                       variant="outlined"
@@ -92,9 +92,8 @@ export default function FindId() {
                       onChange={(e) => {setMail(e.target.value)}}
                     />
                 }
-              </Grid>
+                </Grid>
               <Grid item xs={12}
-                justify="flex-end"
                 className={classes.signup}>
                   {
                     isSendAuthMail ?

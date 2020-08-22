@@ -53,7 +53,7 @@ export default function FindId() {
 
   return (
     <React.Fragment>
-			<Grid container xs={12} spacing={3}
+			<Grid container spacing={3}
         className={classes.tabbar}>
         <Grid item xs={9}>
           <Tabs

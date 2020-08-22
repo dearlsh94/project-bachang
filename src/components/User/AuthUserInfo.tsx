@@ -4,14 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { checkGameUser } from 'utils/UserUtil';
 import IUserInfo from 'interfaces/User/IUserInfo';
 
 import MyButton from 'elements/Button/MyButton';
 import MyAlert from 'elements/Alert/MyAlert';
+import MyBackdrop from 'elements/Backdrop/MyBackdrop';
 
 interface IProps {
   userInfo: IUserInfo,
@@ -107,9 +106,8 @@ function AuthUserInfo(props: IProps) {
             onClick={_onAuthRequest}/>
         </Grid>
       </Grid>
-      <Backdrop className={classes.backdrop} open={isDisabled}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <MyBackdrop
+        isOpen={isDisabled}/>
       {
         openSuccessAlert &&
           <MyAlert

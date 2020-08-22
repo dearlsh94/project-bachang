@@ -6,8 +6,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import MyButton from 'elements/Button/MyButton';
 import MyTextEditor from 'elements/TextEditor/MyTextEditor';
 import MyAlert from 'elements/Alert/MyAlert';
+import MyBackdrop from 'elements/Backdrop/MyBackdrop';
 
 import IPost from 'interfaces/Board/IPost';
 
@@ -158,9 +157,8 @@ function PostWrite() {
           </Grid>
         </Grid>
       </Container>
-      <Backdrop className={classes.backdrop} open={isDisabled}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <MyBackdrop
+        isOpen={isDisabled}/>
       {
         openSuccessAlert &&
           <MyAlert
