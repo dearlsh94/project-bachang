@@ -1,21 +1,20 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import crypto from 'crypto';
-import jsonwebtoken from 'jsonwebtoken';
-
-import jwtObject from 'conf/jwt';
 
 import IUserInfo from 'interfaces/User/IUserInfo';
 import ISignUpUser from 'interfaces/User/ISignUpUser';
 import ISignInUser from 'interfaces/User/ISignInUser';
-import { getSessionNameUserToken } from 'utils/ConfigUtil';
 
 import * as CommonUtil from 'utils/ComoonUtil';
+
+import { getToken, setToken, delToken } from 'utils/ComoonUtil';
 
 export const CheckExistUser = async (id: string) => {
   
 }
-export const SignUpUser = async (user: ISignUpUser) => {
+
+export const SignUpUser = (user: ISignUpUser) => {
 
   // Create Encrypt salt
   let mySalt = Math.round((new Date().valueOf() * Math.random())) + "";
@@ -28,9 +27,9 @@ export const SignUpUser = async (user: ISignUpUser) => {
   }
 
   //DB Process for Create User
-  const res = await axios.post('api/user/signup', newUser)
+  const res = axios.post('api/user/signup', newUser)
     .then((res) => {
-      console.log("SIGN UP REG > ", res);
+      console.log("SIGN UP RES > ", res);
 
       if (res.data.code === 1) {
         return true;
@@ -52,34 +51,37 @@ export const SignUpUser = async (user: ISignUpUser) => {
 
 export const SignInUser = (_id: string, _password: string) => {
   // TODO - DB Process for Check Sign Up User
+  const res = axios.post('api/user/signin', {id: _id, password: _password})
+    .then((res) => {
+      console.log("SIGN IN RES > ", res);
 
-  // Create JWT
-  const token = jsonwebtoken.sign(
-    {
-      id: _id,
-    },
-    jwtObject.secret,
-    {
-      expiresIn: '5m'
-    }
-  );
+      if (res.data.code === 1) {
+        // Create JWT
+        const token = res.data.token;
 
-  // Create SignIn User Info
-  const signInUser: ISignInUser = {
-    token: token,
-  }
+        // Create SignIn User Info
+        const signInUser: ISignInUser = {
+          token: token,
+        }
 
-  // Session Store
-  setSessionUserToken(signInUser);
+        // Session Store
+        setToken(signInUser);
+
+        return true;
+      }
+      else {
+        alert(res.data.message);
+
+        return false;
+      }
+    });
+
+  return res;
 }
 
 export const getSignInUserId = () => { 
-  const userToken = getSessionUserToken();
-  if ( userToken === null ) {
-    return "";
-  }
 
-  const userId = getIdFromJWT(JSON.parse(userToken).token);
+  const userId = getIdFromJWT(getToken());
 
   return userId;
 }
@@ -104,7 +106,7 @@ export const getUserInfoById = (_id: string) => {
 }
 
 export const LogoutUser = () => {
-  delSessionUserToken();
+  delToken();
 }
 
 
@@ -113,6 +115,7 @@ export const LogoutUser = () => {
 */
 export const checkGameUser = async (server: string, character: string) => {
   const r = await axios.post('/api/user/check', {
+      token: getToken(),
       character: character,
       server: server
     })
@@ -127,41 +130,27 @@ export const checkGameUser = async (server: string, character: string) => {
       return false;
     });
 
-  return r
+  return r;
 }
-
-
-
-const setSessionUserToken = (signInUser: ISignInUser) => {
-  localStorage.setItem(
-    getSessionNameUserToken(),
-    JSON.stringify(signInUser)
-  );
-}
-
-const getSessionUserToken = () => {
-  return localStorage.getItem(getSessionNameUserToken());
-}
-
-const delSessionUserToken = () => {
-  localStorage.removeItem(getSessionNameUserToken());
-}
-
-
 
 /*
 * JWT 구조
 * [HEADER].[PAYLOAD].[VERIFY SIGNATURE]
 */
 const getIdFromJWT = (token: string) => {
-  // Get Token
-  const splitToken = token.split(".");
-
-  // Get Payload Token
-  const payloadToken = splitToken[1];
-
-  // Decode Base64 and Transfer to JSON
-  const payload = JSON.parse(atob(payloadToken));
-
-  return payload.id;
+  if (token !== "") {
+    // Get Token
+    const splitToken = token.split(".");
+  
+    // Get Payload Token
+    const payloadToken = splitToken[1];
+  
+    // Decode Base64 and Transfer to JSON
+    const payload = JSON.parse(atob(payloadToken));
+  
+    return payload.id;
+  }
+  else {
+    return "";
+  }
 }

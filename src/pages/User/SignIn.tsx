@@ -21,10 +21,10 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
-	const [mail, setMail] = React.useState("");
+	const [id, setId] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
-	const refMail = React.useRef<any>();
+	const refId = React.useRef<any>();
 	const refPassword = React.useRef<any>();
 
 	const _onEnterPassword = (keyCode: number) => {
@@ -33,10 +33,10 @@ export default function SignIn() {
 		}
 	}
 
-	const _onSignIn = () => {
-		if ( mail.length < 1 ) {
-			alert("PLEASE INPUT USER MAIL");
-			refMail.current.focus();
+	const _onSignIn = async () => {
+		if ( id.length < 1 ) {
+			alert("PLEASE INPUT USER ID");
+			refId.current.focus();
 
 			return false;
 		}
@@ -48,9 +48,10 @@ export default function SignIn() {
 			return false;
 		}
 
-		SignInUser(mail, password);
-
-		document.location.href="/";
+		const res = await SignInUser(id, password);
+		if (res) {
+			document.location.href = "/";
+		}
 	}
 
   return (
@@ -72,12 +73,12 @@ export default function SignIn() {
 											name="id"
 											label="User ID"
 											autoComplete="id"
-											value={mail}
-											inputRef={refMail}
-											onChange={(e) => setMail(e.target.value)}
+											value={id}
+											inputRef={refId}
+											onChange={(e) => setId(e.target.value)}
 									/>
 									<Link href="/findid" variant="body2" tabIndex={-1}>
-											이메일 찾기
+											아이디 찾기
 									</Link>
 								</Grid>
 								<Grid container item xs={12}>

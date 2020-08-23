@@ -82,7 +82,7 @@ export default function SignUp(props: IProps) {
 		setIsAuth(true);
 	}
 
-	const _onClickSignUp = () => {
+	const _onClickSignUp = async () => {
 		if (!isAgree) {
 			alert("동의 후 진행가능합니다.");
 			return 0;
@@ -94,7 +94,7 @@ export default function SignUp(props: IProps) {
 			mail: mail,
 		};
 
-		SignUpUser(signUpUser);
+		await SignUpUser(signUpUser);
 	}
 
   return (

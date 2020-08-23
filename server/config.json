@@ -1,5 +1,6 @@
 {
   "id": "dearlsh",
   "password": "admin",
-  "dbName": "baram"
+  "dbName": "baram",
+  "secret": "Baram"
 }
