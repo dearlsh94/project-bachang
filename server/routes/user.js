@@ -3,6 +3,81 @@ const router = express.Router();
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const SignUpUserSchema = require('../schemas/User/SignUpUserSchema');
+
+/*
+*    사용자 회원가입
+*    TYPE : POST
+*    URI : /api/user/signup
+*    PARAM: { "id": "test", "password": "test", "mail": "mail@test.com", "salt": "salt" }
+*    ERROR CODES:
+*        1: 성공
+*        2: 중복 유저
+*        3: DB 생성 오류
+*        4: DB 중복 확인 오류
+*/
+router.post('/signup', (req, res) => {
+    // CHECK USER EXISTANCE
+    // CREATE ACCOUNT
+    let user = new SignUpUserSchema({
+			id: req.body.id,
+			password: req.body.password,
+			mail: req.body.mail,
+			salt: req.body.salt
+    });
+		
+    SignUpUserSchema.findOne({id: user.id})
+			.then((exist) => {
+				if (exist) {
+					console.log(`[ERROR] : ${user.id} IS ALREADY EXIST`);
+					res.status(200).send({
+						message: "중복된 유저",
+						code: 2
+					});
+
+					return false;
+				}
+				else {
+					SignUpUserSchema.create(user, (err, user) => {
+						console.log(`[ERROR] : ${user.id} CREATED ERROR`);
+						if (err) {
+							res.status(500).send({
+								message: "DB 생성 오류",
+								code: 3
+							});
+						}
+
+						return false;
+					});
+				}
+
+				return true;
+			})
+			.then((created) => {
+				if (created) {
+					console.log(`[SUCCESS] : ${user.id} CREATED!!!`);
+					res.status(200).send({
+						message: "계정 생성 성공",
+						code: 1
+					});
+				}
+			})
+			.catch((e) => {
+				console.log(e);
+
+				res.status(500).send({
+					message: "DB 중복 확인 오류",
+					code: 4
+				});
+			})
+});
+
+/*
+*    사용자 서버, 닉네임 인증
+*    TYPE : POST
+*    URI : /api/user/check
+*    PARAM: { "character": "닉네임", "server": "서버" }
+*/
 router.post('/check', (req, res) => {
   const encodeCharacter = encodeURI(req.body.character);
   const encodeServer = encodeURI(req.body.server);
@@ -50,60 +125,6 @@ router.post('/check', (req, res) => {
         resolve(false);
       })
   });
-});
-
-/*
-    ACCOUNT SIGNUP: POST /api/account/signup
-    BODY SAMPLE: { "username": "test", "password": "test" }
-    ERROR CODES:
-        1: BAD USERNAME
-        2: BAD PASSWORD
-        3: USERNAM EXISTS
-*/
-router.post('/signup', (req, res) => {
-    // CHECK USERNAME FORMAT
-    let usernameRegex = /^[a-z0-9]+$/;
-
-    if(!usernameRegex.test(req.body.username)) {
-        return res.status(400).json({
-            error: "BAD USERNAME",
-            code: 1
-        });
-    }
-
-    // CHECK PASS LENGTH
-    if(req.body.password.length < 4 || typeof req.body.password !== "string") {
-        return res.status(400).json({
-            error: "BAD PASSWORD",
-            code: 2
-        });
-    }
-
-    // CHECK USER EXISTANCE
-    SignUpUserSchema.findOne({ username: req.body.username }, (err, exists) => {
-        if (err) throw err;
-        if(exists){
-            return res.status(409).json({
-                error: "USERNAME EXISTS",
-                code: 3
-            });
-        }
-
-        // CREATE ACCOUNT
-        let account = new SignUpUserSchema({
-            id: req.body.id,
-            password: req.body.password,
-            mail: req.body.mail,
-            salt: req.body.salt
-        });
-
-        // SAVE IN THE DATABASE
-        account.save( err => {
-            if(err) throw err;
-            return res.json({ success: true });
-        });
-
-    });
 });
 
 /*

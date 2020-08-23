@@ -1,6 +1,6 @@
 export default interface ISignUpUser {
   id: string,
-  password: string,
   mail: string,
+  password: string,
   salt?: string
 }

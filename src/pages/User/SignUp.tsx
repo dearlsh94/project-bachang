@@ -94,13 +94,7 @@ export default function SignUp(props: IProps) {
 			mail: mail,
 		};
 
-		if ( SignUpUser(signUpUser) ) {
-			alert("회원가입 성공!");
-		}
-		else {
-			alert ("회원가입 실패!")
-		};
-		
+		SignUpUser(signUpUser);
 	}
 
   return (

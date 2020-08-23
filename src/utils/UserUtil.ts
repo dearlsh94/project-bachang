@@ -12,9 +12,10 @@ import { getSessionNameUserToken } from 'utils/ConfigUtil';
 
 import * as CommonUtil from 'utils/ComoonUtil';
 
-import * as MyMongo from 'shared/index';
-
-export const SignUpUser = (user: ISignUpUser) => {
+export const CheckExistUser = async (id: string) => {
+  
+}
+export const SignUpUser = async (user: ISignUpUser) => {
 
   // Create Encrypt salt
   let mySalt = Math.round((new Date().valueOf() * Math.random())) + "";
@@ -26,13 +27,27 @@ export const SignUpUser = (user: ISignUpUser) => {
     salt: mySalt
   }
 
-  console.log("RUN SignUpUser");
-  //TODO - DB Process for Create User
-  const res = MyMongo.createSignUpUser(newUser);
+  //DB Process for Create User
+  const res = await axios.post('api/user/signup', newUser)
+    .then((res) => {
+      console.log("SIGN UP REG > ", res);
 
-//  console.log("NEW USER CREATED > ", res);
+      if (res.data.code === 1) {
+        return true;
+      }
+      else {
+        alert(res.data.message);
 
-  return true;
+        return false;
+      }
+    })
+    .catch((e) => {
+      console.log("SIGN UP ERROR > ", e);
+
+      return false;
+    });
+
+  return res;
 }
 
 export const SignInUser = (_id: string, _password: string) => {
