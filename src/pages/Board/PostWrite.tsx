@@ -165,7 +165,7 @@ function PostWrite() {
             isOpen={true}
             severity="success"
             duration={duration}
-            text="작성되었습니다. 잠시 후 게시판으로 이동합니다." />
+            message="작성되었습니다. 잠시 후 게시판으로 이동합니다." />
       }
       {
         openErrorAlert &&
@@ -173,7 +173,7 @@ function PostWrite() {
             isOpen={true}
             severity="error"
             duration={duration}
-            text="작성에 실패하였습니다." />
+            message="작성에 실패하였습니다." />
       }
       <Dialog
         open={openConfirmCancle}>

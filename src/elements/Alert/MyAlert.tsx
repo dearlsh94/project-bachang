@@ -24,7 +24,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 interface IProps {
   isOpen: boolean,
   severity: "success" | "error" | "info" | "warning",
-  text: string,
+  message: string,
   duration: number
 }
 
@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function MyAlert(props: IProps) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(props.isOpen);
-
+  const [isOpen, setIsOpen] = React.useState(props.isOpen);
+  
   const handleClick = () => {
-    setOpen(true);
+    setIsOpen(true);
   };
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -54,18 +54,18 @@ export default function MyAlert(props: IProps) {
       return;
     }
 
-    setOpen(false);
+    setIsOpen(false);
   };
 
   return (
     <div className={classes.root}>
       <Snackbar 
         anchorOrigin={{ vertical: "top", horizontal: "right"}}
-        open={open} 
+        open={isOpen} 
         autoHideDuration={props.duration} 
         onClose={handleClose}>
           <Alert onClose={handleClose} severity={props.severity}>
-            {props.text}
+            {props.message}
           </Alert>
       </Snackbar>
     </div>

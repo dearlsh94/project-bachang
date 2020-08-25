@@ -102,7 +102,14 @@ export default function Header() {
               <Grid item xs={3}
                 className={classes.toolbarright}>
                   {
-                    userInfo === "" ?
+                    userInfo ?
+                      <Button 
+                        variant="outlined" 
+                        size="small"
+                        onClick={_onLogoutUser}>
+                        Logout
+                      </Button>
+                    :
                       <Container>
                         <Button 
                           variant="outlined" 
@@ -118,13 +125,6 @@ export default function Header() {
                           SignUp
                         </Button>
                       </Container>
-                    :
-                      <Button 
-                        variant="outlined" 
-                        size="small"
-                        onClick={_onLogoutUser}>
-                         Logout
-                      </Button>
                   }               
               </Grid>
             </Grid>

@@ -11,9 +11,9 @@ const mongoUri = `mongodb+srv://${config.id}:${config.password}@mycluster.xcgrs.
 const app = express();
 app.use(bodyParser.json());
 
-/* FIX FOR
-* (node:12100) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
-*/
+ 
+// FIX FOR
+// (node:12100) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
 mongoose.set('useCreateIndex', true)
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

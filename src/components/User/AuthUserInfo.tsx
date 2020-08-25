@@ -37,27 +37,29 @@ function AuthUserInfo(props: IProps) {
   const userInfo: IUserInfo = props.userInfo;
 
   const [isDisabled, setIsDisabled] = React.useState(false);
-  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
-  const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
+  const [isOpenSuccessAlert, setIsOpenSuccessAlert] = React.useState(false);
+  const [isOpenErrorAlert, setIsOpenErrorAlert] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
 
   const _onAuthRequest = async () => {
     setIsDisabled(true);
 
     const res = await checkGameUser(userInfo.server, userInfo.character);
     
-    if (res) {
+    console.log("AUTH > ", res);
+    if (res.code === 4000) {
       // Successed Authentication
-      setOpenSuccessAlert(true);
-      setTimeout(() => setOpenSuccessAlert(false), duration);
+      
+      setIsOpenSuccessAlert(true);
+      setAlertMessage(res.message);
       setTimeout(() => document.location.reload(), duration);
     }
     else {
       // Failed Authentication
-      setOpenErrorAlert(true);
-      setTimeout(()=> {
-        setOpenErrorAlert(false);
-        setIsDisabled(false);
-      }, duration);
+      setIsOpenErrorAlert(true);
+      setAlertMessage(res.message);
+
+      setTimeout(() => setIsDisabled(false), duration);
     }
   }
 
@@ -109,20 +111,20 @@ function AuthUserInfo(props: IProps) {
       <MyBackdrop
         isOpen={isDisabled}/>
       {
-        openSuccessAlert &&
+        isOpenSuccessAlert &&
           <MyAlert
             isOpen={true}
             severity="success"
             duration={duration}
-            text="인증 성공! 잠시 후 회원정보로 이동 됩니다." />
+            message={alertMessage} />
       }
       {
-        openErrorAlert &&
+        isOpenErrorAlert &&
           <MyAlert
             isOpen={true}
             severity="error"
             duration={duration}
-            text="인증 실패!" />
+            message={alertMessage} />
       }
     </Container>
   ); 

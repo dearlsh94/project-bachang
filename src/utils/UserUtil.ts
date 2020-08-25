@@ -4,16 +4,21 @@ import crypto from 'crypto';
 
 import IUserInfo from 'interfaces/User/IUserInfo';
 import ISignUpUser from 'interfaces/User/ISignUpUser';
-import ISignInUser from 'interfaces/User/ISignInUser';
 
 import * as CommonUtil from 'utils/ComoonUtil';
 
 import { getToken, setToken, delToken } from 'utils/ComoonUtil';
 
+/*
+* 중복 유저 있는 지 체크
+*/
 export const CheckExistUser = async (id: string) => {
   
 }
 
+/*
+* 사용자 회원가입
+*/
 export const SignUpUser = (user: ISignUpUser) => {
 
   // Create Encrypt salt
@@ -27,7 +32,7 @@ export const SignUpUser = (user: ISignUpUser) => {
   }
 
   //DB Process for Create User
-  const res = axios.post('api/user/signup', newUser)
+  const res = axios.post('api/common/signup', newUser)
     .then((res) => {
       console.log("SIGN UP RES > ", res);
 
@@ -49,9 +54,12 @@ export const SignUpUser = (user: ISignUpUser) => {
   return res;
 }
 
+/*
+* 사용자 로그인
+*/
 export const SignInUser = (_id: string, _password: string) => {
   // TODO - DB Process for Check Sign Up User
-  const res = axios.post('api/user/signin', {id: _id, password: _password})
+  const res = axios.post('api/common/signin', {id: _id, password: _password})
     .then((res) => {
       console.log("SIGN IN RES > ", res);
 
@@ -59,13 +67,8 @@ export const SignInUser = (_id: string, _password: string) => {
         // Create JWT
         const token = res.data.token;
 
-        // Create SignIn User Info
-        const signInUser: ISignInUser = {
-          token: token,
-        }
-
         // Session Store
-        setToken(signInUser);
+        setToken(token);
 
         return true;
       }
@@ -79,13 +82,25 @@ export const SignInUser = (_id: string, _password: string) => {
   return res;
 }
 
-export const getSignInUserId = () => { 
-
-  const userId = getIdFromJWT(getToken());
-
-  return userId;
+/*
+* 사용자 로그아웃
+*/
+export const LogoutUser = () => {
+  delToken();
 }
 
+/*
+* 로그인 한 사용자 ID 가져오기
+*/
+export const getSignInUserId = () => {
+  const token = getToken();
+  
+  return token ? getIdFromToken(token) : null;
+}
+
+/*
+* 사용자 ID로 사용자 정보 가져오기
+*/
 export const getUserInfoById = (_id: string) => {
   // TODO - DB Process Get UserInfo By Id
 
@@ -105,11 +120,6 @@ export const getUserInfoById = (_id: string) => {
   return userInfo;
 }
 
-export const LogoutUser = () => {
-  delToken();
-}
-
-
 /*
 * 바람의 나라 공식 사이트 한줄인사말 데이터 크롤링하여, 사용자 인증 처리
 */
@@ -121,7 +131,8 @@ export const checkGameUser = async (server: string, character: string) => {
     })
     .then((res) => {
       console.log(res.data);
-      
+      alert(res.data.message);
+
       return res.data;
     })
     .catch((e) => {
@@ -137,7 +148,7 @@ export const checkGameUser = async (server: string, character: string) => {
 * JWT 구조
 * [HEADER].[PAYLOAD].[VERIFY SIGNATURE]
 */
-const getIdFromJWT = (token: string) => {
+const getIdFromToken = (token: string) => {
   if (token !== "") {
     // Get Token
     const splitToken = token.split(".");
@@ -151,6 +162,6 @@ const getIdFromJWT = (token: string) => {
     return payload.id;
   }
   else {
-    return "";
+    return null;
   }
 }
