@@ -1,32 +1,10 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-/* example
-...
-  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
--- Close after 4'sec --
-  setOpenSuccessAlert(true);
-  setTimeout(() => setOpenSuccessAlert(false), 4000);
--- Component --
-  {
-    openSuccessAlert &&
-      <MyAlert
-        isOpen={true}
-        severity="success"
-        duration={4000}
-        text="성공 메세지" />
-  }
-*/
-
-interface IProps {
-  isOpen: boolean,
-  severity: "success" | "error" | "info" | "warning",
-  message: string,
-  duration: number
-}
+import {useRecoilState} from 'recoil';
+import {MyAlertState} from 'state/index';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,31 +19,26 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function MyAlert(props: IProps) {
+export default function MyAlert() {
   const classes = useStyles();
-  const [isOpen, setIsOpen] = React.useState(props.isOpen);
-  
-  const handleClick = () => {
-    setIsOpen(true);
-  };
+  const [myAlert, setMyAlert] = useRecoilState(MyAlertState);
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setIsOpen(false);
+  const _close = (event?: React.SyntheticEvent, reason?: string) => {
+    setMyAlert({
+      ...myAlert,
+      isOpen: false
+    });
   };
 
   return (
     <div className={classes.root}>
       <Snackbar 
         anchorOrigin={{ vertical: "top", horizontal: "right"}}
-        open={isOpen} 
-        autoHideDuration={props.duration} 
-        onClose={handleClose}>
-          <Alert onClose={handleClose} severity={props.severity}>
-            {props.message}
+        open={myAlert.isOpen} 
+        autoHideDuration={myAlert.duration} 
+        onClose={_close}>
+          <Alert onClose={_close} severity={myAlert.severity}>
+            {myAlert.message}
           </Alert>
       </Snackbar>
     </div>

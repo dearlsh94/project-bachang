@@ -14,8 +14,17 @@ export const setToken = (token: string) => {
   );
 }
 export const getToken = () => {
-  return localStorage.getItem(getSessionNameUserToken());
+  const token = localStorage.getItem(getSessionNameUserToken());
+  return token ? token : "";
 }
 export const delToken = () => {
   localStorage.removeItem(getSessionNameUserToken());
+}
+
+export const getHeaderToken = () => {
+  return {
+    headers: {
+      "token": getToken()
+    }
+  }
 }

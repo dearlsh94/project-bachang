@@ -23,8 +23,11 @@ import Item from 'pages/Dictionary/Item';
 import Raid from 'pages/Dictionary/Raid';
 import RaidInfo from 'pages/Dictionary/RaidInfo';
 
+import MyAlert from 'elements/Alert/MyAlert';
+import MyBackdrop from 'elements/Backdrop/MyBackdrop';
 
 function App() {
+
   return (
     <Container
       maxWidth="xl">
@@ -63,6 +66,8 @@ function App() {
           </Container>
         </main>
       </React.Fragment>
+      <MyAlert/>
+      <MyBackdrop/>
     </Container>
   );
 }

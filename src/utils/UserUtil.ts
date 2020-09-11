@@ -57,9 +57,9 @@ export const SignUpUser = (user: ISignUpUser) => {
 /*
 * 사용자 로그인
 */
-export const SignInUser = (_id: string, _password: string) => {
+export const SignInUser = async (_id: string, _password: string) => {
   // TODO - DB Process for Check Sign Up User
-  const res = axios.post('api/common/signin', {id: _id, password: _password})
+  const res = await axios.post('api/common/signin', {id: _id, password: _password})
     .then((res) => {
       console.log("SIGN IN RES > ", res);
 
@@ -101,23 +101,46 @@ export const getSignInUserId = () => {
 /*
 * 사용자 ID로 사용자 정보 가져오기
 */
-export const getUserInfoById = (_id: string) => {
+export const getUserInfoById = async (_id: string) => {
   // TODO - DB Process Get UserInfo By Id
+  let user: IUserInfo;
+  const res = await axios.get('api/user/find/', {
+      params: {
+        "id": _id
+      },
+      ...CommonUtil.getHeaderToken()})
+    .then((res) => {
+      const json = JSON.parse(res.data.userInfo);
+      const userInfo: IUserInfo = {...json};
 
-  const userInfo: IUserInfo = {
-    id: _id,
-    mail: "mail@mail.net",
-    server: "하자",
-    character: "협가검",
-    isAuth: true,
-    point: 0,
-    grade: "초보자",
-    createDateString: CommonUtil.getNowDateString(),
-    authDateString: CommonUtil.getNowDateString(),
-    isActive: true
-  }
+      user = { ...json };
 
-  return userInfo;
+      Promise.resolve(true);
+    });
+}
+
+/*
+* 사용자 정보 수정하기
+*/
+export const setUserInfo = async (userInfo: IUserInfo) => {
+  const r = await axios.put('/api/user/update', {
+      id: userInfo.id,
+      server: userInfo.server,
+      character: userInfo.character,
+      editDateString: CommonUtil.getNowDateString(),
+    }, CommonUtil.getHeaderToken())
+    .then((res) => {
+      console.log(res);
+
+      return res.data.message;
+    })
+    .catch((e) => {
+      console.log("EDIT USER INFO ERROR > ", e);
+
+      return false;
+    });
+
+  return r;
 }
 
 /*
@@ -125,13 +148,12 @@ export const getUserInfoById = (_id: string) => {
 */
 export const checkGameUser = async (server: string, character: string) => {
   const r = await axios.post('/api/user/check', {
-      token: getToken(),
       character: character,
       server: server
-    })
+    }, CommonUtil.getHeaderToken())
     .then((res) => {
       console.log(res.data);
-      alert(res.data.message);
+      //alert(res.data.message);
 
       return res.data;
     })
@@ -164,4 +186,10 @@ const getIdFromToken = (token: string) => {
   else {
     return null;
   }
+}
+
+//TODO
+const getUserInfoModel = (data: any) => {
+  let userInfo: IUserInfo;
+
 }

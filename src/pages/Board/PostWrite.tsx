@@ -1,11 +1,13 @@
 import React from 'react';
+import {useSetRecoilState} from 'recoil';
+import {MyAlertState, MyBackdropState} from 'state/index';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,8 +15,6 @@ import Button from '@material-ui/core/Button';
 
 import MyButton from 'elements/Button/MyButton';
 import MyTextEditor from 'elements/TextEditor/MyTextEditor';
-import MyAlert from 'elements/Alert/MyAlert';
-import MyBackdrop from 'elements/Backdrop/MyBackdrop';
 
 import IPost from 'interfaces/Board/IPost';
 
@@ -43,10 +43,9 @@ const duration = 3000;
 
 function PostWrite() {
   const classes = useStyles();
+  const setMyAlert = useSetRecoilState(MyAlertState);
+  const setMyBackdrop = useSetRecoilState(MyBackdropState);
 
-  const [isDisabled, setIsDisabled] = React.useState(false);
-  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
-  const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
   const [openConfirmCancle, setOpenConfirmCancle] = React.useState(false);
   const [category, setCategory] = React.useState(10);
   const [title, setTitle] = React.useState("");
@@ -63,7 +62,7 @@ function PostWrite() {
   }
 
   const _onWrite = () => {
-    setIsDisabled(true);
+    setMyBackdrop(true);
 
     // Processing...
     const post: IPost = {
@@ -81,19 +80,29 @@ function PostWrite() {
     }
 
     const res = CreatePost(post);
-
+    
     if (res) {
       // Successed Authentication
-      setOpenSuccessAlert(true);
-      setTimeout(() => setOpenSuccessAlert(false), duration);
+      setMyAlert({
+        isOpen: true,
+        severity: "success",
+        duration: duration,
+        message: "작성되었습니다. 잠시 후 게시판으로 이동합니다."
+      });
+
       setTimeout(() => document.location.reload(), duration);
     }
     else {
       // Failed Authentication
-      setOpenErrorAlert(true);
+      setMyAlert({
+        isOpen: true,
+        severity: "success",
+        duration: duration,
+        message: "작성에 실패하였습니다."
+      });
+      
       setTimeout(()=> {
-        setOpenErrorAlert(false);
-        setIsDisabled(false);
+        setMyBackdrop(false);
       }, duration);
     }
   }
@@ -157,24 +166,6 @@ function PostWrite() {
           </Grid>
         </Grid>
       </Container>
-      <MyBackdrop
-        isOpen={isDisabled}/>
-      {
-        openSuccessAlert &&
-          <MyAlert
-            isOpen={true}
-            severity="success"
-            duration={duration}
-            message="작성되었습니다. 잠시 후 게시판으로 이동합니다." />
-      }
-      {
-        openErrorAlert &&
-          <MyAlert
-            isOpen={true}
-            severity="error"
-            duration={duration}
-            message="작성에 실패하였습니다." />
-      }
       <Dialog
         open={openConfirmCancle}>
           <DialogContent>

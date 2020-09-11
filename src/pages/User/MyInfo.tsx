@@ -31,7 +31,18 @@ function MyInfo() {
   const classes = useStyles();
 
   const userId: string = getSignInUserId();
-  const userInfo: IUserInfo = getUserInfoById(userId);
+  //TODO : 회원정보 불러오기 구현
+  //const userInfo: IUserInfo = getUserInfoById(userId);
+  const userInfo: IUserInfo = {
+    id: "whitow",
+    mail: "whitow@test.co.kr",
+    server: "하자",
+    character: "협가검",
+    isActive: true,
+    createDateString: "1",
+    editDateString: "1",
+    isAuth: true
+  }
 
   const [mode, setMode] = React.useState("view");
 

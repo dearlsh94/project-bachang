@@ -28,7 +28,7 @@ router.post('/signup', (req, res) => {
 			salt: req.body.salt
     });
 		
-    SignUpUserSchema.findOne({id: user.id})
+    SignUpUserSchema.findOneById(user.id)
 			.then((exist) => {
 				if (exist) {
 					console.log(`[ERROR] : ${user.id} IS ALREADY EXIST`);
@@ -88,52 +88,53 @@ router.post('/signup', (req, res) => {
 router.post('/signin', (req, res) => {
 
   // FIND THE USER BY USERNAME
-  SignUpUserSchema.findOne({id: req.body.id}, (err, user) => {
-    if(user) {
-      // 패스워드 암호화 비교
-      const encryptPassword = crypto.createHash("sha512").update(req.body.password + user.salt).digest("hex");
-      if ( encryptPassword !== user.password ) {
-        console.log(`[ERROR] : ${user.id} IS NOT MATCHED PASSWORD`);
+  SignUpUserSchema.findOneById(req.body.id)
+    .then((user) => {
+      if(user) {
+        // 패스워드 암호화 비교
+        const encryptPassword = crypto.createHash("sha512").update(req.body.password + user.salt).digest("hex");
+        if ( encryptPassword !== user.password ) {
+          console.log(`[ERROR] : ${user.id} IS NOT MATCHED PASSWORD`);
+          res.status(200).send({
+            message: "비밀번호가 일치하지 않습니다.",
+            code: 3
+          });
+
+          return false;
+        }
+        else {
+          console.log("[SUCCESS] LOGIN SUCCESSED");
+
+          // CREATE JSONWEBTOKEN
+          const token = jsonwebtoken.sign(
+            {
+              id: user.id,
+            },
+            config.secret,
+            {
+              expiresIn: '2h'
+            }
+          );
+
+          res.status(200).send({
+            message: "로그인 성공!",
+            token: token,
+            code: 1
+          });
+
+          return true;
+        }
+      }
+      else {
+        console.log(`[ERROR] : ${req.body.id} IS NOT EXIST USER`);
         res.status(200).send({
-          message: "비밀번호가 일치하지 않습니다.",
-          code: 3
+          message: "존재하지 않는 사용자입니다.",
+          code: 2
         });
 
         return false;
       }
-      else {
-        console.log("[SUCCESS] LOGIN SUCCESSED");
-
-        // CREATE JSONWEBTOKEN
-        const token = jsonwebtoken.sign(
-          {
-            id: user.id,
-          },
-          config.secret,
-          {
-            expiresIn: '5m'
-          }
-        );
-
-        res.status(200).send({
-          message: "로그인 성공!",
-          token: token,
-          code: 1
-        });
-
-        return true;
-      }
-    }
-    else {
-      console.log(`[ERROR] : ${req.body.id} IS NOT EXIST USER`);
-      res.status(200).send({
-        message: "존재하지 않는 사용자입니다.",
-        code: 2
-      });
-
-      return false;
-    }
-  });
+    });
 });
 
 

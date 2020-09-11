@@ -47,8 +47,7 @@ export default function Header() {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [isSignInOpen, setIsSignInOpen] = React.useState(false);
 
-  const userInfo = getSignInUserId();
-  console.log(userInfo);
+  const signInUserId = getSignInUserId();
 
   const _onMoveToMain = () => {
     document.location.href = "/";
@@ -102,7 +101,7 @@ export default function Header() {
               <Grid item xs={3}
                 className={classes.toolbarright}>
                   {
-                    userInfo ?
+                    signInUserId ?
                       <Button 
                         variant="outlined" 
                         size="small"

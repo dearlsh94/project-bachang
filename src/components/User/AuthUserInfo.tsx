@@ -1,4 +1,6 @@
 import React from 'react';
+import {useSetRecoilState} from 'recoil';
+import {MyAlertState, MyBackdropState} from 'state/index';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -9,8 +11,6 @@ import { checkGameUser } from 'utils/UserUtil';
 import IUserInfo from 'interfaces/User/IUserInfo';
 
 import MyButton from 'elements/Button/MyButton';
-import MyAlert from 'elements/Alert/MyAlert';
-import MyBackdrop from 'elements/Backdrop/MyBackdrop';
 
 interface IProps {
   userInfo: IUserInfo,
@@ -36,30 +36,37 @@ function AuthUserInfo(props: IProps) {
   const classes = useStyles();
   const userInfo: IUserInfo = props.userInfo;
 
+  const setMyAlert = useSetRecoilState(MyAlertState);
+  const setMyBackdrop = useSetRecoilState(MyBackdropState);
+
   const [isDisabled, setIsDisabled] = React.useState(false);
-  const [isOpenSuccessAlert, setIsOpenSuccessAlert] = React.useState(false);
-  const [isOpenErrorAlert, setIsOpenErrorAlert] = React.useState(false);
-  const [alertMessage, setAlertMessage] = React.useState("");
 
   const _onAuthRequest = async () => {
-    setIsDisabled(true);
+    setMyBackdrop(true);
 
     const res = await checkGameUser(userInfo.server, userInfo.character);
     
     console.log("AUTH > ", res);
     if (res.code === 4000) {
       // Successed Authentication
-      
-      setIsOpenSuccessAlert(true);
-      setAlertMessage(res.message);
+      setMyAlert({
+        isOpen: true,
+        severity: "success",
+        duration: duration,
+        message: res.message
+      });
       setTimeout(() => document.location.reload(), duration);
     }
     else {
       // Failed Authentication
-      setIsOpenErrorAlert(true);
-      setAlertMessage(res.message);
+      setMyAlert({
+        isOpen: true,
+        severity: "error",
+        duration: duration,
+        message: res.message
+      });
 
-      setTimeout(() => setIsDisabled(false), duration);
+      setTimeout(() => setMyBackdrop(false), duration);
     }
   }
 
@@ -108,24 +115,6 @@ function AuthUserInfo(props: IProps) {
             onClick={_onAuthRequest}/>
         </Grid>
       </Grid>
-      <MyBackdrop
-        isOpen={isDisabled}/>
-      {
-        isOpenSuccessAlert &&
-          <MyAlert
-            isOpen={true}
-            severity="success"
-            duration={duration}
-            message={alertMessage} />
-      }
-      {
-        isOpenErrorAlert &&
-          <MyAlert
-            isOpen={true}
-            severity="error"
-            duration={duration}
-            message={alertMessage} />
-      }
     </Container>
   ); 
 }

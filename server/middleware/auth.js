@@ -2,7 +2,9 @@ const jsonwebtoken = require('jsonwebtoken');
 const config = require('../config.json');
 
 const authMiddleware = (req, res, next) => {
-  if ( !req.body.token ) {
+  const token = req.headers.token;
+
+  if ( !token ) {
     console.log("DO NOT FIND TOKEN INFORMATION");
     res.status(200).send({
       message: "접근 권한 정보가 없습니다.",
@@ -11,7 +13,7 @@ const authMiddleware = (req, res, next) => {
   }
   
   try {
-    const decoded = jsonwebtoken.verify(req.body.token, config.secret);
+    const decoded = jsonwebtoken.verify(token, config.secret);
     if (!decoded) {
       throw new Error("YOU CAN NOT ACCESSED"); 
     }

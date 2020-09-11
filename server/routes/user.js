@@ -3,11 +3,13 @@ const router = express.Router();
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const UserInfoSchema = require('../schemas/User/UserInfoSchema');
 /*
 *    사용자 서버, 닉네임 검사
 *    TYPE : POST
 *    URI : /api/user/check
-*    PARAM: { "character": "닉네임", "server": "서버" }
+*    HEADER: { "token": token }
+*    BODY: { "character": "닉네임", "server": "서버" }
 */
 router.post('/check', (req, res) => {
 
@@ -70,10 +72,94 @@ router.post('/check', (req, res) => {
 });
 
 /*
-    GET CURRENT USER INFO GET /api/account/getInfo
+*    사용자 정보수정
+*    TYPE : PUT
+*    URI : /api/user/update
+*    HEADER: { "token": token }
+*    BODY: { "userInfo": IUserInfo }
+*    ERROR CODES:
+*        1: 성공
+*        2: 변경 오류
 */
-router.get('/getinfo', (req, res) => {
-    
+router.put('/update', (req, res) => {
+  const userInfo = {
+    id: req.body.id,
+    server: req.body.server,
+    character: req.body.character,
+    editDateString: req.body.editDateString
+  }
+
+  UserInfoSchema.updateById(userInfo.id, userInfo)
+    .then((updated) => {
+      console.log(updated);
+
+      if (updated) {
+        console.log(`[SUCCESS] : ${userInfo.id} INFORMATION UPDATE`);
+        res.status(200).send({
+          message: "정보가 수정되었습니다.",
+          code: 1
+        });
+
+        return true;
+      }
+      else {
+        console.log(`[ERROR] : ${userInfo.id} INFORMATION UPDATE ERROR`);
+        res.status(200).send({
+          message: "작업 중 오류가 발생하였습니다. 잠시 후 다시 시도하여주세요.",
+          code: 2
+        });
+
+        return false;
+      }
+    })
+});
+
+
+/*
+*    사용자 정보조회
+*    TYPE : GET
+*    URI : /api/user/find
+*    HEADER: { "token": token }
+*    QUERYSTRING: { "id": id }
+*    RETURN: userInfo
+*    ERROR CODES:
+*        1: 성공
+*        2: 사용자 정보가 존재하지 않음.
+*        3: 서버 오류
+*/
+router.get('/find', (req, res) => {
+  const id = req.query.id;
+
+  UserInfoSchema.findOneById(req.query.id)
+    .then((user) => {
+      if (user) {
+        console.log(`[SUCCESS] : ${id} INFORMATION FIND`);
+        res.status(200).send({
+          message: "사용자 정보를 조회하였습니다.",
+          code: 1,
+          userInfo: user
+        });
+
+        return true;
+      }
+      else {
+        console.log(`[ERROR] : ${id} INFORMATION FIND ERROR`);
+        res.status(200).send({
+          message: "사용자 정보를 찾을 수 없습니다.",
+          code: 2
+        });
+
+        return null;
+      }
+    })
+    .catch((e) => {
+      console.log(`[ERROR] : ${id} INFORMATION FIND SERVER ERROR`);
+      console.log(e);
+      res.status(200).send({
+        message: "사용자 정보를 찾는 중 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.",
+        code: 3
+      });
+    })
 });
 
 /*

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 // FIX FOR
 // (node:12100) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
 mongoose.set('useCreateIndex', true)
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
   .then(() => {
     console.log("[MONGO DB CONNECT SUCCESS]");
   })

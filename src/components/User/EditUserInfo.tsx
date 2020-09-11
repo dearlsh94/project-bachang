@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 
 import MyButton from 'elements/Button/MyButton';
 
-import SignUp from 'pages/User/SignUp';
+import { SignInUser, setUserInfo } from 'utils/UserUtil';
 
 import IUserInfo from 'interfaces/User/IUserInfo';
 
@@ -38,6 +38,7 @@ function EditUserInfo(props: IProps) {
   const [server, setServer] = React.useState(props.userInfo.server);
   const [character, setCharacter] = React.useState(props.userInfo.character);
   const [password, setPassword] = React.useState("");
+  //TODO 비밀번호 변경 별도 페이지로 분리하기
   const [changePassword, setChangePassword] = React.useState("");
   const [changePasswordConfirm, setChangePasswordConfirm] = React.useState("");
   
@@ -55,8 +56,17 @@ function EditUserInfo(props: IProps) {
 			_onConfirm();
 		}
 	}
-  const _onConfirm = () => {
-    setIsConfirm(true);
+  const _onConfirm = async () => {
+    const res = await SignInUser(userInfo.id, password);
+    
+    if (res) {
+      setIsConfirm(true);
+    }
+    else {
+      
+      setPassword("");
+      setIsConfirm(false);
+    }
   }
 
   const _onCancle = () => {
@@ -64,9 +74,14 @@ function EditUserInfo(props: IProps) {
     setIsConfirm(false);
   }
 
-  const _onSave = () => {
-    //Call function for DB Update User Info 
-    alert("저장하세용");
+  const _onSave = async () => {
+    const editUserInfo: IUserInfo = Object.assign(userInfo);
+    editUserInfo.server = server;
+    editUserInfo.character = character;
+
+    const res = await setUserInfo(editUserInfo);
+    alert(res);
+    window.location.replace("/myinfo");
   }
 
   return (

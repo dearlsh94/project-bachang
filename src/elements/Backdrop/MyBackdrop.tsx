@@ -1,12 +1,11 @@
 import React from 'react';
+import {useRecoilState} from 'recoil';
+import {MyBackdropState} from 'state/index';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-interface IProps{
-  isOpen: boolean
-}
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -15,11 +14,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyBackdrop = (props: IProps) => {
+const MyBackdrop = () => {
   const classes = useStyles();
 
+  const [backdrop, setBackdrop] = useRecoilState(MyBackdropState);
+
   return (
-    <Backdrop className={classes.backdrop} open={props.isOpen}>
+    <Backdrop className={classes.backdrop} open={backdrop}>
       <CircularProgress color="inherit" />
     </Backdrop>
   );
