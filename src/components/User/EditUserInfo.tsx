@@ -52,7 +52,7 @@ function EditUserInfo(props: IProps) {
   }
 
   const _onEnterPassword = (keyCode: number) => {
-		if (keyCode == 13) {
+		if (keyCode === 13) {
 			_onConfirm();
 		}
 	}
