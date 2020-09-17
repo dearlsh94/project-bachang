@@ -103,20 +103,23 @@ export const getSignInUserId = () => {
 */
 export const getUserInfoById = async (_id: string) => {
   // TODO - DB Process Get UserInfo By Id
-  let user: IUserInfo;
-  const res = await axios.get('api/user/find/', {
+  const info = await axios.get('api/user/find/', {
       params: {
         "id": _id
       },
       ...CommonUtil.getHeaderToken()})
     .then((res) => {
-      const json = JSON.parse(res.data.userInfo);
-      const userInfo: IUserInfo = {...json};
-
-      user = { ...json };
-
-      Promise.resolve(true);
+      return res.data.userInfo;
     });
+
+  if ( typeof info === "object" ) {
+    const userInfo: IUserInfo = getUserInfoFromJson(info);
+
+    return userInfo;
+  }
+  else {
+    return null;
+  }
 }
 
 /*
@@ -188,8 +191,17 @@ const getIdFromToken = (token: string) => {
   }
 }
 
-//TODO
-const getUserInfoModel = (data: any) => {
-  let userInfo: IUserInfo;
+const getUserInfoFromJson = (jsonInfo: JSON) => {
+  const userInfo: IUserInfo = {
+    id: "",
+    mail: "",
+    server: "",
+    character: "",
+    isActive: false,
+    createDateString: "",
+    editDateString: "",
+    isAuth: false
+  }
 
+  return Object.setPrototypeOf(jsonInfo, userInfo);
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -27,24 +27,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 function MyInfo() {
   const classes = useStyles();
-
   const userId: string = getSignInUserId();
-  //TODO : 회원정보 불러오기 구현
-  //const userInfo: IUserInfo = getUserInfoById(userId);
-  const userInfo: IUserInfo = {
-    id: "whitow",
-    mail: "whitow@test.co.kr",
-    server: "하자",
-    character: "협가검",
-    isActive: true,
-    createDateString: "1",
-    editDateString: "1",
-    isAuth: true
-  }
 
   const [mode, setMode] = React.useState("view");
+  const [userInfo, setUserInfo] = useState<IUserInfo>({
+    id: "",
+    mail: "",
+    server: "",
+    character: "",
+    isActive: false,
+    createDateString: "",
+    editDateString: "",
+    isAuth: false
+  });
+
+  // Init User Information
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const getUserInfo = async () => {
+    const info = await getUserInfoById(userId);
+  
+    if (info !== null) setUserInfo(info);
+  };
 
   const _onViewUser = () => {
     setMode("view");
