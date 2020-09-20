@@ -45,20 +45,15 @@ router.post('/check', (req, res) => {
           return regRes;
       })
       .then((regRes) => {
-        //TODO DB PROCESS
-
-        return regRes;
-      })
-      .then((authRes) => {
-        if (authRes) {
+        if (regRes) {
           res.status(200).send({
-            message: "인증에 성공하였습니다. 잠시 후 회원정보로 이동합니다.",
+            message: "바람의 나라 계정 인증에 성공하였습니다.",
             code: 4000
           });
         }
         else {
           res.status(200).send({
-            message: "인증에 실패하였습니다.",
+            message: "바람의 나라 계정 인증에 실패하였습니다.",
             code: 4001
           });
         }
@@ -114,6 +109,49 @@ router.put('/update', (req, res) => {
     })
 });
 
+/*
+*    사용자 정보 인증
+*    TYPE : PUT
+*    URI : /api/user/auth
+*    HEADER: { "token": token }
+*    BODY: { "id", "isAuth", "point", "grade", "authDateString" }
+*    ERROR CODES:
+*        1: 성공
+*        2: 변경 오류
+*/
+router.put('/auth', (req, res) => {
+  const userInfo = {
+    id: req.body.id,
+    isAuth: req.body.isAuth,
+    point: req.body.point,
+    grade: req.body.grade,
+    authDateString: req.body.authDateString
+  }
+
+  UserInfoSchema.updateById(userInfo.id, userInfo)
+    .then((updated) => {
+      console.log(updated);
+
+      if (updated) {
+        console.log(`[SUCCESS] : ${userInfo.id} AUTHETICATION`);
+        res.status(200).send({
+          message: "인증에 성공하였습니다. 잠시 후 회원정보로 이동합니다.",
+          code: 4000
+        });
+
+        return true;
+      }
+      else {
+        console.log(`[ERROR] : ${userInfo.id} AUTHETICATION ERROR`);
+        res.status(200).send({
+          message: "인증에 실패하였습니다.",
+          code: 4001
+        });
+
+        return false;
+      }
+    })
+});
 
 /*
 *    사용자 정보조회

@@ -58,7 +58,6 @@ export const SignUpUser = (user: ISignUpUser) => {
 * 사용자 로그인
 */
 export const SignInUser = async (_id: string, _password: string) => {
-  // TODO - DB Process for Check Sign Up User
   const res = await axios.post('api/common/signin', {id: _id, password: _password})
     .then((res) => {
       console.log("SIGN IN RES > ", res);
@@ -102,13 +101,13 @@ export const getSignInUserId = () => {
 * 사용자 ID로 사용자 정보 가져오기
 */
 export const getUserInfoById = async (_id: string) => {
-  // TODO - DB Process Get UserInfo By Id
   const info = await axios.get('api/user/find/', {
       params: {
         "id": _id
       },
       ...CommonUtil.getHeaderToken()})
     .then((res) => {
+
       return res.data.userInfo;
     });
 
@@ -133,7 +132,7 @@ export const setUserInfo = async (userInfo: IUserInfo) => {
       editDateString: CommonUtil.getNowDateString(),
     }, CommonUtil.getHeaderToken())
     .then((res) => {
-      console.log(res);
+      //console.log(res);
 
       return res.data.message;
     })
@@ -147,24 +146,49 @@ export const setUserInfo = async (userInfo: IUserInfo) => {
 }
 
 /*
-* 바람의 나라 공식 사이트 한줄인사말 데이터 크롤링하여, 사용자 인증 처리
+* 바람의 나라 공식 사이트 한줄인사말 데이터 크롤링하여 사용자 인증
 */
-export const checkGameUser = async (server: string, character: string) => {
+export const checkGameUser = async (id: string, server: string, character: string) => {
   const r = await axios.post('/api/user/check', {
       character: character,
       server: server
     }, CommonUtil.getHeaderToken())
     .then((res) => {
-      console.log(res.data);
-      //alert(res.data.message);
+      if (res.data.code === 4000) {
+        return authUser(id);
+      }
+      else {
+        return res.data;
+      }
 
-      return res.data;
     })
     .catch((e) => {
       console.log("CHECK GAME USER ERROR > ", e);
       
       return false;
     });
+
+  return r;
+}
+
+/*
+* 사용자 인증 DB 처리
+*/
+export const authUser = async (userId: string) => {
+  const r = await axios.put('/api/user/auth', {
+    id: userId,
+    isAuth: true,
+    point: 0,
+    grade: "1",
+    authDateString: CommonUtil.getNowDateString()
+  }, CommonUtil.getHeaderToken())
+  .then((res) => {
+    
+    return res.data;
+  })
+  .catch((e) => {
+    console.log("AUTH USER ERROR > ", e);
+  });
 
   return r;
 }

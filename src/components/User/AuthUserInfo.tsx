@@ -44,7 +44,7 @@ function AuthUserInfo(props: IProps) {
   const _onAuthRequest = async () => {
     setMyBackdrop(true);
 
-    const res = await checkGameUser(userInfo.server, userInfo.character);
+    const res = await checkGameUser(userInfo.id, userInfo.server, userInfo.character);
     
     console.log("AUTH > ", res);
     if (res.code === 4000) {
