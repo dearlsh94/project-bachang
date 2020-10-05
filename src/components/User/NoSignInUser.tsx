@@ -1,8 +1,18 @@
 import React from 'react';
+import {useRecoilState} from 'recoil';
+import {SignInState} from 'state/common/SignInState';
+
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
 const NoSignInUser = () => {
+
+  const [isSignInOpen, setIsSignInOpen] = useRecoilState(SignInState);
+
+  const _onGoToSignIn = () => {
+    setIsSignInOpen(true);  
+  }
+
   return (
     <React.Fragment>
       <Typography gutterBottom>
@@ -11,7 +21,7 @@ const NoSignInUser = () => {
       <Link 
         component="button"
         variant="body2"
-        onClick={() => document.location.href="/signin"}>
+        onClick={_onGoToSignIn}>
           로그인하기
       </Link>
     </React.Fragment>

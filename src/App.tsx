@@ -5,12 +5,9 @@ import {BrowserRouter, Route} from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 
-import Test from './Test';
-
 import Header from 'components/Header/Header';
 import Home from 'pages/Home';
 
-//import SignIn from 'pages/User/SignIn';
 import SignUp from 'pages/User/SignUp';
 import FindId from 'pages/User/FindId';
 import FindPw from 'pages/User/FindPw';
@@ -23,8 +20,6 @@ import PostWrite from 'pages/Board/PostWrite';
 import Item from 'pages/Dictionary/Item';
 import Raid from 'pages/Dictionary/Raid';
 import RaidInfo from 'pages/Dictionary/RaidInfo';
-
-import SignIn from 'components/Dialog/SignIn';
 
 import MyAlert from 'elements/Alert/MyAlert';
 import MyBackdrop from 'elements/Backdrop/MyBackdrop';
@@ -46,7 +41,6 @@ function App() {
             <BrowserRouter>
               {/*Home*/}
               <Route exact path="/" component={Home}/>
-              <Route exact path="/test" component={Test}/>
 
               {/*Common*/}
               <Route exact path="/signup" component={SignUp}/>
@@ -70,7 +64,6 @@ function App() {
       </React.Fragment>
       <MyAlert/>
       <MyBackdrop/>
-      <SignIn/>
     </Container>
   );
 }

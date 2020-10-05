@@ -1,4 +1,7 @@
 import React from 'react';
+import {useRecoilState} from 'recoil';
+import {SignInState} from 'state/common/SignInState';
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,7 +16,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from '@material-ui/core/Grid';
 
 import TopTaps from 'components/Header/TopTaps';
-import SignIn from 'pages/User/SignIn_bak';
+import SignInForm from 'components/User/SignInForm';
 
 import { getSignInUserId, LogoutUser } from 'utils/UserUtil';
 
@@ -45,7 +48,7 @@ export default function Header() {
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [isSignInOpen, setIsSignInOpen] = React.useState(false);
+  const [isSignInOpen, setIsSignInOpen] = useRecoilState(SignInState);
 
   const signInUserId = getSignInUserId();
 
@@ -150,7 +153,7 @@ export default function Header() {
               Blah Blah ~~~~ 
             </DialogContentText>
             */}
-            <SignIn/>
+            <SignInForm/>
           </DialogContent>
           <DialogActions
             className={classes.dialogActions}>
