@@ -62,7 +62,7 @@ export default function SignUp(props: IProps) {
 	const _onCheckExist = async () => {
 		const res = await CheckExistUser(id);
 
-		if (res.code === 1) {
+		if (res.code === 200) {
 			alert(res.message);
 			setIsNewId(true);
 		}
@@ -87,7 +87,7 @@ export default function SignUp(props: IProps) {
 
 		setMyBackdrop(true);
 		const res = await SignUpUser(id, password);
-		if (res.code === 1) {
+		if (res.code === 200) {
       // Successed Authentication
       setMyAlert({
         isOpen: true,

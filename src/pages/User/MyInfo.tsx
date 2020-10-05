@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 
 import { getSignInUserId, getUserInfoById } from 'utils/UserUtil';
@@ -35,9 +33,12 @@ function MyInfo({match}: any) {
   const classes = useStyles();
   const {tab} = match.params;
 
-  const [mode, setMode] = React.useState(tab);
+  //const [mode, setMode] = React.useState(tab);
+  const mode = tab;
+
+  const [isNoSignInUser, setIsNoSignInUser] = React.useState(false);
   const [userInfo, setUserInfo] = useState<IUserInfo>({
-    id: getSignInUserId(),
+    id: "",
     isActive: false,
     createDateString: "",
     editDateString: ""
@@ -45,19 +46,25 @@ function MyInfo({match}: any) {
 
   // Init User Information
   useEffect(() => {
-    if (userInfo.id) getUserInfo();
+    const getUserInfo = async () => {
+      const id = getSignInUserId();
+      
+      if (id) {
+        const info = await getUserInfoById(id);
+        info && setUserInfo(info);
+      }
+      else {
+        setIsNoSignInUser(true);
+      }
+    };
+
+    getUserInfo();
   }, []);
-
-  const getUserInfo = async () => {
-    const info = await getUserInfoById(userInfo.id);
-
-    if (info !== null) setUserInfo(info);
-  };
 
   return (
     <React.Fragment>
       {
-        !userInfo.id ?
+        isNoSignInUser ?
           <NoSignInUser />
         :
         <Container 

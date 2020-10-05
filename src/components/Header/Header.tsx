@@ -1,6 +1,6 @@
 import React from 'react';
 import {useRecoilState} from 'recoil';
-import {SignInState} from 'state/common/SignInState';
+import SignInState from 'state/common/SignInState';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -158,14 +158,12 @@ export default function Header() {
           <DialogActions
             className={classes.dialogActions}>
             <Button 
-              autoFocus 
               tabIndex={-1}
               onClick={_onMoveSignUp} 
               color="primary">
                 회원가입
             </Button>
             <Button 
-              autoFocus
               tabIndex={-1}
               onClick={_onSignInClose} 
               color="primary">

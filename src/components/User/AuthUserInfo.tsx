@@ -61,7 +61,7 @@ function AuthUserInfo(props: IProps) {
 
     const res = await checkGameUser(userInfo.id, server, character);
     
-    if (res.code === 4000) {
+    if (res.code === 200) {
       // Successed Authentication
       setMyAlert({
         isOpen: true,

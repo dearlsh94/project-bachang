@@ -1,7 +1,8 @@
 import { atom } from 'recoil';
-import ISignIn from 'interfaces/User/ISignInUser';
 
-export const SignInState = atom({
+const SignInState = atom({
   key: "OpenSignInState",
   default: false
 });
+
+export default SignInState;

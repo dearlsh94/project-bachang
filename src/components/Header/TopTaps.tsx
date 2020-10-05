@@ -47,12 +47,12 @@ export default function TopTaps() {
     setIsOpen(false);
   }
 
-  const _onTabsEnter = (e: React.MouseEvent<{}>) => {
-    _tabsOpen();
-  }
-  const _onTabsLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    _tabsClose();
-  }
+  // const _onTabsEnter = (e: React.MouseEvent<{}>) => {
+  //   _tabsOpen();
+  // }
+  // const _onTabsLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   _tabsClose();
+  // }
 
   const _onListItemOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsOpenFixed(true);

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import cheerio from 'cheerio';
 import crypto from 'crypto';
 
 import IUserInfo from 'interfaces/User/IUserInfo';
@@ -7,7 +6,7 @@ import ISignUpUser from 'interfaces/User/ISignUpUser';
 
 import * as CommonUtil from 'utils/ComoonUtil';
 
-import { getToken, setToken, delToken } from 'utils/ComoonUtil';
+import { getToken, setToken, delToken, checkServerError } from 'utils/ComoonUtil';
 
 /*
 * 중복 유저 있는 지 체크
@@ -61,7 +60,7 @@ export const SignInUser = async (_id: string, _password: string) => {
   const res = await axios.post('/api/common/signin', {id: _id, password: _password})
     .then((res) => {
 
-      if (res.data.code === 1) {
+      if (res.data.code === 200) {
         // Create JWT
         const token = res.data.token;
 
@@ -111,6 +110,7 @@ export const getUserInfoById = async (_id: string) => {
     }
   })
   .then((res) => {
+    checkServerError(res.data);
 
     return res.data.userInfo;
   });
@@ -140,6 +140,8 @@ export const setUserInfo = async (userInfo: IUserInfo) => {
       }
     })
     .then((res) => {
+      checkServerError(res.data);
+
       return res.data;
     })
     .catch((e) => {
@@ -169,6 +171,8 @@ export const setChangePassword = async (id: string, changePassword: string) => {
       }
     })
     .then((res) => {
+      checkServerError(res.data);
+
       return res.data;
     })
     .catch((e) => {
@@ -195,7 +199,9 @@ export const checkGameUser = async (id: string, server: string, character: strin
       }
     })
     .then((res) => {
-      if (res.data.code === 4000) {
+      checkServerError(res.data);
+
+      if (res.data.code === 200) {
         return authUser(id, server, character);
       }
       else {
@@ -228,7 +234,8 @@ export const authUser = async (userId: string, server: string, character: string
     }
   })
   .then((res) => {
-    
+    checkServerError(res.data);
+
     return res.data;
   })
   .catch((e) => {
@@ -245,7 +252,8 @@ export const setTitleAccount = async (userId: string, server: string, character:
   const r = await axios.put('/api/user/settitle', {
     id: userId,
     server: server,
-    character: character
+    character: character,
+    editDateString: CommonUtil.getNowDateString()
   },
   {
     headers: {
@@ -253,6 +261,8 @@ export const setTitleAccount = async (userId: string, server: string, character:
     }
   })
   .then((res) => {
+    checkServerError(res.data);
+    
     return res.data;
   })
   .catch((e) => {

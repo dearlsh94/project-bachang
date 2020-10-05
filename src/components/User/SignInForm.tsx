@@ -28,7 +28,7 @@ export default function SignInForm() {
 	const refPassword = React.useRef<any>();
 
 	const _onEnterPassword = (keyCode: number) => {
-		if (keyCode == 13) {
+		if (keyCode === 13) {
 			_onSignIn();
 		}
 	}

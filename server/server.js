@@ -6,14 +6,16 @@ const route = require('./routes/index');
 const PORT = 3001;
 
 const config = require('./config.json');
+const myLogger = require('./myLogger');
+
 const mongoUri = `mongodb+srv://${config.id}:${config.password}@mycluster.xcgrs.mongodb.net/${config.dbName}?retryWrites=true&w=majority`
 function connect() {
   mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
   .then(() => {
-    console.log("[MONGO DB CONNECT SUCCESS]");
+    myLogger("[MONGO DB CONNECT SUCCESS]");
   })
   .catch((e) => {
-    console.log("[MONGO DB CONNECT ERROR]");
+    myLogger("[MONGO DB CONNECT ERROR]");
   });
 }
 
@@ -30,7 +32,7 @@ app.use(bodyParser.json());
 app.use('/api', route);
 
 app.listen(PORT, ()=>{
-  console.log(`express is running on ${PORT}`);
+  myLogger(`express is running on ${PORT}`);
 })
 
 
@@ -38,7 +40,7 @@ app.listen(PORT, ()=>{
 * TEST API ZONE START
 */
 app.use('/hello', (req, res)=> {
-  console.log(config.id);
+  myLogger(config.id);
   res.send("HELLO, SERVER");
 });
 /*

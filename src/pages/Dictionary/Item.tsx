@@ -78,7 +78,7 @@ export default function Item() {
           <MyInputSearch />
         </Grid>
         <Grid item xs={12}>
-
+          현재 검색어 : {searchValue}
         </Grid>
       </Grid>
     </React.Fragment>

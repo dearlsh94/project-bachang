@@ -1,13 +1,13 @@
 import React from 'react';
-import {useRecoilState} from 'recoil';
-import {SignInState} from 'state/common/SignInState';
+import {useSetRecoilState} from 'recoil';
+import SignInState from 'state/common/SignInState';
 
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
 const NoSignInUser = () => {
 
-  const [isSignInOpen, setIsSignInOpen] = useRecoilState(SignInState);
+  const setIsSignInOpen = useSetRecoilState(SignInState);
 
   const _onGoToSignIn = () => {
     setIsSignInOpen(true);  

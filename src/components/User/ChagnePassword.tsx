@@ -57,7 +57,7 @@ function ChagnePassword(props: IProps) {
     if (res) {
       const res = await setChangePassword(id, chgPassword);
   
-      if (res.code === 1) {
+      if (res.code === 200) {
         setMyAlert({
           isOpen: true,
           severity: "success",

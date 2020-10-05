@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {useSetRecoilState} from 'recoil';
-import {MyAlertState} from 'state/index';
+import {MyAlertState, MyBackdropState} from 'state/index';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -39,6 +39,7 @@ function EditUserInfo(props: IProps) {
   const userInfo: IUserInfo = props.userInfo;
 
   const setMyAlert = useSetRecoilState(MyAlertState);
+  const setMyBackdrop = useSetRecoilState(MyBackdropState);
 
   const [isConfirm, setIsConfirm] = React.useState(false);
   const [openKakao, setOpenKakao] = React.useState("");
@@ -82,12 +83,14 @@ function EditUserInfo(props: IProps) {
   }
 
   const _onSave = async () => {
+    setMyBackdrop(true);
+
     const editUserInfo: IUserInfo = Object.assign(userInfo);
     editUserInfo.openKakao = openKakao;
 
     const res = await setUserInfo(editUserInfo);
 
-    if (res.code === 1) {
+    if (res.code === 200) {
       setMyAlert({
         isOpen: true,
         severity: "success",
@@ -101,9 +104,13 @@ function EditUserInfo(props: IProps) {
         severity: "error",
         duration: duration,
         message: res.message
-      });
+      });  
     }
-    window.location.replace("/myinfo/view");
+
+    setTimeout(() => {
+      setMyBackdrop(false);
+      window.location.reload();
+    }, duration);
   }
 
   return (

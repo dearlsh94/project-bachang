@@ -5,6 +5,8 @@ import {BrowserRouter, Route} from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 
+import NoAuth from 'pages/NoAuth';
+
 import Header from 'components/Header/Header';
 import Home from 'pages/Home';
 
@@ -39,6 +41,9 @@ function App() {
           <Container
             fixed>
             <BrowserRouter>
+              {/*Error Handling*/}
+              <Route exact path="/error/auth" component={NoAuth}/>
+
               {/*Home*/}
               <Route exact path="/" component={Home}/>
 

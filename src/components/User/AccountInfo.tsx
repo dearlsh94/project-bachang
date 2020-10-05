@@ -60,7 +60,7 @@ function AccountInfo(props: IProps) {
 
     const res = await setTitleAccount(userInfo.id, parseValue[0], parseValue[1]);
 
-    if (res.code === 1) {
+    if (res.code === 200) {
       // Successed
       setMyAlert({
         isOpen: true,
