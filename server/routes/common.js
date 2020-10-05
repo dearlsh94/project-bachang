@@ -6,12 +6,40 @@ const jsonwebtoken = require('jsonwebtoken');
 const config = require('../config.json');
 
 const SignUpUserSchema = require('../schemas/User/SignUpUserSchema');
+const UserInfoSchema = require('../schemas/User/UserInfoSchema');
+/*
+*    아이디 중복 검사
+*    TYPE : POST
+*    URI : /api/common/checkid
+*    PARAM: {"id"}
+*    RESULT CODES:
+*       true: 신규 ID
+*       false: 중복 ID
+*/
+router.post('/checkid', (req, res) => {
+  console.log(req.body.id);
+  SignUpUserSchema.findOneById(req.body.id)
+    .then((exist) => {
+      if (exist) {
+        res.status(200).send({
+          message: "사용 불가능한 ID 입니다.",
+          code: 2
+        });
+      }
+      else {
+        res.status(200).send({
+          message: "사용 가능한 ID 입니다.",
+          code: 1
+        });
+      }
+    });
+});
 
 /*
 *    사용자 회원가입
 *    TYPE : POST
-*    URI : /api/user/signup
-*    PARAM: { "id": "test", "password": "test", "mail": "mail@test.com", "salt": "salt" }
+*    URI : /api/common/signup
+*    PARAM: { "id": "test", "password": "test", "salt": "salt", "createDateString", "editDateString" }
 *    ERROR CODES:
 *        1: 성공
 *        2: 중복 유저
@@ -19,59 +47,71 @@ const SignUpUserSchema = require('../schemas/User/SignUpUserSchema');
 *        4: DB 중복 확인 오류
 */
 router.post('/signup', (req, res) => {
-    // CHECK USER EXISTANCE
-    // CREATE ACCOUNT
-    let user = new SignUpUserSchema({
-			id: req.body.id,
-			password: req.body.password,
-			mail: req.body.mail,
-			salt: req.body.salt
-    });
-		
-    SignUpUserSchema.findOneById(user.id)
-			.then((exist) => {
-				if (exist) {
-					console.log(`[ERROR] : ${user.id} IS ALREADY EXIST`);
-					res.status(200).send({
-						message: "중복된 유저",
-						code: 2
-					});
+  // CREATE ACCOUNT
+  let user = new SignUpUserSchema({
+    id: req.body.id,
+    password: req.body.password,
+    salt: req.body.salt,
+    createDateString: req.body.createDateString,
+    editDateString: req.body.editDateString
+  });
+  
+  SignUpUserSchema.findOneById(user.id)
+    .then((exist) => {
+      if (exist) {
+        console.log(`[ERROR] : ${user.id} IS ALREADY EXIST`);
+        res.status(200).send({
+          message: "중복된 유저",
+          code: 2
+        });
 
-					return false;
-				}
-				else {
-					SignUpUserSchema.create(user, (err, user) => {
-						console.log(`[ERROR] : ${user.id} CREATED ERROR`);
-						if (err) {
-							res.status(500).send({
-								message: "DB 생성 오류",
-								code: 3
-							});
-						}
+        return false;
+      }
+      else {
+        SignUpUserSchema.create(user, (err, user) => {
+          console.log(`[ERROR] : ${user.id} CREATED ERROR`);
+          if (err) {
+            res.status(500).send({
+              message: "DB 생성 오류",
+              code: 3
+            });
+          }
 
-						return false;
-					});
-				}
+          return false;
+        });
+        
+        const userInfo = new UserInfoSchema({
+          id: user.id,
+          createDateString: user.createDateString,
+          editDateString: user.editDateString,
+          point: 0,
+          grade: "Level 1",
+          isActive: false,
+        });
 
-				return true;
-			})
-			.then((created) => {
-				if (created) {
-					console.log(`[SUCCESS] : ${user.id} CREATED!!!`);
-					res.status(200).send({
-						message: "계정 생성 성공",
-						code: 1
-					});
-				}
-			})
-			.catch((e) => {
-				console.log(e);
+        UserInfoSchema.create(userInfo);
+      }
 
-				res.status(500).send({
-					message: "DB 중복 확인 오류",
-					code: 4
-				});
-			})
+      return true;
+    })
+    .then((created) => {
+      if (created) {
+        console.log(`[SUCCESS] : ${user.id} CREATED!!!`);
+        
+        res.status(200).send({
+          message: "회원가입이 완료되었습니다.",
+          code: 1
+        });
+      }
+    })
+    .catch((e) => {
+      console.log(`[ERROR] : ${user.id} EXIST CHECK ERROR > ${e}`);
+
+      res.status(500).send({
+        message: "DB 중복 확인 오류",
+        code: 4
+      });
+    })
 });
 
 

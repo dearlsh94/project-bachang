@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FindId() {
+export default function Item() {
   const classes = useStyles();
 
   const [value, setValue] = React.useState(0);

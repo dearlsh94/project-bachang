@@ -11,10 +11,14 @@ import { getSignInUserId, getUserInfoById } from 'utils/UserUtil';
 
 import IUserInfo from 'interfaces/User/IUserInfo';
 
+import LeftMenuList from 'components/User/LeftMenuList';
+
 import NoSignInUser from 'components/User/NoSignInUser';
 import ViewUserInfo from 'components/User/ViewUserInfo';
 import EditUserInfo from 'components/User/EditUserInfo';
 import AuthUserInfo from 'components/User/AuthUserInfo';
+import AccountInfo from 'components/User/AccountInfo';
+import ChagnePassword from 'components/User/ChagnePassword';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,51 +31,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
-function MyInfo() {
+function MyInfo({match}: any) {
   const classes = useStyles();
-  const userId: string = getSignInUserId();
+  const {tab} = match.params;
 
-  const [mode, setMode] = React.useState("view");
+  const [mode, setMode] = React.useState(tab);
   const [userInfo, setUserInfo] = useState<IUserInfo>({
-    id: "",
-    mail: "",
-    server: "",
-    character: "",
+    id: getSignInUserId(),
     isActive: false,
     createDateString: "",
-    editDateString: "",
-    isAuth: false
+    editDateString: ""
   });
 
   // Init User Information
   useEffect(() => {
-    getUserInfo();
+    if (userInfo.id) getUserInfo();
   }, []);
 
   const getUserInfo = async () => {
-    const info = await getUserInfoById(userId);
-  
+    const info = await getUserInfoById(userInfo.id);
+
     if (info !== null) setUserInfo(info);
   };
-
-  const _onViewUser = () => {
-    setMode("view");
-  }
-
-  const _onEditUser = () => {
-    setMode("edit");
-  }
-
-  const _onAuthUser = () => {
-    setMode("auth");
-  }
 
   return (
     <React.Fragment>
       {
-        userId === "" ?
+        !userInfo.id ?
           <NoSignInUser />
         :
         <Container 
@@ -80,18 +66,12 @@ function MyInfo() {
           maxWidth="md">
             <Grid container>
               <Grid item xs={2} className={classes.leftSection}>
-                <MenuList>
-                  <MenuItem onClick={_onViewUser}>회원정보</MenuItem>
-                  <Divider variant="middle"/>
-                  <MenuItem onClick={_onEditUser}>정보수정</MenuItem>
-                  <Divider variant="middle"/>
-                  <MenuItem onClick={_onAuthUser}>회원인증</MenuItem>
-                </MenuList>
+                <LeftMenuList />
               </Grid>
               <Divider orientation="vertical" flexItem />
               <Grid item xs={9} className={classes.rightSection}>
                 {
-                  mode === "view" &&
+                  (mode === "view") &&
                     <ViewUserInfo 
                       userInfo={userInfo}/>
                 }
@@ -104,6 +84,16 @@ function MyInfo() {
                   mode === "auth" &&
                     <AuthUserInfo 
                       userInfo={userInfo}/>
+                }
+                {
+                  mode === "char" &&
+                    <AccountInfo 
+                      userInfo={userInfo}/>
+                }
+                {
+                  mode === "chgPwd" &&
+                    <ChagnePassword
+                      id={userInfo.id} />
                 }
               </Grid>
             </Grid>

@@ -4,6 +4,9 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const UserInfoSchema = require('../schemas/User/UserInfoSchema');
+const AccountInfoSchema = require('../schemas/User/AccountInfoSchema');
+const SignUpUserSchema = require('../schemas/User/SignUpUserSchema');
+
 /*
 *    사용자 서버, 닉네임 검사
 *    TYPE : POST
@@ -34,13 +37,9 @@ router.post('/check', (req, res) => {
           
           const $ = cheerio.load(html.data);
           const $txtMessage = $("textarea").text();
+          //console.log($txtMessage);
 
-          console.log($txtMessage);
-
-          const regContainCharacter = new RegExp(req.body.character, "g");
-
-          const regRes = regContainCharacter.test($txtMessage);
-          console.log("REG RESPONSE > ", regRes);
+          const regRes = new RegExp(`${req.body.id}`).test($txtMessage);
 
           return regRes;
       })
@@ -77,19 +76,15 @@ router.post('/check', (req, res) => {
 *        2: 변경 오류
 */
 router.put('/update', (req, res) => {
-  const userInfo = {
-    id: req.body.id,
-    server: req.body.server,
-    character: req.body.character,
+  const editedUserInfo = {
+    openKakao: req.body.openKakao,
     editDateString: req.body.editDateString
   }
 
-  UserInfoSchema.updateById(userInfo.id, userInfo)
-    .then((updated) => {
-      console.log(updated);
-
-      if (updated) {
-        console.log(`[SUCCESS] : ${userInfo.id} INFORMATION UPDATE`);
+  UserInfoSchema.updateById(req.body.id, editedUserInfo)
+    .then((updatedUserInfo) => {
+      if (updatedUserInfo) {
+        console.log(`[SUCCESS] : ${updatedUserInfo.id} INFORMATION UPDATE`);
         res.status(200).send({
           message: "정보가 수정되었습니다.",
           code: 1
@@ -98,7 +93,7 @@ router.put('/update', (req, res) => {
         return true;
       }
       else {
-        console.log(`[ERROR] : ${userInfo.id} INFORMATION UPDATE ERROR`);
+        console.log(`[ERROR] : ${updatedUserInfo.id} INFORMATION UPDATE ERROR`);
         res.status(200).send({
           message: "작업 중 오류가 발생하였습니다. 잠시 후 다시 시도하여주세요.",
           code: 2
@@ -114,43 +109,58 @@ router.put('/update', (req, res) => {
 *    TYPE : PUT
 *    URI : /api/user/auth
 *    HEADER: { "token": token }
-*    BODY: { "id", "isAuth", "point", "grade", "authDateString" }
+*    BODY: { "id", "server", "character" "authDateString" }
 *    ERROR CODES:
-*        1: 성공
-*        2: 변경 오류
+*        4000: 인증 성공
+*        4001: 인증 실패
+*        4002: 중복 계정
 */
 router.put('/auth', (req, res) => {
-  const userInfo = {
-    id: req.body.id,
-    isAuth: req.body.isAuth,
-    point: req.body.point,
-    grade: req.body.grade,
+  const id = req.body.id;
+
+  const accountInfo = {
+    server: req.body.server,
+    character: req.body.character,
     authDateString: req.body.authDateString
-  }
+  };
 
-  UserInfoSchema.updateById(userInfo.id, userInfo)
-    .then((updated) => {
-      console.log(updated);
-
-      if (updated) {
-        console.log(`[SUCCESS] : ${userInfo.id} AUTHETICATION`);
+  // Exist Check
+  AccountInfoSchema.checkAccount(id, accountInfo.server, accountInfo.character)
+    .then((exist) => {
+      if (exist) {
+        console.log(`[ERROR] : ${id} AUTHETICATION ERROR`);
         res.status(200).send({
-          message: "인증에 성공하였습니다. 잠시 후 회원정보로 이동합니다.",
-          code: 4000
+          message: "이미 인증 처리 된 계정 입니다.",
+          code: 4002
         });
-
-        return true;
       }
       else {
-        console.log(`[ERROR] : ${userInfo.id} AUTHETICATION ERROR`);
-        res.status(200).send({
-          message: "인증에 실패하였습니다.",
-          code: 4001
-        });
+        AccountInfoSchema.create(id, accountInfo);
 
-        return false;
+        UserInfoSchema.pushAccountList(id, accountInfo)
+          .then((updated) => {
+            
+            if (updated) {
+              console.log(`[SUCCESS] : ${id} AUTHETICATION`);
+              res.status(200).send({
+                message: `${accountInfo.server}%${accountInfo.character} 계정 인증에 성공하였습니다.`,
+                code: 4000
+              });
+      
+              return true;
+            }
+            else {
+              console.log(`[ERROR] : ${id} AUTHETICATION ERROR`);
+              res.status(200).send({
+                message: "인증에 실패하였습니다.",
+                code: 4001
+              });
+      
+              return false;
+            }
+          })
       }
-    })
+    });
 });
 
 /*
@@ -199,6 +209,109 @@ router.get('/find', (req, res) => {
       });
     })
 });
+
+/*
+*    대표캐릭터 설정
+*    TYPE : PUT
+*    URI : /api/user/settitle
+*    HEADER: { "token": token }
+*    BODY: { "id", "server", "character" }
+*    ERROR CODES:
+*        1: 성공
+*        2: 사용자 정보가 존재하지 않음.
+*        3: 서버 오류
+*/
+router.put('/settitle', (req, res) => {
+  const id = req.body.id;
+  const titleAccountInfo = {
+    server: req.body.server,
+    character: req.body.character
+  }
+  
+  UserInfoSchema.updateById(id, {titleAccount: titleAccountInfo})
+    .then((updatedUserInfo) => {
+      if (updatedUserInfo) {
+        console.log(`[SUCCESS] : ${updatedUserInfo.id} INFORMATION UPDATE`);
+        res.status(200).send({
+          message: "대표캐릭터가 변경되었습니다.",
+          code: 1
+        });
+
+        return true;
+      }
+      else {
+        console.log(`[ERROR] : ${updatedUserInfo.id} INFORMATION UPDATE ERROR`);
+        res.status(200).send({
+          message: "대표캐릭터 변경에 실패하였습니다. 잠시 후 다시 시도하여주세요.",
+          code: 2
+        });
+
+        return false;
+      }
+    })
+    .catch((e) => {
+      console.log(`[ERROR] : ${id} SET TITLE ACCOUNT ERROR`);
+      console.log(e);
+      res.status(200).send({
+        message: "대표캐릭터 설정 중 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.",
+        code: 3
+      });
+    })
+
+});
+
+/*
+*    비밀번호 변경
+*    TYPE : PUT
+*    URI : /api/user/changepassword
+*    HEADER: { "token": token }
+*    BODY: { "id", "password", "slat", "editDateString" }
+*    ERROR CODES:
+*        1: 성공
+*        2: 비밀번호 변경 실패
+*        3: 서버 오류
+*/
+router.put('/changepassword', (req, res) => {
+  // CHANGE PASSWORD INFO
+  const id = req.body.id;
+  const changePasswordInfo = {
+    password: req.body.password,
+    salt: req.body.salt,
+    editDateString: req.body.editDateString
+  };
+
+  SignUpUserSchema.changePassword(id, changePasswordInfo)
+    .then((changedInfo) => {
+      if (changedInfo) {
+        console.log(`[SUCCESS] : ${changedInfo.id} PASSWORD WAS CHANGEED`);
+        res.status(200).send({
+          message: "비밀번호가 변경되었습니다. 다시 로그인 해 주세요.",
+          code: 1
+        });
+
+        return true;
+      }
+      else {
+        console.log(`[ERROR] : ${changedInfo.id} PASSWORD CHANGE ERROR`);
+        res.status(200).send({
+          message: "비밀번호 변경에 실패하였습니다. 잠시 후 다시 시도하여주세요.",
+          code: 2
+        });
+
+        return false;
+      }
+    })
+    .catch((e) => {
+      console.log(`[ERROR] : ${id} CHANGE PASSWORD ERROR`);
+      console.log(e);
+      res.status(200).send({
+        message: "비밀번호 변경 중 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.",
+        code: 3
+      });
+    })
+});
+
+
 
 /*
     LOGOUT: POST /api/account/logout

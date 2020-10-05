@@ -83,8 +83,9 @@ export default function TopTaps() {
                   item
                   key={menu.idx}
                   className={classes.menuTab}
-                  onMouseEnter={_onTabsEnter}
-                  onMouseLeave={_onTabsLeave}>
+                  //onMouseEnter={_onTabsEnter}
+                  //onMouseLeave={_onTabsLeave}
+                  >
                     <List>
                       <ListItem
                         key={menu.key}

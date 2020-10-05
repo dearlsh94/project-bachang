@@ -20,11 +20,3 @@ export const getToken = () => {
 export const delToken = () => {
   localStorage.removeItem(getSessionNameUserToken());
 }
-
-export const getHeaderToken = () => {
-  return {
-    headers: {
-      "token": getToken()
-    }
-  }
-}

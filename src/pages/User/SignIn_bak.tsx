@@ -35,14 +35,14 @@ export default function SignIn() {
 
 	const _onSignIn = async () => {
 		if ( id.length < 1 ) {
-			alert("PLEASE INPUT USER ID");
+			alert("ID를 입력해주세요.");
 			refId.current.focus();
 
 			return false;
 		}
 
 		if ( password.length < 1 ) {
-			alert("PLEASE INPUT PASSWORD");
+			alert("비밀번호를 입력해주세요.");
 			refPassword.current.focus();
 
 			return false;
@@ -65,20 +65,21 @@ export default function SignIn() {
 							<Grid container spacing={2}>
 								<Grid container item xs={12}>
 									<TextField
-											variant="outlined"
-											required
-											fullWidth
-											margin="dense"
-											id="id"
-											name="id"
-											label="User ID"
-											autoComplete="id"
-											value={id}
-											inputRef={refId}
-											onChange={(e) => setId(e.target.value)}
+										variant="outlined"
+										required
+										fullWidth
+										autoFocus
+										margin="dense"
+										id="id"
+										name="id"
+										label="User ID"
+										autoComplete="id"
+										value={id}
+										inputRef={refId}
+										onChange={(e) => setId(e.target.value)}
 									/>
 									<Link href="/findid" variant="body2" tabIndex={-1}>
-											아이디 찾기
+										아이디 찾기
 									</Link>
 								</Grid>
 								<Grid container item xs={12}>
