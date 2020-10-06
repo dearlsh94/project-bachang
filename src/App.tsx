@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 import {BrowserRouter, Route} from 'react-router-dom';
@@ -26,7 +26,13 @@ import RaidInfo from 'pages/Dictionary/RaidInfo';
 import MyAlert from 'elements/Alert/MyAlert';
 import MyBackdrop from 'elements/Backdrop/MyBackdrop';
 
+import { refreshToken } from 'utils/ComoonUtil';
+
 function App() {
+
+  useEffect(() => {
+    setInterval(refreshToken, 1000 * 60 * 30);
+  }, []);
 
   return (
     <Container

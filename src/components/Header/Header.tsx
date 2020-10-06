@@ -1,6 +1,6 @@
 import React from 'react';
 import {useRecoilState} from 'recoil';
-import SignInState from 'state/common/SignInState';
+import SignInDialogState from 'state/common/SignInDialogState';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -48,7 +48,7 @@ export default function Header() {
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [isSignInOpen, setIsSignInOpen] = useRecoilState(SignInState);
+  const [isSignInOpen, setIsSignInOpen] = useRecoilState(SignInDialogState);
 
   const signInUserId = getSignInUserId();
 

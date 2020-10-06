@@ -6,7 +6,7 @@ import ISignUpUser from 'interfaces/User/ISignUpUser';
 
 import * as CommonUtil from 'utils/ComoonUtil';
 
-import { getToken, setToken, delToken, checkServerError } from 'utils/ComoonUtil';
+import { setToken, delToken, checkServerError, getNowIdFromToken } from 'utils/ComoonUtil';
 
 /*
 * 중복 유저 있는 지 체크
@@ -61,15 +61,11 @@ export const SignInUser = async (_id: string, _password: string) => {
     .then((res) => {
 
       if (res.data.code === 200) {
-        // Create JWT
         const token = res.data.token;
-
         // Session Store
         setToken(token);
 
-        //TODO Refresh Token
-
-        return true;
+        return token;
       }
       else {
         alert(res.data.message);
@@ -92,9 +88,7 @@ export const LogoutUser = () => {
 * 로그인 한 사용자 ID 가져오기
 */
 export const getSignInUserId = () => {
-  const token = getToken();
-  
-  return token ? getIdFromToken(token) : null;
+  return getNowIdFromToken();
 }
 
 /*
@@ -270,28 +264,6 @@ export const setTitleAccount = async (userId: string, server: string, character:
   });
 
   return r;
-}
-
-/*
-* JWT 구조
-* [HEADER].[PAYLOAD].[VERIFY SIGNATURE]
-*/
-const getIdFromToken = (token: string) => {
-  if (token !== "") {
-    // Get Token
-    const splitToken = token.split(".");
-  
-    // Get Payload Token
-    const payloadToken = splitToken[1];
-  
-    // Decode Base64 and Transfer to JSON
-    const payload = JSON.parse(atob(payloadToken));
-  
-    return payload.id;
-  }
-  else {
-    return null;
-  }
 }
 
 const getUserInfoFromJson = (jsonInfo: JSON) => {

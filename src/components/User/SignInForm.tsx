@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -48,8 +49,8 @@ export default function SignInForm() {
 			return false;
 		}
 
-		const res = await SignInUser(id, password);
-		if (res) {
+		const token = await SignInUser(id, password);
+		if (token) {
 			document.location.href = "/";
 		}
 	}

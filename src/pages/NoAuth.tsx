@@ -1,10 +1,10 @@
 import React from 'react';
 import {useSetRecoilState} from 'recoil';
-import SignInState from 'state/common/SignInState';
+import SignInDialogState from 'state/common/SignInDialogState';
 
 const NoAuth = () => {
 
-  const setIsOpen = useSetRecoilState(SignInState);
+  const setIsOpen = useSetRecoilState(SignInDialogState);
   setIsOpen(true);
 
   return (

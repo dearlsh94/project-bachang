@@ -8,6 +8,7 @@ const myLogger = require('../myLogger');
 
 const SignUpUserSchema = require('../schemas/User/SignUpUserSchema');
 const UserInfoSchema = require('../schemas/User/UserInfoSchema');
+
 /*
 *    아이디 중복 검사
 *    TYPE : POST
@@ -122,19 +123,20 @@ router.post('/signup', (req, res) => {
         code: 500,
         message: "서버 오류가 발생했습니다.",
       });
-    })
+    });
 });
 
 
 /*
 *    사용자 로그인
 *    TYPE : POST
-*    URI : /api/user/signin
+*    URI : /api/common/signin
 *    PARAM: { "id": "test", "password": "test"}
 *    ERROR CODES:
 *        200: 성공
 *        1001: 존재하지 않는 유저
 *        1003: 패스워드 불일치
+*        500: 서버 오류
 */
 router.post('/signin', (req, res) => {
 
@@ -156,16 +158,7 @@ router.post('/signin', (req, res) => {
         else {
           myLogger(`[SUCCESS] : ${user.id} SIGNIN SUCCESSED`);
 
-          // CREATE JSONWEBTOKEN
-          const token = jsonwebtoken.sign(
-            {
-              id: user.id,
-            },
-            config.secret,
-            {
-              expiresIn: '2h'
-            }
-          );
+          const token = createToken(user.id);
 
           res.status(200).send({
             code: 200,
@@ -185,8 +178,64 @@ router.post('/signin', (req, res) => {
 
         return false;
       }
+    })
+    .catch((e) => {
+      myLogger(`SIGNIN ERROR > ${e}`);
+
+      res.status(500).send({
+        code: 500,
+        message: "서버 오류가 발생했습니다.",
+      });
     });
 });
 
+/*
+*    사용자 토큰 정보 갱신
+*    TYPE : POST
+*    URI : /api/common/refresh
+*    PARAM: { "id", "token"}
+*    ERROR CODES:
+*        200: 성공
+*        401: 유효하지 않은 토큰
+*/
+router.post('/refresh', (req, res) => {
+  const token = req.body.token;
+  const id = req.body.id;
+
+  const decoded = jsonwebtoken.verify(token, config.secret);
+
+  if (decoded) {
+    myLogger(`[SUCCESS] : ${id} REFRESHED ACCESS TOKEN`);
+    res.status(200).send({
+      code: 200,
+      token: createToken(id)
+    });
+  }
+  else {
+    myLogger(`[SUCCESS] : ${id} INVALID ACCESS TOKEN`);
+    res.status(200).send({
+      code: 401,
+      token: null
+    });
+  }
+});
+
+/*
+*   신규 토큰 생성
+*/
+const createToken = (_id) => {
+  // CREATE JSONWEBTOKEN
+  const token = jsonwebtoken.sign(
+    {
+      id: _id,
+    },
+    config.secret,
+    {
+      expiresIn: '1h'
+    }
+  );
+
+  return token;
+}
 
 module.exports = router;
