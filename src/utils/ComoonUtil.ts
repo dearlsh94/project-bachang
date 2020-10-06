@@ -29,7 +29,7 @@ export const refreshToken = () => {
   if (_token){
     const res = axios.post('/api/common/refresh', {id: _id, token: _token})
       .then((res) => {
-        if (res.data.code === 200) {
+        if (res.data.code === 200 && res.data.token) {
           setToken(res.data.token);
           return true;
         }

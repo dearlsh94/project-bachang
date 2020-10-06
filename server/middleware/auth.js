@@ -6,7 +6,7 @@ const authMiddleware = (req, res, next) => {
   const token = req.headers.token;
 
   if ( !token ) {
-    myLogger("DO NOT FIND TOKEN INFORMATION");
+    myLogger("[ERROR] DO NOT FIND TOKEN INFORMATION IN REQUEST HEADER");
     res.redirect('/api/error/auth');
   }
   

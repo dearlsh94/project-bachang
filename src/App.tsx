@@ -31,7 +31,7 @@ import { refreshToken } from 'utils/ComoonUtil';
 function App() {
 
   useEffect(() => {
-    setInterval(refreshToken, 1000 * 60 * 30);
+    setInterval(refreshToken, 1000 * 60 * 25);
   }, []);
 
   return (
