@@ -31,6 +31,10 @@ import { refreshToken } from 'utils/ComoonUtil';
 function App() {
 
   useEffect(() => {
+    fetch('/hello')
+      .then((res) => res.json())
+      .then((success) => console.log('hi'));
+      
     setInterval(refreshToken, 1000 * 60 * 25);
   }, []);
 
@@ -48,6 +52,7 @@ function App() {
             fixed>
             <BrowserRouter>
               {/*Error Handling*/}
+              <Route exact path="/signin" component={NoAuth}/>
               <Route exact path="/error/auth" component={NoAuth}/>
 
               {/*Home*/}
