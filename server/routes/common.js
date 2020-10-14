@@ -71,8 +71,8 @@ router.post('/signup', (req, res) => {
       }
       else {
         SignUpUserSchema.create(user, (err, user) => {
-          myLogger(`[ERROR] : ${user.id} CREATED ERROR`);
           if (err) {
+            myLogger(`[ERROR] : ${user.id} CREATED ERROR`);
             res.status(500).send({
               code: 1002,
               message: "DB 계정 생성 오류"
@@ -129,6 +129,8 @@ router.post('/signup', (req, res) => {
         code: 500,
         message: "서버 오류가 발생했습니다.",
       });
+
+      return false;
     });
 });
 
@@ -219,7 +221,7 @@ router.post('/refresh', (req, res) => {
     });
   }
   else {
-    myLogger(`[SUCCESS] : ${id} INVALID ACCESS TOKEN`);
+    myLogger(`[ERROR] : ${id} INVALID ACCESS TOKEN`);
     res.status(200).send({
       code: 401,
       token: null

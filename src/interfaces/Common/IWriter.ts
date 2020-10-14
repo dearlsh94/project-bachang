@@ -1,6 +1,6 @@
 export default interface IWriter {
-  creater: string,
+  key?: number,
+  id: string,
   createDateString: string,
-  editer: string,
   lastEditDateString: string,
 }

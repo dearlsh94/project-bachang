@@ -3,7 +3,7 @@ const autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(mongoose.connection);
 
 const signUpUserSchema = new mongoose.Schema({
-  key: { type: Number, default: 0, require: true, unique: true },
+  key: { type: Number, default: 0, required: true, unique: true },
   id: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   salt: { type: String, required: true },

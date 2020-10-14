@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useSetRecoilState} from 'recoil';
 import {MyAlertState, MyBackdropState} from 'state/index';
 
@@ -19,7 +19,10 @@ import Button from '@material-ui/core/Button';
 
 import MyButton from 'elements/Button/MyButton';
 
+import { CategoryType } from 'interfaces/Board/IPost';
+
 import { CreatePost } from 'utils/PostUtil';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,15 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
   selector: {
     minWidth: "180px",
-    textAlign: "center"
+    textAlign: "center",
   },
   buttonZone: {
     marginTop: "10px"
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
+  }
 }));
 
 const modules = {
@@ -95,28 +94,36 @@ const formats = [
 
 const duration = 3000;
 
-function PostWrite() {
+function PostWrite({match}: any) {
   const classes = useStyles();
+  const {tab} = match.params;
+
   const setMyAlert = useSetRecoilState(MyAlertState);
   const setMyBackdrop = useSetRecoilState(MyBackdropState);
+  
+  const refTitle = React.useRef<any>();
 
   const [openConfirmCancle, setOpenConfirmCancle] = React.useState(false);
-  const [category, setCategory] = React.useState(10);
+  const [category, setCategory] = React.useState<CategoryType>("free");
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
 
-  const refTitle = React.useRef<any>();
+  useEffect(() => {
+    if (tab) setCategory(tab);
+  }, []);
 
   const _onChangeCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setCategory(event.target.value as number);
+    setCategory(event.target.value as CategoryType);
     refTitle.current.focus();
   }
 
   const _onCancle = () => {
-    setOpenConfirmCancle(true);
-    setCategory(10);
+    setCategory("free");
     setTitle("");
-
+    setContent("");
+    setOpenConfirmCancle(false);
+    
+    window.history.back();
   }
 
   const _onWrite = async () => {
@@ -124,29 +131,25 @@ function PostWrite() {
 
     const res = await CreatePost(category, title, content);
     
-    if (res) {
-      // Successed Authentication
+    if (res.code === 200) {
       setMyAlert({
         isOpen: true,
         severity: "success",
         duration: duration,
-        message: "작성되었습니다. 잠시 후 게시판으로 이동합니다."
+        message: res.message
       });
 
-      setTimeout(() => document.location.reload(), duration);
+      setTimeout(() => document.location.href = `/board/${category}/view/${res.seq}`, duration);
     }
     else {
-      // Failed Authentication
       setMyAlert({
         isOpen: true,
-        severity: "success",
+        severity: "error",
         duration: duration,
-        message: "작성에 실패하였습니다."
+        message: res.message
       });
       
-      setTimeout(()=> {
-        setMyBackdrop(false);
-      }, duration);
+      setTimeout(()=> { setMyBackdrop(false); }, duration);
     }
   }
 
@@ -168,10 +171,12 @@ function PostWrite() {
               onChange={_onChangeCategory}
               displayEmpty
               className={classes.selector}>
-                <MenuItem value={10}>자유게시판</MenuItem>
-                <MenuItem value={20}>서버게시판</MenuItem>
-                <MenuItem value={30}>게시판1</MenuItem>
-                <MenuItem value={40}>게시판2</MenuItem>
+                <MenuItem value={"tip"}>팁게시판</MenuItem>
+                <MenuItem value={"free"}>자유게시판</MenuItem>
+                <MenuItem value={"screenshot"}>스크린샷게시판</MenuItem>
+                <MenuItem value={"server"}>서버게시판</MenuItem>
+                <MenuItem value={"offer"}>구인게시판</MenuItem>
+                <MenuItem value={"job"}>직업게시판</MenuItem>
             </Select>
           </Grid>
           <Grid item xs={12}>
@@ -179,24 +184,25 @@ function PostWrite() {
               variant="outlined"
               required
               fullWidth
+              autoFocus
               margin="dense"
               id="title"
               name="title"
               label="Title"
               value={title}
               inputRef={refTitle}
-              onChange={(e) => { setTitle(e.target.value); }}
+              onChange={(e) => {setTitle(e.target.value)}}
             />
           </Grid>
           <Grid item xs={12}>
             <div className="editor">
               <ReactQuill
-                value={content} // state 값
-                theme="snow" // 테마값 이미 snow.css를 로드해서 제거해도 무망
-                onChange={(e) => {setContent(e)}}
+                value={content}
+                theme="snow"
                 modules={modules}
                 formats={formats}
                 placeholder={'내용을 입력해주세요'}
+                onChange={(e) => {setContent(e)}}
               />
             </div>
           </Grid>
@@ -207,7 +213,7 @@ function PostWrite() {
                 <MyButton
                   color="red"
                   text="취소"
-                  onClick={_onCancle}/>
+                  onClick={() => setOpenConfirmCancle(true)}/>
               </Grid>
               <Grid item xs={3}>
                 <MyButton
@@ -224,7 +230,7 @@ function PostWrite() {
             작업한 내용이 사라집니다. 
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={() => {setOpenConfirmCancle(false)}} color="primary">
+            <Button onClick={() => {setOpenConfirmCancle(false)}} color="primary">
               Cancel
             </Button>
             <Button onClick={_onCancle} color="primary">

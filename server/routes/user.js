@@ -123,7 +123,6 @@ router.put('/auth', (req, res) => {
 
         UserInfoSchema.pushAccountListById(id, accountInfo)
           .then((updated) => {
-            
             if (updated) {
               myLogger(`[SUCCESS] : ${id} AUTHETICATION`);
               res.status(200).send({

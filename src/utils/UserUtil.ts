@@ -6,8 +6,6 @@ import ISignUpUser from 'interfaces/User/ISignUpUser';
 
 import * as CommonUtil from 'utils/ComoonUtil';
 
-import { setToken, delToken, checkServerError, getNowIdFromToken } from 'utils/ComoonUtil';
-
 /*
 * 중복 유저 있는 지 체크
 */
@@ -63,7 +61,7 @@ export const SignInUser = async (_id: string, _password: string) => {
       if (res.data.code === 200) {
         const token = res.data.token;
         // Session Store
-        setToken(token);
+        CommonUtil.setToken(token);
 
         return token;
       }
@@ -91,7 +89,7 @@ export const CheckPassword = async (_id: string, _password: string) => {
       }
     })
     .then((res) => {
-      checkServerError(res.data);
+      CommonUtil.checkServerError(res.data);
       return res.data.code === 200 ? true : false;
     })
     .catch((e) => {
@@ -107,14 +105,14 @@ export const CheckPassword = async (_id: string, _password: string) => {
 * 사용자 로그아웃
 */
 export const LogoutUser = () => {
-  delToken();
+  CommonUtil.delToken();
 }
 
 /*
 * 로그인 한 사용자 ID 가져오기
 */
 export const getSignInUserId = () => {
-  return getNowIdFromToken();
+  return CommonUtil.getNowIdFromToken();
 }
 
 /*
@@ -130,7 +128,7 @@ export const getUserInfoById = async (_id: string) => {
     }
   })
   .then((res) => {
-    checkServerError(res.data);
+    CommonUtil.checkServerError(res.data);
 
     return res.data.userInfo;
   });
@@ -160,7 +158,7 @@ export const setUserInfo = async (userInfo: IUserInfo) => {
       }
     })
     .then((res) => {
-      checkServerError(res.data);
+      CommonUtil.checkServerError(res.data);
 
       return res.data;
     })
@@ -191,7 +189,7 @@ export const setChangePassword = async (_id: string, _changePassword: string) =>
       }
     })
     .then((res) => {
-      checkServerError(res.data);
+      CommonUtil.checkServerError(res.data);
 
       return res.data;
     })
@@ -219,7 +217,7 @@ export const checkGameUser = async (_id: string, _server: string, _character: st
       }
     })
     .then((res) => {
-      checkServerError(res.data);
+      CommonUtil.checkServerError(res.data);
 
       if (res.data.code === 200) {
         return authUser(_id, _server, _character);
@@ -254,7 +252,7 @@ export const authUser = async (_id: string, _server: string, _character: string)
     }
   })
   .then((res) => {
-    checkServerError(res.data);
+    CommonUtil.checkServerError(res.data);
 
     return res.data;
   })
@@ -281,7 +279,7 @@ export const setTitleAccount = async (_id: string, _server: string, _character: 
     }
   })
   .then((res) => {
-    checkServerError(res.data);
+    CommonUtil.checkServerError(res.data);
     
     return res.data;
   })
@@ -306,7 +304,7 @@ export const WithDrawUser = async (_id: string, _password: string) => {
     }
   })
   .then((res) => {
-    checkServerError(res.data);
+    CommonUtil.checkServerError(res.data);
 
     return res.data;
   })

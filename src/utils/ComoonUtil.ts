@@ -86,3 +86,8 @@ export const getIdFromToken = (token: string | null) => {
 export const getNowIdFromToken = () => {
   return getIdFromToken(getToken());
 }
+
+export const getDateFromString = (dateString: string) => {
+  const date = dateString.split(' ');
+  return date[0]+date[1]+date[2];
+}
