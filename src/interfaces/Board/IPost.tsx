@@ -1,5 +1,5 @@
 import IWriter from 'interfaces/Common/IWriter';
-import IComment from 'interfaces/Common/IComment';
+import IComment from 'interfaces/Board/IComment';
 
 export type CategoryType =
   | "tip"

@@ -6,7 +6,7 @@ const crypto = require('crypto');
 
 const myLogger = require('../myLogger');
 
-const SignUpUserSchema = require('../schemas/User/SignUpUserSchema');
+const UserSchema = require('../schemas/User/UserSchema');
 const UserInfoSchema = require('../schemas/User/UserInfoSchema');
 const AccountInfoSchema = require('../schemas/User/AccountInfoSchema');
 
@@ -325,7 +325,7 @@ router.put('/changepassword', (req, res) => {
     editDateString: req.body.editDateString
   };
 
-  SignUpUserSchema.updateById(id, changePasswordInfo)
+  UserSchema.updateById(id, changePasswordInfo)
     .then((changedInfo) => {
       if (changedInfo) {
         myLogger(`[SUCCESS] : ${changedInfo.id} CHANGE PASSWORD`);
@@ -372,7 +372,7 @@ router.post('/checkpassword', (req, res) => {
   const id = req.body.id;
   const password = req.body.password;
 
-  SignUpUserSchema.findOneById(id)
+  UserSchema.findOneById(id)
     .then((user) => {
       if(user) {
         // 패스워드 암호화 비교
@@ -430,7 +430,7 @@ router.post('/checkpassword', (req, res) => {
 router.post('/withdraw', (req, res) => {
   const id = req.body.id;
 
-  SignUpUserSchema.deleteById(id)
+  UserSchema.deleteById(id)
     .then((result) => {
       myLogger(`${result}`);
       myLogger(`[SUCCESS] : ${id} WAS DELETED`);

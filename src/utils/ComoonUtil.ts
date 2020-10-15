@@ -83,8 +83,30 @@ export const getIdFromToken = (token: string | null) => {
   }
 }
 
-export const getNowIdFromToken = () => {
+export const getKeyFromToken = (token: string | null) => {
+  if (token !== null) {
+    // Get Token
+    const splitToken = token.split(".");
+  
+    // Get Payload Token
+    const payloadToken = splitToken[1];
+  
+    // Decode Base64 and Transfer to JSON
+    const payload = JSON.parse(atob(payloadToken));
+  
+    return payload.key;
+  }
+  else {
+    return null;
+  }
+}
+
+export const getNowId = () => {
   return getIdFromToken(getToken());
+}
+
+export const getNowKey = () => {
+  return getKeyFromToken(getToken());
 }
 
 export const getDateFromString = (dateString: string) => {

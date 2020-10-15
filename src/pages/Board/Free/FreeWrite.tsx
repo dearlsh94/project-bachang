@@ -139,7 +139,7 @@ function PostWrite({match}: any) {
         message: res.message
       });
 
-      setTimeout(() => document.location.href = `/board/${category}/view/${res.seq}`, duration);
+      setTimeout(() => document.location.href = `/board/${category}/${res.seq}`, duration);
     }
     else {
       setMyAlert({

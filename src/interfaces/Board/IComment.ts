@@ -5,6 +5,7 @@ interface IComment {
   message: string,
   writer: IWriter
   recommentList?: Array<{
+    idx?: number,
     message: string,
     writer: IWriter
   }>

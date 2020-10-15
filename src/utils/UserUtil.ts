@@ -112,7 +112,13 @@ export const LogoutUser = () => {
 * 로그인 한 사용자 ID 가져오기
 */
 export const getSignInUserId = () => {
-  return CommonUtil.getNowIdFromToken();
+  return CommonUtil.getNowId();
+}
+/*
+* 로그인 한 사용자 KEY 가져오기
+*/
+export const getSignInUserKey = () => {
+  return CommonUtil.getNowKey();
 }
 
 /*

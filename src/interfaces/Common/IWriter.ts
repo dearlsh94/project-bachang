@@ -1,5 +1,5 @@
 export default interface IWriter {
-  key?: number,
+  key: number,
   id: string,
   createDateString: string,
   lastEditDateString: string,

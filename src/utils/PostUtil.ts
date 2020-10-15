@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 import IPost from 'interfaces/Board/IPost';
-import { getSignInUserId } from 'utils/UserUtil';
+import { getSignInUserKey, getSignInUserId } from 'utils/UserUtil';
 import * as CommonUtil from 'utils/ComoonUtil';
 
 import { CategoryType } from 'interfaces/Board/IPost';
+import IComment from 'interfaces/Board/IComment';
 
 // 게시글 생성
 export const CreatePost = async (_category: CategoryType, _title: string, _content: string) => {
@@ -12,11 +13,7 @@ export const CreatePost = async (_category: CategoryType, _title: string, _conte
     category: _category,
     title: _title,
     content: _content,
-    writer: {
-      id: getSignInUserId(),
-      createDateString: CommonUtil.getNowDateString(),
-      lastEditDateString: CommonUtil.getNowDateString()
-    }
+    writer: getWriter()
   }
 
   const res = await axios.post(`/api/board/${post.category}/create`, post, {
@@ -34,6 +31,65 @@ export const CreatePost = async (_category: CategoryType, _title: string, _conte
 
     return false;
   });
+
+  return res;
+}
+
+// 댓글 생성
+export const CreateComment = async (_category: CategoryType, _seq: number, _comment: string) => {
+  const comment: IComment = {
+    message: _comment,
+    writer: getWriter()
+  }
+  
+  const res = await axios.post(`/api/board/${_category}/comment/create`, {
+      seq: _seq,
+      comment: comment
+    }, {
+    headers: {
+      token: CommonUtil.getToken()
+    }
+  })
+  .then((res) => {
+    CommonUtil.checkServerError(res.data);
+
+    return res.data;
+  })
+  .catch((e) => {
+    console.log(`CREATE COMMENT ERROR > ${e}`);
+
+    return false;
+  })
+
+  return res;
+}
+
+// 댓글 답글 생성
+export const CreateRecomment = async (_category: CategoryType, _seq: number, _commentIdx: number, _recomment: string) => {
+  const recomment: IComment = {
+    message: _recomment,
+    writer: getWriter()
+  }
+  
+  const res = await axios.post(`/api/board/${_category}/recomment/create`, {
+      seq: _seq,
+      commentIdx: _commentIdx,
+      recomment: recomment
+    }, {
+    headers: {
+      token: CommonUtil.getToken()
+    }
+  })
+  .then((res) => {
+    CommonUtil.checkServerError(res.data);
+    
+    return res.data;
+  })
+  .catch((e) => {
+    console.log(`CREATE COMMENT ERROR > ${e}`);
+
+    return false;
+  })
 
   return res;
 }
@@ -108,5 +164,15 @@ export const getCategoryName = (_category: CategoryType) => {
       return "직업게시판";
     default:
       break;
+  }
+}
+
+// 작성자 객체 생성
+const getWriter = () => {
+  return {
+    key: getSignInUserKey(),
+    id: getSignInUserId(),
+    createDateString: CommonUtil.getNowDateString(),
+    lastEditDateString: CommonUtil.getNowDateString()
   }
 }

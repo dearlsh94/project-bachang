@@ -5,6 +5,7 @@ const authMiddleware = require('../../middleware/auth');
 const myLogger = require('../../myLogger');
 
 const FreeSchema = require('../../schemas/Board/FreeSchema');
+const UserSchema = require('../../schemas/User/UserSchema');
 const UserInfoSchema = require('../../schemas/User/UserInfoSchema');
 
 
@@ -53,6 +54,83 @@ router.post('/create', (req, res) => {
   })
   .catch((e) => {
     myLogger(`POST CREATE ERROR > ${e}`);
+
+    res.status(200).send({
+      code: 500,
+      message: "서버 오류가 발생했습니다.",
+    });
+
+    return false;
+  })
+});
+
+/*
+*    댓글쓰기
+*    TYPE : POST
+*    URI : /api/board/free/comment/create
+*    HEADER: { "token": token }
+*    BODY: { "seq", "comment" }
+*    RETURN CODES:
+*        200: 성공
+*        500: 서버 오류
+*/
+router.use('/comment/create', authMiddleware);
+router.post('/comment/create', (req, res) => {
+  const seq =  req.body.seq;
+  const comment = req.body.comment;
+
+  FreeSchema.createComment(seq, comment)
+  .then((post) => {
+    myLogger(`[SUCCESS] : ${post.title} COMMENT CREATED SUCCESS`);
+    res.status(200).send({
+      code: 200,
+      message: "댓글이 등록되었습니다. 잠시 후 새로고침 됩니다.",
+      seq: post.seq
+    });
+  
+    return true;
+  })
+  .catch((e) => {
+    myLogger(`COMMENT CREATE ERROR > ${e}`);
+
+    res.status(200).send({
+      code: 500,
+      message: "서버 오류가 발생했습니다.",
+    });
+
+    return false;
+  })
+});
+
+/*
+*    답글쓰기
+*    TYPE : POST
+*    URI : /api/board/free/recomment/create
+*    HEADER: { "token": token }
+*    BODY: { "seq", "commentSeq", "recomment" }
+*    RETURN CODES:
+*        200: 성공
+*        500: 서버 오류
+*/
+router.use('/recomment/create', authMiddleware);
+router.post('/recomment/create', (req, res) => {
+  const seq =  req.body.seq;
+  const commentIdx = req.body.commentIdx;
+  const comment = req.body.comment;
+
+  FreeSchema.createRecomment(seq, commentIdx, comment)
+  .then((post) => {
+    myLogger(`[SUCCESS] : ${post.title}-${commentIdx} RECOMMENT CREATED SUCCESS`);
+    res.status(200).send({
+      code: 200,
+      message: "댓글이 등록되었습니다. 잠시 후 새로고침 됩니다.",
+      seq: post.seq
+    });
+  
+    return true;
+  })
+  .catch((e) => {
+    myLogger(`RECOMMENT CREATE ERROR > ${e}`);
 
     res.status(200).send({
       code: 500,
@@ -130,7 +208,7 @@ router.get('/find', (req, res) => {
     return true;
   })
   .catch((e) => {
-    myLogger(`POST FIND ERROR > ${e}`);
+    myLogger(`POST LIST FIND ERROR > ${e}`);
     res.status(200).send({
       code: 500,
       message: "게시글 조회 중 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요."
@@ -154,7 +232,7 @@ router.get('/find/:seq', (req, res) => {
 
   FreeSchema.findOneBySeq(seq)
   .then((post) => {
-    myLogger(`[SUCCESS] : POST FIND SUCCESS`);
+    myLogger(`[SUCCESS] : ${post.title} POST FIND SUCCESS`);
     res.status(200).send({
       code: 200,
       message: "게시글 조회에 성공하였습니다.",

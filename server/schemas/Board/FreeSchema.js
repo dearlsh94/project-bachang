@@ -12,7 +12,12 @@ const writerSchema = new mongoose.Schema({
 const commentSchema = new mongoose.Schema({
   idx: { type: Number, default: 0 },
   message: { type: String },
-  writer: writerSchema
+  writer: writerSchema,
+  recommentList: {
+    idx: { type: Number, default: 0},
+    message: { type: String },
+    writer: writerSchema,
+  }
 });
 
 const freeSchema = new mongoose.Schema({
@@ -20,16 +25,9 @@ const freeSchema = new mongoose.Schema({
   category: { type: String, required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
-  writer: writerSchema,
+  writer: { type: writerSchema },
   viewCount: { type: Number, default: 0},
-  commentList: [
-    {
-      commentSchema,
-      recommentList: [
-        commentSchema
-      ]
-    }
-  ]
+  commentList: [{ type: commentSchema }]
 });
 
 freeSchema.plugin(autoIncrement.plugin, {
@@ -65,11 +63,11 @@ freeSchema.statics.createComment = function (postSeq, payload) {
 }
 
 // Push Recomment
-freeSchema.statics.createRecomment = function (postSeq, commentIndex, payload) {
+freeSchema.statics.createRecomment = function (postSeq, commentIdx, payload) {
   return this.findOneAndUpdate({
       seq: postSeq, 
       commentList: {
-        idx: commentIndex
+        idx: commentIdx
       }
     }, { commentList: { $push: { recommentList: payload } } }, { upsert: true, new: true});
 }
