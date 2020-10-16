@@ -16,7 +16,11 @@ export const CreatePost = async (_category: CategoryType, _title: string, _conte
     writer: getWriter()
   }
 
-  const res = await axios.post(`/api/board/${post.category}/create`, post, {
+  console.log(post);
+
+  const res = await axios.post(`/api/board/${post.category}/create`, {
+    post: post
+  }, {
     headers: {
       token: CommonUtil.getToken()
     }

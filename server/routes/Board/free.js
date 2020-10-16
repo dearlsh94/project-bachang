@@ -11,7 +11,7 @@ const FreeSchema = require('../../schemas/Board/FreeSchema');
 *    TYPE : POST
 *    URI : /api/board/free/create
 *    HEADER: { "token": token }
-*    BODY: { "category", "title", "content", "writer" }
+*    BODY: { "post" }
 *    RETURN CODES:
 *        200: 성공
 *        3001: 게시글 DB 생성 오류
@@ -20,16 +20,17 @@ const FreeSchema = require('../../schemas/Board/FreeSchema');
 router.use('/create', authMiddleware);
 router.post('/create', (req, res) => {
   const post = new FreeSchema({
-    category: req.body.category,
-    title: req.body.title,
-    content: req.body.content,
+    category: req.body.post.category,
+    title: req.body.post.title,
+    content: req.body.post.content,
     writer: {
-      ...req.body.writer,
+      ...req.body.post.writer,
       createDateString: new Date().toLocaleString(),
       lastEditDateString: new Date().toLocaleString()
     }
   });
 
+  console.log(post);
   FreeSchema.create(post, (err, post) => {
     if (err) {
       myLogger(`[ERROR] : ${post.title} CREATED ERROR`);

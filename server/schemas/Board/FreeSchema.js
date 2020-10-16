@@ -20,12 +20,6 @@ const commentSchema = new mongoose.Schema({
     writer: { type: writerSchema },
   }]
 });
-commentSchema.plugin(autoIncrement.plugin, {
-  model: "freeBoard",
-  field: "commentList",
-  startAt: 1,
-  increment: 1
-});
 
 const freeSchema = new mongoose.Schema({
   seq: { type: Number, default: 0, required: true, unique: true },

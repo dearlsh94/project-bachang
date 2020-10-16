@@ -89,8 +89,6 @@ function PostComment(props: IProps) {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  
-
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, comments.length - page * rowsPerPage);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -108,7 +106,7 @@ function PostComment(props: IProps) {
   const [inputComment, setInputComment] = React.useState("");
   const [inputRecomment, setInputRecomment] = React.useState("");
 
-  const [commentIdx, setCommentIdx] = React.useState(0);
+  const [commentIdx, setCommentIdx] = React.useState(-1);
 
   useEffect(() => {
     if (post.commentList) {
@@ -147,7 +145,6 @@ function PostComment(props: IProps) {
   }
 
   const _onSubmitRecomment = async () => {
-    alert(`${commentIdx}. ${inputRecomment}`);
     setMyBackdrop(true);
 
     if (post.seq) {
@@ -189,6 +186,7 @@ function PostComment(props: IProps) {
           <Grid container item xs={12}>
             <Grid item xs={10}>
               <Input
+                type="text"
                 id="input-comment"
                 className={classes.input}
                 multiline
@@ -225,7 +223,9 @@ function PostComment(props: IProps) {
                           {comment.writer.createDateString}
                         </TableCell>
                         <TableCell style={{ width: "70%" }}>
-                          {comment.message}
+                          <Typography>
+                            {comment.message}
+                          </Typography>
                         </TableCell>
                         <TableCell style={{ width: "10%" }} align="right">
                           <Grid container direction="row"

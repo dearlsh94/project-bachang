@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import PostTitle from 'components/Board/PostTitle';
 import PostContent from 'components/Board/PostContent';
 import PostComment from 'components/Board/PostComment';
 
-import IPost, { CategoryType } from 'interfaces/Board/IPost';
+import IPost from 'interfaces/Board/IPost';
 import { getPost } from 'utils/PostUtil';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
     width: "100%"
   },
+  editBox: {
+    marginTop: "10px",
+    marginRight: "30px",
+    textAlign: 'right'
+  }
 }));
 
 function FreeBoard({match}: any) {
@@ -32,6 +39,14 @@ function FreeBoard({match}: any) {
     if (res) setPost(res);
   }
 
+  const _onEdit = () => {
+
+  }
+
+  const _onDelete = () => {
+    
+  }
+
   return (
     <Container
       className={classes.root}>
@@ -40,7 +55,15 @@ function FreeBoard({match}: any) {
             <Container>
               <PostTitle
                 post={post}/>
-                수정 삭제
+              <Box
+                className={classes.editBox}>
+                  <Button>
+                    수정
+                  </Button>
+                  <Button>
+                    삭제
+                  </Button>
+              </Box>
               <PostContent
                 post={post}/>
               <PostComment
