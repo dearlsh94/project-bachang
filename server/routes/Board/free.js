@@ -5,9 +5,6 @@ const authMiddleware = require('../../middleware/auth');
 const myLogger = require('../../myLogger');
 
 const FreeSchema = require('../../schemas/Board/FreeSchema');
-const UserSchema = require('../../schemas/User/UserSchema');
-const UserInfoSchema = require('../../schemas/User/UserInfoSchema');
-
 
 /*
 *    글쓰기
@@ -26,7 +23,11 @@ router.post('/create', (req, res) => {
     category: req.body.category,
     title: req.body.title,
     content: req.body.content,
-    writer: req.body.writer
+    writer: {
+      ...req.body.writer,
+      createDateString: new Date().toLocaleString(),
+      lastEditDateString: new Date().toLocaleString()
+    }
   });
 
   FreeSchema.create(post, (err, post) => {
@@ -72,12 +73,26 @@ router.post('/create', (req, res) => {
 *    BODY: { "seq", "comment" }
 *    RETURN CODES:
 *        200: 성공
+*        401: 사용자 인증 오류
 *        500: 서버 오류
 */
 router.use('/comment/create', authMiddleware);
 router.post('/comment/create', (req, res) => {
   const seq =  req.body.seq;
   const comment = req.body.comment;
+  comment.writer.createDateString = new Date().toLocaleString();
+  comment.writer.lastEditDateString = new Date().toLocaleString();
+
+  if ( !comment.writer.id || !comment.writer.key ) {
+    myLogger(`[ERROR] : COMMENT CREATED ERROR - NOT FOUND USER INFORMATION`);
+    res.status(200).send({
+      code: 401,
+      message: "유효하지 않은 사용자 정보입니다. 로그인 후 다시 작성해주세요.",
+      redirectUri: "/signin"
+    });
+
+    return false;
+  }
 
   FreeSchema.createComment(seq, comment)
   .then((post) => {
@@ -116,14 +131,16 @@ router.use('/recomment/create', authMiddleware);
 router.post('/recomment/create', (req, res) => {
   const seq =  req.body.seq;
   const commentIdx = req.body.commentIdx;
-  const comment = req.body.comment;
+  const recomment = req.body.recomment;
+  recomment.writer.createDateString = new Date().toLocaleString();
+  recomment.writer.lastEditDateString = new Date().toLocaleString();
 
-  FreeSchema.createRecomment(seq, commentIdx, comment)
+  FreeSchema.createRecomment(seq, commentIdx, recomment)
   .then((post) => {
     myLogger(`[SUCCESS] : ${post.title}-${commentIdx} RECOMMENT CREATED SUCCESS`);
     res.status(200).send({
       code: 200,
-      message: "댓글이 등록되었습니다. 잠시 후 새로고침 됩니다.",
+      message: "답글이 등록되었습니다. 잠시 후 새로고침 됩니다.",
       seq: post.seq
     });
   

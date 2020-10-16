@@ -40,6 +40,7 @@ function FreeBoard({match}: any) {
             <Container>
               <PostTitle
                 post={post}/>
+                수정 삭제
               <PostContent
                 post={post}/>
               <PostComment

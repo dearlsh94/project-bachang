@@ -54,8 +54,8 @@ router.post('/signup', (req, res) => {
     id: req.body.id,
     password: req.body.password,
     salt: req.body.salt,
-    createDateString: req.body.createDateString,
-    editDateString: req.body.editDateString
+    createDateString: new Date().toLocaleString(),
+    editDateString: new Date().toLocaleString()
   });
   
   UserSchema.findOneById(user.id)
@@ -210,6 +210,7 @@ router.post('/signin', (req, res) => {
 router.post('/refresh', (req, res) => {
   const token = req.body.token;
   const id = req.body.id;
+  const key = req.body.key;
 
   const decoded = jsonwebtoken.verify(token, config.secret);
 
@@ -217,7 +218,7 @@ router.post('/refresh', (req, res) => {
     myLogger(`[SUCCESS] : ${id} REFRESHED ACCESS TOKEN`);
     res.status(200).send({
       code: 200,
-      token: createToken(id)
+      token: createToken(key, id)
     });
   }
   else {

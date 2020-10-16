@@ -32,9 +32,7 @@ export const SignUpUser = async (_id: string, _password: string) => {
   const newUser: ISignUpUser = {
     id: _id,
     password: crypto.createHash("sha512").update(_password + mySalt).digest("hex"),
-    salt: mySalt,
-    createDateString: CommonUtil.getNowDateString(),
-    editDateString: CommonUtil.getNowDateString()
+    salt: mySalt
   }
 
   //DB Process for Create User
@@ -155,8 +153,7 @@ export const getUserInfoById = async (_id: string) => {
 export const setUserInfo = async (userInfo: IUserInfo) => {
   const r = await axios.put('/api/user/update', {
       id: userInfo.id,
-      openKakao: userInfo.openKakao,
-      editDateString: CommonUtil.getNowDateString(),
+      openKakao: userInfo.openKakao
     }, 
     {
       headers: {
@@ -186,8 +183,7 @@ export const setChangePassword = async (_id: string, _changePassword: string) =>
   const r = await axios.put('/api/user/changepassword', {
       id: _id,
       password: crypto.createHash("sha512").update(_changePassword + mySalt).digest("hex"),
-      salt: mySalt,
-      editDateString: CommonUtil.getNowDateString()
+      salt: mySalt
     },
     {
       headers: {
@@ -249,8 +245,7 @@ export const authUser = async (_id: string, _server: string, _character: string)
   const r = await axios.put('/api/user/auth', {
     id: _id,
     server: _server,
-    character: _character,
-    authDateString: CommonUtil.getNowDateString()
+    character: _character
   }, 
   {
     headers: {
@@ -276,8 +271,7 @@ export const setTitleAccount = async (_id: string, _server: string, _character: 
   const r = await axios.put('/api/user/settitle', {
     id: _id,
     server: _server,
-    character: _character,
-    editDateString: CommonUtil.getNowDateString()
+    character: _character
   },
   {
     headers: {

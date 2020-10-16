@@ -10,14 +10,21 @@ const writerSchema = new mongoose.Schema({
 });
 
 const commentSchema = new mongoose.Schema({
-  idx: { type: Number, default: 0 },
+  idx: { type: Number},
   message: { type: String },
-  writer: writerSchema,
-  recommentList: {
-    idx: { type: Number, default: 0},
+  writer: { type: writerSchema },
+  recommentIdx: { type: Number, default: 0},
+  recommentList: [{
+    idx: { type: Number},
     message: { type: String },
-    writer: writerSchema,
-  }
+    writer: { type: writerSchema },
+  }]
+});
+commentSchema.plugin(autoIncrement.plugin, {
+  model: "freeBoard",
+  field: "commentList",
+  startAt: 1,
+  increment: 1
 });
 
 const freeSchema = new mongoose.Schema({
@@ -27,6 +34,7 @@ const freeSchema = new mongoose.Schema({
   content: { type: String, required: true },
   writer: { type: writerSchema },
   viewCount: { type: Number, default: 0},
+  commentIdx: { type: Number, default: 0},
   commentList: [{ type: commentSchema }]
 });
 
@@ -58,18 +66,31 @@ freeSchema.statics.findOneBySeq = function (seq) {
 }
 
 // Push Comment
-freeSchema.statics.createComment = function (postSeq, payload) {
-  return this.findOneAndUpdate({seq: postSeq}, { $push: { commentList: payload } }, { upsert: true, new: true });
+freeSchema.statics.createComment = function (postSeq, comment) {
+  return this.findOneAndUpdate({seq: postSeq}, { $inc: { commentIdx: 1 }, $push: { commentList: comment } }, { upsert: true, new: true });
 }
 
 // Push Recomment
-freeSchema.statics.createRecomment = function (postSeq, commentIdx, payload) {
-  return this.findOneAndUpdate({
-      seq: postSeq, 
-      commentList: {
-        idx: commentIdx
+freeSchema.statics.createRecomment = function (postSeq, commentIdx, recomment) {
+  return this.findOne({
+    seq: postSeq,
+    commentList: {
+      $elemMatch: { idx: commentIdx }
+    }
+  }, (err, post) => {
+    let idx = 0;
+    const comment = post.commentList.filter((comment, _idx) => {
+      if (comment.idx === commentIdx) {
+        idx = _idx;
+        return comment.idx === commentIdx;
       }
-    }, { commentList: { $push: { recommentList: payload } } }, { upsert: true, new: true});
+    })[0];
+    comment.recommentIdx++;
+    comment.recommentList.push(recomment);
+    post.commentList[idx] = comment;
+
+    post.save();
+  });
 }
 
 module.exports = mongoose.model("Free", freeSchema, "freeBoard");

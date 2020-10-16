@@ -61,6 +61,12 @@ const useStyles = makeStyles((theme) => ({
       margin: 'auto'
     }
   },
+  commentRow: {
+    backgroundColor: "#A0A0A0",
+  },
+  recommentRow: {
+    backgroundColor: "#C0C0C0",
+  },
   commentButton: {
     spacing: "5"
   },
@@ -71,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const duration = 2000;
-let rows: Array<IComment> = [];
+let comments: Array<IComment> = [];
 
 function PostComment(props: IProps) {
 
@@ -85,7 +91,7 @@ function PostComment(props: IProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, comments.length - page * rowsPerPage);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -107,7 +113,7 @@ function PostComment(props: IProps) {
   useEffect(() => {
     if (post.commentList) {
       setCount(post.commentList.length);
-      rows = post.commentList;
+      comments = post.commentList;
     }
   }, []);
 
@@ -115,7 +121,7 @@ function PostComment(props: IProps) {
     setMyBackdrop(true);
 
     if (post.seq) {
-      const res = await CreateComment(post.category, post.seq, inputComment);
+      const res = await CreateComment(post, inputComment);
   
       if (res.code === 200) {
         setMyAlert({
@@ -145,7 +151,7 @@ function PostComment(props: IProps) {
     setMyBackdrop(true);
 
     if (post.seq) {
-      const res = await CreateRecomment(post.category, post.seq, commentIdx, inputRecomment);
+      const res = await CreateRecomment(post, commentIdx, inputRecomment);
   
       if (res.code === 200) {
         setMyAlert({
@@ -209,17 +215,17 @@ function PostComment(props: IProps) {
                 className={classes.table} aria-label="custom pagination table">
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : rows
-                  ).map((row: IComment) => (
-                    <Box key={row.idx}>
-                      <TableRow key={row.idx}>
+                    ? comments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : comments
+                  ).map((comment: IComment) => (
+                    <Box key={comment.idx}>
+                      <TableRow key={comment.idx} className={classes.commentRow}>
                         <TableCell  style={{ width: "20%" }} component="th" scope="row">
-                          [{row.writer.key}]{row.writer.id}<br/>
-                          {row.writer.createDateString}
+                          [{comment.writer.key}]{comment.writer.id}<br/>
+                          {comment.writer.createDateString}
                         </TableCell>
                         <TableCell style={{ width: "70%" }}>
-                          {row.idx} : {row.message}
+                          {comment.message}
                         </TableCell>
                         <TableCell style={{ width: "10%" }} align="right">
                           <Grid container direction="row"
@@ -227,7 +233,7 @@ function PostComment(props: IProps) {
                             <Grid item>
                               <Button
                                 onClick={() => {
-                                  setCommentIdx(row.idx !== undefined ? row.idx : -1);
+                                  setCommentIdx(comment.idx !== undefined ? comment.idx : -1);
                                 }}>
                                   답글
                               </Button>
@@ -246,8 +252,37 @@ function PostComment(props: IProps) {
                         </TableCell>
                       </TableRow>
                       {
-                        commentIdx === row.idx &&
-                          <TableRow key={row.idx}>
+                        (comment.recommentList && comment.recommentList.length > 0) &&
+                          comment.recommentList.map((recomment) => (
+                            <TableRow key={`${comment.idx}-${recomment.idx}`} className={classes.recommentRow}>
+                              <TableCell  style={{ width: "20%" }} component="th" scope="row">
+                                [{recomment.writer.key}]{recomment.writer.id}<br/>
+                                {recomment.writer.createDateString}
+                              </TableCell>
+                              <TableCell style={{ width: "70%" }}>
+                                {recomment.message}
+                              </TableCell>
+                              <TableCell style={{ width: "10%" }} align="right">
+                                <Grid container direction="row"
+                                  className={classes.commentButton}>
+                                  <Grid item>
+                                    <Button>
+                                      수정
+                                    </Button>
+                                  </Grid> 
+                                  <Grid item>
+                                    <Button>
+                                      삭제
+                                    </Button>
+                                  </Grid> 
+                                </Grid>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                      }
+                      {
+                        commentIdx === comment.idx &&
+                          <TableRow key={comment.idx}>
                             <TableCell  style={{ textAlign: "center", verticalAlign: "middle", margin: "auto", width: "20%" }} component="th" scope="row">
                               <Typography variant="subtitle1">
                                 <SubdirectoryArrowRightIcon/> 답글 달기
@@ -295,7 +330,7 @@ function PostComment(props: IProps) {
                                 ${paginationInfo.to === -1 ? "All" : paginationInfo.to}`;
                       }}
                       colSpan={3}
-                      count={rows.length}
+                      count={comments.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       SelectProps={{

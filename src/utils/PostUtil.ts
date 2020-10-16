@@ -36,14 +36,15 @@ export const CreatePost = async (_category: CategoryType, _title: string, _conte
 }
 
 // 댓글 생성
-export const CreateComment = async (_category: CategoryType, _seq: number, _comment: string) => {
+export const CreateComment = async (post: IPost, _comment: string) => {
   const comment: IComment = {
+    idx: post.commentIdx,
     message: _comment,
     writer: getWriter()
   }
-  
-  const res = await axios.post(`/api/board/${_category}/comment/create`, {
-      seq: _seq,
+
+  const res = await axios.post(`/api/board/${post.category}/comment/create`, {
+      seq: post.seq,
       comment: comment
     }, {
     headers: {
@@ -65,14 +66,20 @@ export const CreateComment = async (_category: CategoryType, _seq: number, _comm
 }
 
 // 댓글 답글 생성
-export const CreateRecomment = async (_category: CategoryType, _seq: number, _commentIdx: number, _recomment: string) => {
+export const CreateRecomment = async (post: IPost, _commentIdx: number, _recomment: string) => {
+  const comment = post.commentList?.filter((comment) => {
+    return comment.idx === _commentIdx;
+  });
+
+  const recommentIdx = comment ? comment[0].recommentIdx : 0;
   const recomment: IComment = {
+    idx: recommentIdx,
     message: _recomment,
     writer: getWriter()
   }
   
-  const res = await axios.post(`/api/board/${_category}/recomment/create`, {
-      seq: _seq,
+  const res = await axios.post(`/api/board/${post.category}/recomment/create`, {
+      seq: post.seq,
       commentIdx: _commentIdx,
       recomment: recomment
     }, {
@@ -172,7 +179,7 @@ const getWriter = () => {
   return {
     key: getSignInUserKey(),
     id: getSignInUserId(),
-    createDateString: CommonUtil.getNowDateString(),
-    lastEditDateString: CommonUtil.getNowDateString()
+    // createDateString: new Date().toLocaleString(),
+    // lastEditDateString: new Date().toLocaleString(),
   }
 }

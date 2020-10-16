@@ -2,10 +2,6 @@ import axios from 'axios';
 
 import { getSessionNameUserToken } from 'utils/ConfigUtil';
 
-export const getNowDateString = () => {
-  return new Date().toLocaleString();
-}
-
 export const setToken = (_token: string) => {
   localStorage.setItem(
     getSessionNameUserToken(),
@@ -23,11 +19,17 @@ export const delToken = () => {
 }
 
 export const refreshToken = () => {
-  const _token = getToken();
-  const _id = getIdFromToken(_token);
+  const token = getToken();
+  const id = getIdFromToken(token);
+  const key = getKeyFromToken(token);
 
-  if (_token){
-    const res = axios.post('/api/common/refresh', {id: _id, token: _token})
+  if (!id || !key ) {
+    delToken();
+    document.location.href="/signin";
+  }
+  
+  if (token){
+    const res = axios.post('/api/common/refresh', {id: id, key: key, token: token})
       .then((res) => {
         if (res.data.code === 200 && res.data.token) {
           setToken(res.data.token);
@@ -109,7 +111,9 @@ export const getNowKey = () => {
   return getKeyFromToken(getToken());
 }
 
-export const getDateFromString = (dateString: string) => {
+export const getDateFromString = (dateString: string | undefined) => {
+  if (!dateString) return "Unknown Date";
+
   const date = dateString.split(' ');
   return date[0]+date[1]+date[2];
 }

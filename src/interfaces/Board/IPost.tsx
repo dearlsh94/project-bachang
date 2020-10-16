@@ -16,6 +16,7 @@ interface IPost {
   content: string,
   writer: IWriter,
   viewCount?: number,
+  commentIdx?: number,
   commentList?: Array<IComment>,
 }
 
