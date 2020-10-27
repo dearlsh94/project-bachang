@@ -31,7 +31,7 @@ function FreeBoard() {
   return (
     <Container
       className={classes.root}>
-      <Link href="/board/write" variant="body2">
+      <Link href="/board/write/free" variant="body2">
           글쓰기
       </Link>
       <Container>

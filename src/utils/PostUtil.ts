@@ -15,9 +15,7 @@ export const CreatePost = async (_category: CategoryType, _title: string, _conte
     content: _content,
     writer: getWriter()
   }
-
-  console.log(post);
-
+  
   const res = await axios.post(`/api/board/${post.category}/create`, {
     post: post
   }, {
@@ -32,6 +30,62 @@ export const CreatePost = async (_category: CategoryType, _title: string, _conte
   })
   .catch((e) => {
     console.log(`CREATE POST ERROR > ${e}`);
+
+    return false;
+  });
+
+  return res;
+}
+
+// 게시글 수정
+export const EditPost = async (_title: string, _content: string, _post?: IPost) => {
+  if (_post) {
+    const post: IPost = {
+      ..._post,
+      title: _title,
+      content: _content
+    }
+  
+    const res = await axios.put(`/api/board/${post.category}/edit`, {
+      post: post
+    }, {
+      headers: {
+        token: CommonUtil.getToken()
+      }
+    })
+    .then((res) => {
+      CommonUtil.checkServerError(res.data);
+  
+      return res.data;
+    })
+    .catch((e) => {
+      console.log(`EDIT POST ERROR > ${e}`);
+  
+      return false;
+    });
+  
+    return res;
+  }
+  else {
+    alert("올바르지 않은 게시글 정보입니다.");
+    return false;
+  }
+}
+
+// 게시글 삭제
+export const DeletePost = async (_category: CategoryType, _seq: number) => {
+  const res = await axios.delete(`/api/board/${_category}/delete/${_seq}`, {
+    headers: {
+      token: CommonUtil.getToken()
+    }
+  })
+  .then((res) => {
+    CommonUtil.checkServerError(res.data);
+
+    return res.data;
+  })
+  .catch((e) => {
+    console.log(`DELETE POST ERROR > ${e}`);
 
     return false;
   });

@@ -5,8 +5,8 @@ autoIncrement.initialize(mongoose.connection);
 const writerSchema = new mongoose.Schema({
   key: { type: Number },
   id: { type: String },
-  createDateString: { type: String },
-  lastEditDateString: { type: String }
+  createDateString: { type: String, required: false },
+  lastEditDateString: { type: String, required: false }
 });
 
 const commentSchema = new mongoose.Schema({
@@ -26,10 +26,10 @@ const freeSchema = new mongoose.Schema({
   category: { type: String, required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
-  writer: { type: writerSchema },
-  viewCount: { type: Number, default: 0},
-  commentIdx: { type: Number, default: 0},
-  commentList: [{ type: commentSchema }]
+  writer: { type: writerSchema, required: false },
+  viewCount: { type: Number, required: false, default: 0},
+  commentIdx: { type: Number, required: false, default: 0},
+  commentList: [{ type: commentSchema, required: false, unique: false }]
 });
 
 freeSchema.plugin(autoIncrement.plugin, {
@@ -42,6 +42,16 @@ freeSchema.plugin(autoIncrement.plugin, {
 // create new post
 freeSchema.statics.create = function (payload) {
   return new this(payload).save();
+}
+
+// update post
+freeSchema.statics.updateBySeq = function (seq, post) {
+  return this.findOneAndUpdate({seq: seq}, { $set: post }, { upsert: true, new: true });
+}
+
+// delete post
+freeSchema.statics.deleteBySeq = function (seq, post) {
+  return this.deleteOne({seq: seq});
 }
 
 // find all

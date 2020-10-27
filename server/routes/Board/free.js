@@ -29,8 +29,7 @@ router.post('/create', (req, res) => {
       lastEditDateString: new Date().toLocaleString()
     }
   });
-
-  console.log(post);
+  
   FreeSchema.create(post, (err, post) => {
     if (err) {
       myLogger(`[ERROR] : ${post.title} CREATED ERROR`);
@@ -64,6 +63,108 @@ router.post('/create', (req, res) => {
 
     return false;
   })
+});
+
+/*
+*    게시글 수정
+*    TYPE : PUT
+*    URI : /api/board/free/edit
+*    HEADER: { "token": token }
+*    BODY: { "post" }
+*    RETURN CODES:
+*        200: 성공
+*        3002: 게시글 DB 수정 오류
+*        500: 서버 오류
+*/
+router.use('/edit', authMiddleware);
+router.put('/edit', (req, res) => {
+  const post = {
+    ...req.body.post,
+    writer: {
+      ...req.body.post.writer,
+      lastEditDateString: new Date().toLocaleString()
+    }
+  };
+  
+  FreeSchema.updateBySeq(post.seq, post)
+    .then((updatedPost) => {
+      if (updatedPost) {
+        myLogger(`[SUCCESS] : ${post.title} EDITED SUCCESS`);
+        res.status(200).send({
+          code: 200,
+          message: "게시글이 수정되었습니다.",
+          seq: updatedPost.seq
+        });
+
+        return true;
+      }
+      else {
+        myLogger(`[ERROR] : ${post.title} EDIT ERROR`);
+        res.status(200).send({
+          code: 3002,
+          message: "DB 게시글 수정 오류"
+        });
+
+        return false;
+      }
+    })
+    .catch((e) => {
+      myLogger(`POST EDIT ERROR > ${e}`);
+
+      res.status(200).send({
+        code: 500,
+        message: "서버 오류가 발생했습니다.",
+      });
+
+      return false;
+    })
+});
+
+/*
+*    게시글 삭제
+*    TYPE : DLELTE
+*    URI : /api/board/free/delete/${seq}
+*    HEADER: { "token": token }
+*    RETURN CODES:
+*        200: 성공
+*        3003: 게시글 DB 삭제 오류
+*        500: 서버 오류
+*/
+router.use('/delete/:seq', authMiddleware);
+router.delete('/delete/:seq', (req, res) => {
+  const seq = req.params.seq;
+
+  FreeSchema.deleteBySeq(seq)
+    .then((deletedCount) => {
+      if (deletedCount) {
+        myLogger(`[SUCCESS] : POST NUMBER ${seq} DELETED SUCCESS`);
+        res.status(200).send({
+          code: 200,
+          message: "게시글이 삭제되었습니다."
+        });
+
+        return true;
+      }
+      else {
+        myLogger(`[ERROR] : POST NUMBER ${seq} DELETE ERROR`);
+        res.status(200).send({
+          code: 3003,
+          message: "DB 게시글 삭제 오류"
+        });
+
+        return false;
+      }
+    })
+    .catch((e) => {
+      myLogger(`POST DELETE ERROR > ${e}`);
+
+      res.status(200).send({
+        code: 500,
+        message: "서버 오류가 발생했습니다.",
+      });
+
+      return false;
+    })
 });
 
 /*

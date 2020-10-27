@@ -115,5 +115,5 @@ export const getDateFromString = (dateString: string | undefined) => {
   if (!dateString) return "Unknown Date";
 
   const date = dateString.split(' ');
-  return date[0]+date[1]+date[2];
+  return date[0];
 }
