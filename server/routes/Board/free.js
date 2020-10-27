@@ -349,6 +349,8 @@ router.get('/find', (req, res) => {
 router.get('/find/:seq', (req, res) => {
   const seq = req.params.seq;
 
+  addViewCount(seq);
+
   FreeSchema.findOneBySeq(seq)
   .then((post) => {
     myLogger(`[SUCCESS] : ${post.title} POST FIND SUCCESS`);
@@ -371,4 +373,10 @@ router.get('/find/:seq', (req, res) => {
   })
 });
 
+function addViewCount(seq) {
+  FreeSchema.addViewCount(seq)
+  .then(() => {
+    myLogger(`Add ViewCount`);
+  });
+}
 module.exports = router;

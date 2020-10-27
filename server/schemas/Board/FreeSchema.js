@@ -54,6 +54,11 @@ freeSchema.statics.deleteBySeq = function (seq, post) {
   return this.deleteOne({seq: seq});
 }
 
+// add viewCount
+freeSchema.statics.addViewCount = function (seq) {
+  return this.findOneAndUpdate({seq: seq}, { $inc: {viewCount: 1} });
+}
+
 // find all
 freeSchema.statics.findAll = function () {
   return this.find({});
