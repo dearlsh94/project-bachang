@@ -62,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   commentRow: {
-    backgroundColor: "#A0A0A0",
+    backgroundColor: "#d6e0f0",
   },
   recommentRow: {
-    backgroundColor: "#C0C0C0",
+    backgroundColor: "#f1f3f8",
   },
   commentButton: {
     spacing: "5"
