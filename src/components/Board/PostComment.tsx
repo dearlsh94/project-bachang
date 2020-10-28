@@ -173,6 +173,15 @@ function PostComment(props: IProps) {
     }
   }
 
+  // TODO 댓글 수정, 삭제 기능 구현
+  const _onEdit = async () => {
+    alert("구현 예정인 기능입니다.");
+  }
+
+  const _onDelete = async () => {
+    alert("구현 예정인 기능입니다.");
+  }
+
   return (
     <Container
       className={classes.root}>
@@ -239,13 +248,15 @@ function PostComment(props: IProps) {
                               </Button>
                             </Grid> 
                             <Grid item>
-                              <Button>
-                                수정
+                              <Button
+                                onClick={_onEdit}>
+                                  수정
                               </Button>
                             </Grid> 
                             <Grid item>
-                              <Button>
-                                삭제
+                              <Button
+                                onClick={_onDelete}>
+                                  삭제
                               </Button>
                             </Grid> 
                           </Grid>
