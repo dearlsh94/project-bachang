@@ -99,7 +99,7 @@ function MyInfo({match}: any) {
                       userInfo={userInfo}/>
                 }
                 {
-                  mode === "chgPwd" &&
+                  mode === "changepassword" &&
                     <ChagnePassword
                       id={userInfo.id} />
                 }

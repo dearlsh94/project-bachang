@@ -30,6 +30,10 @@ function LeftMenuList() {
   }
 
   const _onChangePassword = () => {
+    document.location.href = "/myinfo/changepassword";
+  }
+  
+  const _onWithdraw = () => {
     document.location.href = "/myinfo/withdraw";
   }
   
@@ -46,7 +50,7 @@ function LeftMenuList() {
         <Divider variant="middle"/>
         <MenuItem onClick={_onChangePassword}>비밀번호 변경</MenuItem>
         <Divider variant="middle"/>
-        <MenuItem onClick={_onChangePassword}>회원 탈퇴</MenuItem>
+        <MenuItem onClick={_onWithdraw}>회원 탈퇴</MenuItem>
       </MenuList>
     </React.Fragment>
   )
