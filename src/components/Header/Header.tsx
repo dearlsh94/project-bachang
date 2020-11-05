@@ -22,7 +22,7 @@ import { getSignInUserId, LogoutUser } from 'utils/UserUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-
+    backgroundColor: 'white'
   },
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -76,7 +76,8 @@ export default function Header() {
 
   return (
     <React.Fragment>
-      <React.Fragment>
+      <Container
+        className={classes.root}>
         <nav>
           <Toolbar 
             className={classes.toolbar}>
@@ -137,7 +138,7 @@ export default function Header() {
             <TopTaps/>
           </Box>
         </aside>
-      </React.Fragment>
+      </Container>
       <Dialog
         fullScreen={fullScreen}
         open={isSignInOpen}

@@ -32,12 +32,18 @@ import { refreshToken } from 'utils/ComoonUtil';
 
 const useStyles = makeStyles((theme) => ({
   header: {
+    zIndex: 10,
     // position: "absolute",
-    // zIndex: 10,
-    // backgroundColor: "white"
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '10%',
+    maxHeight: '10%'
   },
   root: {
     // position: "absolute"
+    marginTop: '15%'
   }
 }));
 
@@ -54,13 +60,13 @@ function App() {
       <React.Fragment>
         <header>
           <Container
+            fixed
             className={classes.header}>
             <Header/>
           </Container>
         </header>
         <main>
           <Container
-            fixed
             className={classes.root}>
             <BrowserRouter>
               {/*Error Handling*/}
