@@ -19,6 +19,8 @@ import PostComment from 'components/Board/PostComment';
 import IPost from 'interfaces/Board/IPost';
 import { getPost, DeletePost } from 'utils/PostUtil';
 
+import * as CommonUtil from 'utils/ComoonUtil';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "10px",
@@ -53,32 +55,53 @@ function FreeBoard({match}: any) {
   }
 
   const _onEdit = () => {
-    document.location.href = `/board/write/${category}/${seq}`
+    if (isCheckAuth()) {
+      document.location.href = `/board/write/${category}/${seq}`
+    }
   }
 
   const delPost = async () => {
-    setMyBackdrop(true);
-    
-    const res = await DeletePost(category, seq);
-    if (res.code === 200) {
-      setMyAlert({
-        isOpen: true,
-        severity: "success",
-        duration: duration,
-        message: res.message
-      });
+    if (isCheckAuth()) {
+      setMyBackdrop(true);
+      
+      const res = await DeletePost(category, seq);
+      if (res.code === 200) {
+        setMyAlert({
+          isOpen: true,
+          severity: "success",
+          duration: duration,
+          message: res.message
+        });
+  
+        setTimeout(() => document.location.href = `/board/${category}`, duration);
+      }
+      else {
+        setMyAlert({
+          isOpen: true,
+          severity: "error",
+          duration: duration,
+          message: res.message
+        });
+        
+        setTimeout(()=> { setMyBackdrop(false); }, duration);
+      }
+    }
+  }
 
-      setTimeout(() => document.location.href = `/board/${category}`, duration);
+  const isCheckAuth = () => {
+    if (!post) {
+      alert("게시글 정보가 없습니다.");
+      window.location.href = `/board/${category}`
     }
     else {
-      setMyAlert({
-        isOpen: true,
-        severity: "error",
-        duration: duration,
-        message: res.message
-      });
+      if (post.writer.key !== CommonUtil.getNowKey()) {
+        alert("권한이 없습니다.");
+        window.location.href = `/board/${category}/${seq}`
+  
+        return false;
+      }
       
-      setTimeout(()=> { setMyBackdrop(false); }, duration);
+      return true;
     }
   }
 
