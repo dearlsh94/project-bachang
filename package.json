@@ -46,6 +46,7 @@
     "typescript": "^3.9.6"
   },
   "scripts": {
+    "prod": "react-scripts start || cross-env NODE_EVN=production node ./server/server.js",
     "start": "npm-run-all --parallel start:**",
     "start:client": "react-scripts start",
     "start:server": "cross-env NODE_ENV=production node ./server/server.js",
