@@ -2,4 +2,3 @@ node_modules/
 build/
 
 /server/config.json
-/src/conf/mongodb.ts
