@@ -10,15 +10,16 @@ const myLogger = require('./myLogger');
 
 const mongoUri = `mongodb+srv://${config.id}:${config.password}@mycluster.xcgrs.mongodb.net/${config.dbName}?retryWrites=true&w=majority`
 function connect() {
-  setTimeout(() => {
-    mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-      .then(() => {
-        myLogger("[MONGO DB CONNECT SUCCESS]");
-      })
-      .catch((e) => {
-        myLogger("[MONGO DB CONNECT ERROR] >>> ", e);
-      });
-  }, 5000);
+  mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+    .then(() => {
+      myLogger("[MONGO DB CONNECT SUCCESS]");
+    })
+    .catch((e) => {
+      myLogger("[MONGO DB CONNECT ERROR] >>> ", e);
+      setTimeout(() => {
+        
+      }, 5000);
+    });
 }
 
 // FIX FOR
