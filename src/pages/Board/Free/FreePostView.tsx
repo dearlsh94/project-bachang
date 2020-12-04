@@ -19,8 +19,6 @@ import PostComment from 'components/Board/PostComment';
 import IPost from 'interfaces/Board/IPost';
 import { getPost, DeletePost } from 'utils/PostUtil';
 
-import * as CommonUtil from 'utils/ComoonUtil';
-
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "10px",
@@ -34,10 +32,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const duration = 2000;
+const category = 'free';
 
 function FreeBoard({match}: any) {
   const classes = useStyles();
-  const { category, seq } = match.params;
+  // const { category, seq } = match.params;
+  const { seq } = match.params;
 
   const setMyAlert = useSetRecoilState(MyAlertState);
   const setMyBackdrop = useSetRecoilState(MyBackdropState);
@@ -55,53 +55,32 @@ function FreeBoard({match}: any) {
   }
 
   const _onEdit = () => {
-    if (isCheckAuth()) {
-      document.location.href = `/board/write/${category}/${seq}`
-    }
+    document.location.href = `/board/write/${category}/${seq}`
   }
 
   const delPost = async () => {
-    if (isCheckAuth()) {
-      setMyBackdrop(true);
-      
-      const res = await DeletePost(category, seq);
-      if (res.code === 200) {
-        setMyAlert({
-          isOpen: true,
-          severity: "success",
-          duration: duration,
-          message: res.message
-        });
-  
-        setTimeout(() => document.location.href = `/board/${category}`, duration);
-      }
-      else {
-        setMyAlert({
-          isOpen: true,
-          severity: "error",
-          duration: duration,
-          message: res.message
-        });
-        
-        setTimeout(()=> { setMyBackdrop(false); }, duration);
-      }
-    }
-  }
+    setMyBackdrop(true);
+    
+    const res = await DeletePost(category, seq);
+    if (res.code === 200) {
+      setMyAlert({
+        isOpen: true,
+        severity: "success",
+        duration: duration,
+        message: res.message
+      });
 
-  const isCheckAuth = () => {
-    if (!post) {
-      alert("게시글 정보가 없습니다.");
-      window.location.href = `/board/${category}`
+      setTimeout(() => document.location.href = `/board/${category}`, duration);
     }
     else {
-      if (post.writer.key !== CommonUtil.getNowKey()) {
-        alert("권한이 없습니다.");
-        window.location.href = `/board/${category}/${seq}`
-  
-        return false;
-      }
+      setMyAlert({
+        isOpen: true,
+        severity: "error",
+        duration: duration,
+        message: res.message
+      });
       
-      return true;
+      setTimeout(()=> { setMyBackdrop(false); }, duration);
     }
   }
 

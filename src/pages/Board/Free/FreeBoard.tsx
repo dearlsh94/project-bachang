@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
 import IPost from 'interfaces/Board/IPost';
@@ -11,7 +10,7 @@ import Board from 'components/Board/Board';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: "10px"
+    marginTop: "30px"
   },
 }));
 
@@ -31,14 +30,10 @@ function FreeBoard() {
   return (
     <Container
       className={classes.root}>
-      <Link href="/board/write/free" variant="body2">
+      {/* <Link href="/board/write/free" variant="body2">
           글쓰기
-      </Link>
-      <Container>
-      {
-        <Board posts={posts} page={2}/>
-      }
-      </Container>
+      </Link> */}
+      <Board posts={posts} page={2}/>
     </Container>
   );
 }
